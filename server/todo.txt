@@ -1,0 +1,9 @@
+1. Login
+2. ./errors
+    custom-error.js extends Error
+    bad-request.js  extends custom-error
+    unauthenticated.js extends custom-error
+    not-found.js    extends custom-error
+    index.js collects the error modules for export
+3. error-handler middleware for catch async request errors and our custom Error objects thrown and send the response
+4. not-found middleware for catching unknown routes
