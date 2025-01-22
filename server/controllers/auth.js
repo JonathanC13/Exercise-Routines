@@ -1,32 +1,43 @@
 const { StatusCodes } = require('http-status-codes')
 const UserModel = require('../models/User')
+const { BadRequestError, UnauthenticatedError } = require('../errors/')
 
-const register = (req, res) => {
+const register = async(req, res) => {
     const { name, email, password } = req.body
 
     if (!name || !email || !password) {
-        return res.send('missing inputs')// TODO custom errors
+        throw new BadRequestError('Please provide the required fields!')
     }
 
     // mongoose will exec default pre('save') that exec the validation checks, then run the any custom pre('save') function, then send the request to MongoDB
-    const response = UserModel.create({name, email, password})  // in the model, it will call our pre('save') to encrypt the password
+    const response = await UserModel.create({name, email, password})  // in the model, it will call our pre('save') to encrypt the password
 
-    const token = UserModel.generateJWT()
+    const token = response.generateJWT()
 
     res.status(StatusCodes.CREATED).json({user: {name: response.getName()}, token: token})
 }
 
-const login = (req, res) => {
+const login = async(req, res) => {
     const { email, password } = req.body
 
     if (!email || !password) {
-        return res.json({msg: 'bad request'}) // TODO custom errors
+        throw new BadRequestError('Please provide the required fields!')
     }
 
     // try to find the account
+    const response = await UserModel.findOne({email: email})
 
+    if (!response) {
+        throw new UnauthenticatedError('Invalid credentials!')
+    }
 
-    const token = UserModel.generateJWT()
+    const passwordCorrect = await response.validatePassword(password)
+
+    if (!passwordCorrect) {
+        throw new UnauthenticatedError('Invalid credentials!')
+    }
+
+    const token = response.generateJWT()
     res.status(StatusCodes.OK).json({user: {name: response.getName()}, token: token})
 }
 

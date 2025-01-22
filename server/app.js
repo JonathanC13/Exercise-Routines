@@ -12,6 +12,10 @@ const connectDB = require('./db/connect')
 // router
 const authRouter = require('./routes/auth')
 
+// error handler
+const errorHandlerMiddleware = require('./middleware/error-handler')
+const notFoundMiddleware = require('./middleware/not-found')
+
 // app
 const app = express()
 const port = process.env.PORT || 5000
@@ -37,6 +41,10 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
+
+// error routes
+app.use(errorHandlerMiddleware)
+app.use(notFoundMiddleware)
 
 
 const start = async() => {

@@ -1,9 +1,57 @@
-1. Login
-2. ./errors
-    custom-error.js extends Error
-    bad-request.js  extends custom-error
-    unauthenticated.js extends custom-error
-    not-found.js    extends custom-error
-    index.js collects the error modules for export
-3. error-handler middleware for catch async request errors and our custom Error objects thrown and send the response
-4. not-found middleware for catching unknown routes
+* revise
+* should not be calling other controllers. move to middleware? yes and have the differenct controllers use the common middleware. add what data each middleware needs to use and pass.
+
+1. Routine router
+    - get all
+        - for list
+    - get one
+        - for edit page
+    - post one
+    - update one
+    - delete one
+        - also delete all sessions, exercises, comments 
+        middleware steps:
+        1. delete Routine in routine controller
+            req.routineId = the deleted routine id
+            next()
+        2. delete session in session controller that match the req.routineId
+            Since exercises are a subdoc of session, exercies will be deleted here. But need the exercise Ids
+            req.exerciseIds = [array of all the exercise IDs that belonged to this session]
+            next()
+        3. delete comments in the comment controller that match the req.exerciseIds
+            res.status(OK) success
+
+2. Session router
+    - get all
+    - get one
+        - for edit
+    - post one
+    - update one
+    - delete many: can have many since if a routine is deleted, then the many sessions will be deleted. if only one session needs to be deleted, all _ids are unique
+        1. delete session in session controller that match the req.routineId
+            Since exercises are a subdoc of session, exercies will be deleted here. But need the exercise Ids
+            req.exerciseIds = [array of all the exercise IDs that belonged to this session]
+            next()
+        2. delete comments in the comment controller that match the req.exerciseIds
+            res.status(OK) success
+
+3. Exercise router
+    - get all
+        1. get all sessions in session controller 
+        2. get all exercises from each session
+    - get one
+        - edit page
+    - post one
+    - update one
+        1. update session in session controller with new exercise list. Array map
+    - delete (no db query)
+        1. update session in session controller with new exercise list. Array map
+        2. delete comments in the comment controller that match the req.exerciseIds
+            res.status(OK) success
+
+4. Comments
+    - get all
+    - get one
+    - post one
+    - update one
+    - delete many: if exercise is deleted, the many comments that have that exercise _id are deleted. if only one comment needs to be deleted, it will only match one.

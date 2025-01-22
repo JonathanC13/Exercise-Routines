@@ -29,18 +29,22 @@ const UserSchema = new mongoose.Schema({
     }
 }, { timestamps: true } )
 
-UserSchema.method.getName = function() {
+UserSchema.methods.getName = function() {
     return this.name
 }
 
-UserSchema.method.generateJWT = function() {
+UserSchema.methods.generateJWT = function() {
     return jwt.sign({userId:this._id, name:this.name}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_LIFETIME})
 }
 
-UserSchema.pre('save', function() {
+UserSchema.pre('save', function(next) {
     const salt = bcrypt.genSaltSync(10);
     this.password = bcrypt.hashSync(this.password, salt);
     next()
 })
+
+UserSchema.methods.validatePassword = async function(password) {
+    return await bcrypt.compare(password, this.password)
+}
 
 module.exports = mongoose.model('User', UserSchema)
