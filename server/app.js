@@ -11,6 +11,10 @@ const connectDB = require('./db/connect')
 
 // router
 const authRouter = require('./routes/auth')
+const routineRouter = require('./routes/routines')
+
+// middleware
+const authorizationMiddleware = require('./middleware/authorization')
 
 // error handler
 const errorHandlerMiddleware = require('./middleware/error-handler')
@@ -41,6 +45,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
+app.use('/api/v1/routines', authorizationMiddleware, routineRouter)
 
 // error routes
 app.use(errorHandlerMiddleware)

@@ -1,14 +1,23 @@
 * revise
 * should not be calling other controllers. move to middleware? yes and have the differenct controllers use the common middleware. add what data each middleware needs to use and pass.
 
-1. Routine router
-    - get all
+Run queries in group
+// https://stackoverflow.com/questions/74913957/if-one-of-the-multiple-queries-running-one-after-another-fails-in-mongoose
+
+For a route that requires multiple DB calls:
+    1. In the middleware, add the queries to like req.queries = []
+    2. in the controller, start a mongoose session and try to commit them all or nothing.
+
+1. Routine router * HERE
+    - get all   (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)
         - for list
-    - get one
+    - get one (route param :id)
         - for edit page
-    - post one
-    - update one
-    - delete one
+    - post one (get user Id from req.userId)
+
+    - update one (route param :id)
+    - delete one (route param :id)
+        - Need middleware
         - also delete all sessions, exercises, comments 
         middleware steps:
         1. delete Routine in routine controller
@@ -55,3 +64,6 @@
     - post one
     - update one
     - delete many: if exercise is deleted, the many comments that have that exercise _id are deleted. if only one comment needs to be deleted, it will only match one.
+
+
+AUth middleware for JWT from user request
