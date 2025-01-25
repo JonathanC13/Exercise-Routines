@@ -3,7 +3,7 @@ const router = express.Router()
 const { getAllRoutines, getRoutine, createRoutine, updateRoutine, deleteRoutine } = require('../controllers/routines')
 
 router.route('/').get(getAllRoutines).post(createRoutine)
-router.route('/:id').get(getRoutine).patch(updateRoutine).delete(deleteRoutine)
+router.route('/:routineId').get(getRoutine).patch(updateRoutine).delete(deleteRoutine)
 
 /* 
 For delete, deleting a routine also deletes all session documents associated with the routine, comment documents associated with the exersice subdocument in the sesssons.

@@ -1,5 +1,5 @@
 const RoutineModel = require('../models/Routine')
-const {NotFoundError} = require('../errors')
+const {NotFoundError, BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
 
 /**
@@ -37,8 +37,18 @@ const getRoutine = async(req, res, next) => {
  * @param {*} next 
  */
 const createRoutine = async(req, res, next) => {
-    const createdBy = req.userId
-    res.json({createdBy, ...req.body()})
+    const {
+        user: {userId: createdByUserId},
+        body: {name}
+    } = req
+
+    if (name === '') {
+        throw new BadRequestError('Please provide a routine name!')
+    }
+    
+    const response = await RoutineModel.create({createdByUserId, ...req.body})
+
+    res.status(StatusCodes.CREATED).json({response})
 }
 
 /**
@@ -48,8 +58,28 @@ const createRoutine = async(req, res, next) => {
  * @param {*} next 
  */
 const updateRoutine = async(req, res, next) => {
-    const { routineId } = req.params
-    res.json({routineId, ...req.body()})
+    const {
+        user: {userId: createdByUserId},
+        params: { routineId },
+        body: {name}
+    } = req
+
+    if (name === '') {
+        throw new BadRequestError('Please provide a routine name!')
+    }
+
+    const optObj = {
+        new: true,
+        runValidators: true
+    }
+
+    const response = await RoutineModel.findOneAndUpdate({createdByUserId, _id: routineId}, req.body, optObj)
+
+    if (!response) {
+        throw new NotFoundError('Routine not found!')
+    }
+
+    res.status(StatusCodes.OK).json({response})
 }
 
 /**
@@ -60,6 +90,13 @@ const updateRoutine = async(req, res, next) => {
  */
 const deleteRoutine = async(req, res, next) => {
     const { routineId } = req.params
+
+    // should get all the queries from the req.queries and start session to execute them in a transaction.
+
+    if (!response) {
+        throw new NotFoundError('Routines not found!')
+    }
+
     res.json({routineId})
 }
 

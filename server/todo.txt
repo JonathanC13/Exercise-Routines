@@ -8,15 +8,15 @@ For a route that requires multiple DB calls:
     1. In the middleware, add the queries to like req.queries = []
     2. in the controller, start a mongoose session and try to commit them all or nothing.
 
-1. Routine router * HERE
-    - get all   (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)
+1. Routine router
+    - get all   (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)  * Done
         - for list
-    - get one (route param :id)
+    - get one (route param :id) * Done
         - for edit page
-    - post one (get user Id from req.userId)
+    - post one (get user Id from req.userId)    * Done
 
-    - update one (route param :id)
-    - delete one (route param :id)
+    - update one (route param :id) * Done
+    - delete one (route param :id)  *** HERE
         - Need middleware
         - also delete all sessions, exercises, comments 
         middleware steps:
