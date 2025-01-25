@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const CommentSchema = require('./Comment')
+const {CommentSchema} = require('./Comment')
 
 const ExerciseSchema = new mongoose.Schema({
     order: {

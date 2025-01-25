@@ -16,7 +16,7 @@ For a route that requires multiple DB calls:
     - post one (get user Id from req.userId)    * Done
 
     - update one (route param :id) * Done
-    - delete one (route param :id)  *** HERE
+    - delete one (route param :id)  * Done
         - Need middleware
         - also delete all sessions, exercises, comments 
         middleware steps:
@@ -27,8 +27,13 @@ For a route that requires multiple DB calls:
             Since exercises are a subdoc of session, exercies will be deleted here. But need the exercise Ids
             req.exerciseIds = [array of all the exercise IDs that belonged to this session]
             next()
-        3. delete comments in the comment controller that match the req.exerciseIds
+        3. delete comments in the comment controller that match the req.exerciseIds 
             res.status(OK) success
+        4. In controller run session * Done
+
+
+        **TODO TEST AGAIN when session, exercise, and comment routes are done **
+        They also use the same middleware. 
 
 2. Session router
     - get all
@@ -43,6 +48,10 @@ For a route that requires multiple DB calls:
             next()
         2. delete comments in the comment controller that match the req.exerciseIds
             res.status(OK) success
+
+    ** Done
+    ** TODO
+    Test all session api
 
 3. Exercise router
     - get all

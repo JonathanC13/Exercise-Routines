@@ -2,10 +2,15 @@ const mongoose = require('mongoose')
 const ExerciseSchema = require('./Exercise')
 
 const SessionSchema = new mongoose.Schema({
-    RoutineId: {
+    routineId: {
         type: mongoose.Types.ObjectId,
         ref: 'Routine',
         required: [true, 'Please provide a valid RoutineId!']
+    },
+    createdByUserId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Please provide a user!']
     },
     order: {
         type: Number,

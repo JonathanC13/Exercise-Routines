@@ -1,6 +1,8 @@
 const RoutineModel = require('../models/Routine')
 const {NotFoundError, BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
+const mongoose = require('mongoose')
+const Routine = require('../models/Routine')
 
 /**
  * Get all the Routines for the authenticated user. (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)
@@ -12,8 +14,8 @@ const getAllRoutines = async(req, res, next) => {
     const {userId} = req.user
     const response = await RoutineModel.find({createdByUserId: userId})
     
-    if (!response) {
-        throw new NotFoundError('Routines not found!')
+    if (!userId) {
+        throw new BadRequestError('Missing user id!')
     }
 
     res.status(StatusCodes.OK).json({response, count: response.length})
@@ -27,7 +29,18 @@ const getAllRoutines = async(req, res, next) => {
  */
 const getRoutine = async(req, res, next) => {
     const {routineId} = req.params
-    res.send(`route param ${routineId}`)
+
+    if (!routineId) {
+        throw new BadRequestError('Missing routine Id!')
+    }
+
+    const response = await RoutineModel.findById(routineId)
+
+    if (!response) {
+        throw new Error('That routine does not exist!')
+    }
+
+    res.status(StatusCodes.OK).json({response})
 }
 
 /**
@@ -42,6 +55,9 @@ const createRoutine = async(req, res, next) => {
         body: {name}
     } = req
 
+    if (!createdByUserId) {
+        throw new BadRequestError('Missing user id!')
+    }
     if (name === '') {
         throw new BadRequestError('Please provide a routine name!')
     }
@@ -64,6 +80,12 @@ const updateRoutine = async(req, res, next) => {
         body: {name}
     } = req
 
+    if (!createdByUserId) {
+        throw new BadRequestError('Missing user id!')
+    }
+    if (!routineId) {
+        throw new BadRequestError('Missing routine id!')
+    }
     if (name === '') {
         throw new BadRequestError('Please provide a routine name!')
     }
@@ -89,15 +111,7 @@ const updateRoutine = async(req, res, next) => {
  * @param {*} next 
  */
 const deleteRoutine = async(req, res, next) => {
-    const { routineId } = req.params
-
-    // should get all the queries from the req.queries and start session to execute them in a transaction.
-
-    if (!response) {
-        throw new NotFoundError('Routines not found!')
-    }
-
-    res.json({routineId})
+    res.status(StatusCodes.OK).send()
 }
 
 module.exports = { getAllRoutines, getRoutine, createRoutine, updateRoutine, deleteRoutine }
