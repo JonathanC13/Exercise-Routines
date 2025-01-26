@@ -5,14 +5,14 @@ const { BadRequestError, NotFoundError } = require('../errors')
 const getAllSessions = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: routineId
+        params: {routineId}
     } = req
-
+    
     if (!routineId) {
         throw new BadRequestError('Missing routine id!')
     }
 
-    const response = await SessionModel.find({routineId, createdByUserId})
+    const response = await SessionModel.find({routineId, createdByUserId}).sort('order updatedAt')
 
     res.status(StatusCodes.OK).json({response, count: response.length})
 }
@@ -22,7 +22,7 @@ const getSession = async(req, res) => {
         user: {userId: createdByUserId},
         params: {routineId, sessionId}
     } = req
-
+    
     if (!routineId) {
         throw new BadRequestError('Missing routine Id!')
     }
@@ -30,7 +30,7 @@ const getSession = async(req, res) => {
         throw new BadRequestError('Missing session Id!')
     }
     
-    const response = SessionModel.findOne({sessionId, routineId, createdByUserId})
+    const response = await SessionModel.findOne({_id: sessionId, routineId, createdByUserId})
 
     if (!response) {
         throw new NotFoundError('Session not found!')
@@ -44,12 +44,12 @@ const createSession = async(req, res) => {
         user: {userId: createdByUserId},
         params: { routineId }
     } = req
-
+    
     if (!routineId) {
         throw new BadRequestError('Missing routine Id')
     }
-
-    const response = await SessionModel.create({createdByUserId, ...req.body})
+    
+    const response = await SessionModel.create({routineId, createdByUserId, ...req.body})
 
     res.status(StatusCodes.CREATED).json({response})
 }
@@ -59,7 +59,7 @@ const updateSession = async(req, res) => {
         user: {userId: createdByUserId},
         params: { routineId, sessionId }
     } = req
-
+    
     if (!routineId) {
         throw new BadRequestError('Missing routine Id!')
     }
@@ -72,11 +72,13 @@ const updateSession = async(req, res) => {
         runValidators: true
     }
 
-    const response = SessionModel.findOneAndUpdate({sessionId, routineId, createdByUserId}, req.body, optObj)
+    const response = await SessionModel.findOneAndUpdate({_id: sessionId, routineId, createdByUserId}, req.body, optObj)
 
     if (!response) {
         throw new NotFoundError('Session not found!')
     }
+
+    res.status(StatusCodes.OK).json({response})
 }
 
 const deleteSession = async(req, res) => {

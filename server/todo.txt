@@ -11,12 +11,12 @@ For a route that requires multiple DB calls:
 1. Routine router
     - get all   (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)  * Done
         - for list
-    - get one (route param :id) * Done
+    - get one (route param :id)
         - for edit page
-    - post one (get user Id from req.userId)    * Done
+    - post one (get user Id from req.userId)
 
-    - update one (route param :id) * Done
-    - delete one (route param :id)  * Done
+    - update one (route param :id)
+    - delete one (route param :id)
         - Need middleware
         - also delete all sessions, exercises, comments 
         middleware steps:
@@ -29,7 +29,7 @@ For a route that requires multiple DB calls:
             next()
         3. delete comments in the comment controller that match the req.exerciseIds 
             res.status(OK) success
-        4. In controller run session * Done
+        4. In controller run session
 
 
         **TODO TEST AGAIN when session, exercise, and comment routes are done **
@@ -55,8 +55,7 @@ For a route that requires multiple DB calls:
 
 3. Exercise router
     - get all
-        1. get all sessions in session controller 
-        2. get all exercises from each session
+        1. get all exercises for the session
     - get one
         - edit page
     - post one
@@ -67,12 +66,17 @@ For a route that requires multiple DB calls:
         2. delete comments in the comment controller that match the req.exerciseIds
             res.status(OK) success
 
-4. Comments
+    ** TODO
+    Test all session api
+
+4. Comments **HERE
     - get all
     - get one
     - post one
     - update one
     - delete many: if exercise is deleted, the many comments that have that exercise _id are deleted. if only one comment needs to be deleted, it will only match one.
+
+
 
 
 AUth middleware for JWT from user request

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const { BadRequestError } = require('../errors')
+const { BadRequestError } = require('../../errors')
 
 const runDeleteQueries = async(req, res, next) => {
     const {

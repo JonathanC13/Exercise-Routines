@@ -12,6 +12,8 @@ const connectDB = require('./db/connect')
 // router
 const authRouter = require('./routes/auth')
 const routineRouter = require('./routes/routines')
+const sessionsRouter = require('./routes/sessions')
+const exercisesRouter = require('./routes/exercises')
 
 // middleware
 const authorizationMiddleware = require('./middleware/authorization')
@@ -40,12 +42,16 @@ app.use(limiter)
 // /extra security packages
 
 // routes
+// /api/v1/routes/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
 app.get('/', (req, res) => {
     res.send('hello, world!')
 })
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/routines', authorizationMiddleware, routineRouter)
+routineRouter.use('/:routineId/sessions', sessionsRouter)
+sessionsRouter.use('/:sessionId/exercises', exercisesRouter)
+
 
 // error routes
 app.use(errorHandlerMiddleware)

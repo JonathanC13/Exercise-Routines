@@ -27,7 +27,10 @@ const SessionSchema = new mongoose.Schema({
         trim: true,
         maxLength: 8000
     },
-    exercises: [ExerciseSchema]
+    exercises: {
+        type: [ExerciseSchema],
+        default: []
+    }
     
 }, {timestamps: true})
 

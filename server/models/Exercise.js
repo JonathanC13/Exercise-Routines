@@ -19,18 +19,21 @@ const ExerciseSchema = new mongoose.Schema({
     }, 
     sets: {
         type: Number,
-        required: true,
         default: 1
     },
     repsOrDuration: {
         type: String,
-        maxLength: 20
+        maxLength: 20,
+        default: 0
     },
     restTimeSeconds: {
         type: Number,
         default: 0
     },
-    comments: [CommentSchema]
-})
+    comments: {
+        type: [CommentSchema],
+        default: []
+    }
+}, {timestamps: true})
 
 module.exports = ExerciseSchema

@@ -2,12 +2,9 @@ const express = require('express')
 const router = express.Router()
 const { getAllRoutines, getRoutine, createRoutine, updateRoutine, deleteRoutine } = require('../controllers/routines')
 const { routineDeleteQuery, sessionDeleteQuery, commentDeleteQuery, runDeleteQueries } = require('../middleware/delete-queries')
-const sessionsRouter = require('./sessions')
 
 router.route('/').get(getAllRoutines).post(createRoutine)
 router.route('/:routineId').get(getRoutine).patch(updateRoutine).delete(routineDeleteQuery, sessionDeleteQuery, commentDeleteQuery, runDeleteQueries, deleteRoutine)
-
-app.use('/sessions', sessionsRouter)
 
 /* 
 getAllRoutines for the current userId
