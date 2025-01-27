@@ -55,9 +55,6 @@ const createRoutine = async(req, res, next) => {
         body: {name}
     } = req
 
-    if (!createdByUserId) {
-        throw new BadRequestError('Missing user id!')
-    }
     if (name === '') {
         throw new BadRequestError('Please provide a routine name!')
     }
@@ -80,9 +77,6 @@ const updateRoutine = async(req, res, next) => {
         body: {name}
     } = req
 
-    if (!createdByUserId) {
-        throw new BadRequestError('Missing user id!')
-    }
     if (!routineId) {
         throw new BadRequestError('Missing routine id!')
     }

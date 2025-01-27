@@ -69,14 +69,15 @@ For a route that requires multiple DB calls:
     ** TODO
     Test all session api
 
-4. Comments **HERE
+4. Comments 
     - get all
     - get one
     - post one
     - update one
     - delete many: if exercise is deleted, the many comments that have that exercise _id are deleted. if only one comment needs to be deleted, it will only match one.
 
+    ** TODO
+    Test all session api
 
 
-
-AUth middleware for JWT from user request
+**** Review all routes and controllers and then test from Routine -> Session -> Exercise -> Comments

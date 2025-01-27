@@ -12,7 +12,7 @@ const getAllExercises = async(req, res) => {
         throw new BadRequestError('Missing session id!')
     }
 
-    const response = await SessionModel.findOne({createdByUserId, _id: sessionId}).select('exercises').sort('order updatedAt')
+    const response = await SessionModel.findOne({_id: sessionId, createdByUserId}).select('exercises').sort('order updatedAt')
 
     if (!response) {
         throw new NotFoundError('Exercises not found!')
@@ -34,7 +34,7 @@ const getExercise = async(req, res) => {
         throw new BadRequestError('Missing exercise id!')
     }
 
-    const parent = await SessionModel.findOne({createdByUserId, _id: sessionId})
+    const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     const response = parent.exercises.id(exerciseId)
 
     res.status(StatusCodes.OK).json({response})
@@ -50,7 +50,7 @@ const createExercise = async(req, res) => {
         throw new BadRequestError('Missing session id!')
     }
 
-    const parent = await SessionModel.findOne({createdByUserId, _id: sessionId})
+    const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     if (parent.exercises !== undefined) {
         parent.exercises.push(req.body)
     } else {

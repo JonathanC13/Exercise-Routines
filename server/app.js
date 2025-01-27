@@ -14,6 +14,7 @@ const authRouter = require('./routes/auth')
 const routineRouter = require('./routes/routines')
 const sessionsRouter = require('./routes/sessions')
 const exercisesRouter = require('./routes/exercises')
+const commentsRouter = require('./routes/comments')
 
 // middleware
 const authorizationMiddleware = require('./middleware/authorization')
@@ -51,7 +52,7 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/routines', authorizationMiddleware, routineRouter)
 routineRouter.use('/:routineId/sessions', sessionsRouter)
 sessionsRouter.use('/:sessionId/exercises', exercisesRouter)
-
+exercisesRouter.use('/:exerciseId/comments', commentsRouter)
 
 // error routes
 app.use(errorHandlerMiddleware)
