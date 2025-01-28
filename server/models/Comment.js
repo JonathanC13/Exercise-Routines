@@ -18,19 +18,19 @@ const CommentSchema = new mongoose.Schema({
     }
 }, {timestamps: true})
 
-const CommentSubSchema = new mongoose.Schema({
-    commentId: {
-        type: mongoose.Types.ObjectId,
-        ref: 'Comment',
-        required: [true, 'Please provide valid commentId for collection Comment!']
-    },
-    text: {
-        type: String,
-        trim: true,
-        maxLength: 8000
-    }
-}, {timestamps: true})
+// const CommentSubSchema = new mongoose.Schema({
+//     commentId: {
+//         type: mongoose.Types.ObjectId,
+//         ref: 'Comment',
+//         required: [true, 'Please provide valid commentId for collection Comment!']
+//     },
+//     text: {
+//         type: String,
+//         trim: true,
+//         maxLength: 8000
+//     }
+// }, {timestamps: true})
 
 const CommentModel = mongoose.model('comment', CommentSchema)
 
-module.exports = { CommentSubSchema, CommentModel }
+module.exports = { CommentSchema, CommentModel }

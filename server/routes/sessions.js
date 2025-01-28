@@ -9,8 +9,6 @@ router.route('/:sessionId').get(getSession).patch(updateSession).delete(sessionD
 
 /*
 getAllSessions for the current routineId from parent route
-
-For front end, delete all exercises in a session, the request is a patch with exercises = []
 */
 
 module.exports = router

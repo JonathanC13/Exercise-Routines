@@ -50,27 +50,28 @@ const createComment = async(req, res) => {
         // Transaction queries
         // 1. create comment in the Comment collection
         const commentRes = await CommentModel.create({createdByUserId, exerciseId, ...req.body})
-        const crComId = commentRes._id
+        // const crComId = commentRes._id
 
         // 2. create the comment in the Session -> exercises sub doc -> comments sub doc
         const session = await SessionModel.findById(sessionId)
-        const comments = session.exercises.id(exerciseId).comments
+        //const comments = session.exercises.id(exerciseId).comments.push({commentId: crComId, ...req.body})
+        const comments = session.exercises.id(exerciseId).comments.push(commentRes)
         comments.sort((a, b) => {return new Date(b.updatedAt) - new Date(a.updatedAt)})
-        if (comments.length >= 3) {
+        while (comments.length > 3) {
             comments.pop()
         }
-        comments = [{commentId: crComId, ...req.body}, ...comments]
+        console.log(comments)
         const response = await session.save()
-
+        console.log(response)
         // Commit the transaction
         await session.commitTransaction();
+
+        return res.status(StatusCodes.CREATED).json({response})
     } catch (err) {
         throw new BadRequestError('Something has gone wrong!')
     } finally {
         session.endSession()
     }
-
-    res.status(StatusCodes.CREATED).json({response})
 }
 
 const updateComment = async(req, res) => {
@@ -89,7 +90,6 @@ const updateComment = async(req, res) => {
         // Transaction queries
         // 1. update the comment in the Comment collection
         const commentRes = await CommentModel.findAndUpdate({_id: commentId, createdByUserId, exerciseId}, req.body, {new: true, runValidators: true})
-        const crComId = commentRes._id
 
         // 2. create the comment in the Session -> exercises sub doc -> comments sub doc
         const session = await SessionModel.findById(sessionId)
@@ -102,17 +102,19 @@ const updateComment = async(req, res) => {
                 }
             }
         })
+        console.log(comments)
         const response = await session.save()
+        console.log(response)
 
         // Commit the transaction
         await session.commitTransaction();
+
+        return res.status(StatusCodes.OK).json({response})
     } catch (err) {
         throw new BadRequestError('Something has gone wrong!')
     } finally {
         session.endSession()
     }
-
-    res.status(StatusCodes.OK).json({response})
 }
 
 const deleteComment = async(req, res) => {

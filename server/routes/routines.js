@@ -9,6 +9,8 @@ router.route('/:routineId').get(getRoutine).patch(updateRoutine).delete(routineD
 /* 
 getAllRoutines for the current userId
 
+For all routes, no delete all option. Must specify id.
+
 For delete, deleting a routine also deletes all session documents associated with the routine, comment documents associated with the exersice subdocument in the sesssons.
     1. In the middleware, add the queries to like req.queries = []
     2. in the controller, start a mongoose session and try to commit them all or nothing.

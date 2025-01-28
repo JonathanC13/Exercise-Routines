@@ -80,4 +80,9 @@ For a route that requires multiple DB calls:
     Test all session api
 
 
-**** Review all routes and controllers and then test from Routine -> Session -> Exercise -> Comments
+*1. Review all routes and controllers
+2. create test plan with route, value, expected  test from Routine -> Session -> Exercise -> Comments
+3. run tests manaully in postman
+
+* watch for on create Comment, in the exercise subdoc, make sure the existing comments createdAt and UpdatedAt times remain the same. It should but compare all values
+
