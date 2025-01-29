@@ -1,8 +1,6 @@
 const RoutineModel = require('../models/Routine')
 const {NotFoundError, BadRequestError} = require('../errors')
 const {StatusCodes} = require('http-status-codes')
-const mongoose = require('mongoose')
-const Routine = require('../models/Routine')
 
 /**
  * Get all the Routines for the authenticated user. (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)
@@ -37,7 +35,7 @@ const getRoutine = async(req, res, next) => {
     const response = await RoutineModel.findById(routineId)
 
     if (!response) {
-        throw new Error('That routine does not exist!')
+        throw new NotFoundError('That routine does not exist!')
     }
 
     res.status(StatusCodes.OK).json({response})

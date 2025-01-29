@@ -56,10 +56,9 @@ const createComment = async(req, res) => {
         const session = await SessionModel.findById(sessionId)
         //const comments = session.exercises.id(exerciseId).comments.push({commentId: crComId, ...req.body})
         const comments = session.exercises.id(exerciseId).comments.push(commentRes)
-        comments.sort((a, b) => {return new Date(b.updatedAt) - new Date(a.updatedAt)})
-        while (comments.length > 3) {
-            comments.pop()
-        }
+        comments.sort((a, b) => {return new Date(b.createdAt) - new Date(a.createdAt)})
+        session.exercises.id(exerciseId).comments = session.exercises.id(exerciseId).comments.slice(0, 3)
+
         console.log(comments)
         const response = await session.save()
         console.log(response)
@@ -91,18 +90,16 @@ const updateComment = async(req, res) => {
         // 1. update the comment in the Comment collection
         const commentRes = await CommentModel.findAndUpdate({_id: commentId, createdByUserId, exerciseId}, req.body, {new: true, runValidators: true})
 
-        // 2. create the comment in the Session -> exercises sub doc -> comments sub doc
+        // 2. update the comment in the Session -> exercises sub doc -> comments sub doc
         const session = await SessionModel.findById(sessionId)
-        const comments = session.exercises.id(exerciseId).comments
+        const comment = session.exercises.id(exerciseId).comments.id(commentId)
 
-        comments = comments.map((comment) => {
-            if (comment._id === commentId) {
-                for (let [key, val] of Object.entries(req.body)) {
-                    comment[key] = val
-                }
-            }
-        })
-        console.log(comments)
+        // update the comment
+        for (let [key, val] of Object.entries(req.body)) {
+            comment[key] = val
+        }
+
+        console.log(comment)
         const response = await session.save()
         console.log(response)
 

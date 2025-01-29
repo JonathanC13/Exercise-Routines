@@ -19,7 +19,7 @@ const RoutineSchema = new mongoose.Schema({
     description: {
         type: String,
         trim: true,
-        maxLength: 8000
+        maxLength: [500, 'Please provide a description that is less than 500 characters!']
     }
 }, { timestamps: true })
 

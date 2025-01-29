@@ -85,5 +85,4 @@ const deleteSession = async(req, res) => {
     res.status(StatusCodes.OK).send()
 }
 
-
 module.exports = { getAllSessions, getSession, createSession, updateSession, deleteSession }

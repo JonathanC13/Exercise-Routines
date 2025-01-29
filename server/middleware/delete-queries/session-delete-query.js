@@ -1,4 +1,5 @@
 const SessionModel = require('../../models/Session')
+const {BadRequestError} = require('../../errors')
 
 const sessionDeleteQuery = async(req, res, next) => {
 
@@ -10,15 +11,7 @@ const sessionDeleteQuery = async(req, res, next) => {
     let query = ''
     const exerciseIds = []
 
-    if (sessionId) {
-        query = SessionModel.findByIdAndDelete(sessionId)
-
-        const response = await SessionModel.findById(sessionId).select('exercises')
-        response['exercises'].forEach((obj) => {
-            exerciseIds.push(obj._id)
-        })
-
-    } else {
+    if (routineId) {
         // delete coming from Routine delete
         query = SessionModel.deleteMany({routineId})
         // get all exercise ids
@@ -28,6 +21,19 @@ const sessionDeleteQuery = async(req, res, next) => {
                 exerciseIds.push(obj._id)
             })
         })
+    } else {
+        // specific session to be delete
+        if (!sessionId) {
+            throw new BadRequestError('Missing session Id!')
+        }
+
+        query = SessionModel.findByIdAndDelete(sessionId)
+
+        const response = await SessionModel.findById(sessionId).select('exercises')
+        response['exercises'].forEach((obj) => {
+            exerciseIds.push(obj._id)
+        })
+
     }
 
     if (!req.queries) {

@@ -83,14 +83,22 @@ const updateExercise = async(req, res) => {
     //     optObj
     // )
 
+    // do not update comments in this controller func
+    const requestBody = {}
+    for (let [key, val] of Object.entries(req.body)) {
+        if (key !== 'comments') {
+            requestBody[key] = val
+        }
+    }
+
     const parent = await SessionModel.findOne({"createdByUserId": createdByUserId, "_id": sessionId})
 
     if (!parent) {
         throw new NotFoundError('Session not found!')
     }
     
-    for (let [key, val] of Object.entries(req.body)) {
-        parent.exercises.id(exerciseId)[key] = val
+    for (let [key, val] of Object.entries(requestBody)) {
+        parent.exercises.id(exerciseId)[key] = val  // will only update the values of the keys that exist in the request body
     }
     const response = await parent.save()
     

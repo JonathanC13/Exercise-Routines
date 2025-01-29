@@ -88,7 +88,7 @@
     *Body*: **JSON**
         {
             {
-                "name": "qwertyuiopasdfghjklzxcvbnm",
+                "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
                 "email": "A@B",
                 "password": "12345"
             }
@@ -98,7 +98,7 @@
         1. status code: 400.
         2. response: **JSON**
             {
-                message: Validation failed for the following fields: Please provide a name 25 or less characters!, Please provide a valid email!, Please provide a password that is 6 or more characters!
+                message: Validation failed for the following fields: Please provide a name 50 or less characters!, Please provide a valid email!, Please provide a password that is 6 or more characters!
             }
         3. No user document created in collection 'users'.
 
@@ -152,7 +152,7 @@
 
 ## POST : http://localhost:5000/api/v1/auth/login
 *Prerequisites*:
-    1. Atleast one account successfully registered.
+    1. At least one account successfully registered.
 
 - Test 1: Missing key "email"
     *Description*:
@@ -250,7 +250,7 @@
                 token: JWT
             }
 
---- HERE
+---
 
 # ./routes/routines
 ## GET : http://localhost:5000/api/v1/routines/
@@ -285,7 +285,52 @@
 *Prerequisites*:
     1. Sucessful login that returned a valid JWT.
 
-validation ruless
+- Text X: Missing key "name"
+    *Body*:
+        {
+            "order": 1,
+            "description": "My first routine"
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Please provide a routine name!
+            }
+        3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
+
+- Text X: Empty value for key "name".
+    *Body*:
+        {
+            "order": 1,
+            "name": "",
+            "description": "My first routine"
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Validation failed for the following fields: Please provide a name!
+            }
+        3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
+
+- Test X: Value for key "name" is longer than 50 characters and description is longer than 8000 characters.
+    *Body*:
+        {
+            "order": 1,
+            "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
+            "description": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent."
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Validation failed for the following fields: Please provide a name that is 50 or less characters!, Please provide a description that is less than 500 characters!
+            }
+        3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
 - Test X: Successful creation
     *Body*: **JSON**
@@ -298,49 +343,202 @@ validation ruless
     *Expected results*:
         1. status code: 201.
         2. response: The object of the created document.
-        3. In the cluster 'Exercise-Routines', it created a new document in the collection 'routines' with the exact values in the request.
+        3. In the cluster 'Exercise-Routines', a new document is created in the collection 'routines' with the exact values in the request.
 
 ## GET : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
     1. Sucessful login that returned a valid JWT.
 
+- Test X: Invalid routine id.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d
 
-- Test X: get not exist
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 67969cbe4163742abfe4d7d!
+            }
 
-- Test X: get exist
-    2. 1 or more routines already created for the current user.
+- Test X: Id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7dA
 
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: That routine does not exist!
+            }
+
+- Test X: Successful get with Id that does exist.
+    *Prerequisites*:
+        1. At least one routine document exists in the collection 'routines'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid route _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The document of the created routine.
+        3. The routine document created in the collection 'routines'.
 
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
     1. Sucessful login that returned a valid JWT.
 
-- X: update not exist
+- Test X: Missing :routineId
+    *Route params*:
+        :routineid = ''
 
-- X: update exist
-    2. 1 or more routines already created for the current user.
-    3. note created and updated time
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Missing routine id!
+            }
 
-    expected: routine values updated, created time stays the same, updated time changes to time of request
+- Test X: Invalid routine id
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 67969cbe4163742abfe4d7d!
+            }
+
+- Test X: Id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7dA
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: That routine does not exist!
+            }
+
+- Test X: Successful update with Id that does exist.
+    *Prerequisites*:
+        1. At least one routine document exists in the collection 'routines'.
+        2. Record createdAt and updatedAt values.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid route _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The document of the updated routine.
+        3. The routine document is updated in the collection 'routines'.
+        4. createdAt value remains unchanged.
+        5. updatedAt changes to current time, account for timezone.
 
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId
-prereq
+*Prerequisites*:
+    1. Sucessful login that returned a valid JWT.
 
-- X: with standalone routine with no documents in collection 'sessions' that have the routineId, therefore no exercise sub docs and no comments in collection 'comments' for the exercises
+- Test X: Missing :routineId
+    *Route params*:
+        :routineid = ''
 
-- X: with sessions but no exercises
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Missing routine id!
+            }
 
-- X: with sessions with exercises but no comments
+- Test X: Invalid routine id
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d
 
-- X: with sessions with exercises and the exercises have comments
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 67969cbe4163742abfe4d7d!
+            }
 
----
+- Test X: Id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7dA
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: That routine does not exist!
+            }
+
+- Test X: Delete a routine that has no additional related documents in other collections.
+    *Prerequisites*:
+        1. Create a routine document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. The document is deleted from the collection 'routines'.
+
+- Test X: Delete a routine that has related session documents in the collection 'sessions'.
+    *Prerequisites*:
+        1. Create a routine document.
+        2. Create 2 session document that references the routine document id.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. The routine document is deleted from the collection 'routines'.
+        4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
+
+- Test X: Delete a routine that has related session documents and those sessions have sub documents of exercises.
+    *Prerequisites*:
+        1. Create a routine document.
+        2. Create 2 session document that references the routine document id.
+        3. Each session document, add 2 exercises to the exercises sub document array.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. The routine document is deleted from the collection 'routines'.
+        4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
+
+- Test X: Delete a routine that has related session documents and those sessions have sub documents of exercises and some of the exercises have comments in a subset pattern.
+    *Prerequisites*:
+        1. Create a routine document.
+        2. Create 2 session document that references the routine document id.
+        3. Each session document, add 2 exercises to the exercises sub document array.
+        4. For at least 2 exercises, add 2 or more comments each.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. The routine document is deleted from the collection 'routines'.
+        4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
+        5. The comment documents with the exerciseId referenced are deleted from the the collection 'comments'.
+
+--- HERE
 
 # ./routes/sessions
 
-## GET : http://localhost:5000/api/v1/routines/:routineId/sessions
+## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/
 
-## POST : http://localhost:5000/api/v1/routines/:routineId/sessions
+## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/
 
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId
 
@@ -349,8 +547,10 @@ prereq
 
 - X: patch only the Session info, exclude the exercises sub doc
 
-- X: Specific test for updating exercises subdoc from routine route: update one exercise with all valid values. Expected result, no change! exercises sub doc array not allowed to be changed in this route!
-- X: Specific test for updating exercises subdoc from routine route: update sub doc array by sending the request with empty array. Expected result, no change! exercises sub doc array not allowed to be changed in this route!
+- X: Specific test for updating exercises subdoc from routine route: update one exercise with all valid values.
+- X: Specific test for updating exercises subdoc from routine route: update one exercise with non valid values.
+- X: Specific test for updating exercises subdoc from routine route: update sub doc array by sending the request with modified array. 
+- X: Specific test for updating exercises subdoc from routine route: update sub doc array by sending the request with empty array. 
 
 ## DELETE : http://localhost:5000/api/v1/routines/67969cbe4163742abfe4d7d5/sessions/:sessionId
 
@@ -385,19 +585,20 @@ prereq
 
 **TODO**
 Back end:
-    1. PATCH : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId
-        Filter out "exercises" key in the update body. Do not allow sub doc to be modified through this route
 
     2. controllers comments
         redo with CommentSchema
         get:
-            1. get from collection 'comments'
+            1. get from collection 'comments' *should be ok
 
         create:
-            1. create comment document for collection 'comments'
+            1. createdComment = create comment document for collection 'comments' with the exerciseId. After get the _id that was assigned
             2. find session
             3. with session find the exercise sub doc
             4. with the exercise sub doc, push created comment doc into the comments subdoc, sort by desc created time, while > 3 pop
+                session.exercises.id(_id).comments.push(createdComment)
+                sort and pop
+                session.save()
 
             * ensure when reordered, the ids, created, and updated time stay the same as before request
 
@@ -410,6 +611,3 @@ Back end:
             2. find the session -> exercise -> comment id and delete then save()
 
         * or revert to use CommentSubSchema. where you get the createdId from comments and then put into CommentSubSchema
-
-    3. PATCH : exercises/:exerciseId
-        Filter out if body has "comments"  Do not allow sub doc to be modified through this route

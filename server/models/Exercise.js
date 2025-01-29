@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const {CommentSchema} = require('./Comment')
+const {CommentSchema, CommentModel} = require('./Comment')
 
 const ExerciseSchema = new mongoose.Schema({
     order: {
@@ -32,8 +32,10 @@ const ExerciseSchema = new mongoose.Schema({
     },
     comments: {
         type: [CommentSchema],
+        // type: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
         default: []
     }
+    
 }, {timestamps: true})
 
 module.exports = ExerciseSchema
