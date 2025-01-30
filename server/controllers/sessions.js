@@ -7,12 +7,12 @@ const getAllSessions = async(req, res) => {
         user: {userId: createdByUserId},
         params: {routineId}
     } = req
-    
-    if (!routineId) {
-        throw new BadRequestError('Missing routine id!')
-    }
 
     const response = await SessionModel.find({routineId, createdByUserId}).sort('order updatedAt')
+
+    if (!response) {
+        throw new NotFoundError('No sessions found!')
+    }
 
     res.status(StatusCodes.OK).json({response, count: response.length})
 }
@@ -23,9 +23,6 @@ const getSession = async(req, res) => {
         params: {routineId, sessionId}
     } = req
     
-    if (!routineId) {
-        throw new BadRequestError('Missing routine Id!')
-    }
     if (!sessionId) {
         throw new BadRequestError('Missing session Id!')
     }
@@ -42,14 +39,23 @@ const getSession = async(req, res) => {
 const createSession = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: { routineId }
+        params: { routineId },
+        body: {name}
     } = req
-    
-    if (!routineId) {
-        throw new BadRequestError('Missing routine Id')
+
+    if (!name) {
+        throw new BadRequestError('Please provide a session name!')
+    }
+
+    // ignore if the req body has the key exercises.
+    const requestBody = {}
+    for (let [key, val] of Object.entries(req.body)) {
+        if (key !== 'exercises') {
+            requestBody[key] = val
+        }
     }
     
-    const response = await SessionModel.create({routineId, createdByUserId, ...req.body})
+    const response = await SessionModel.create({routineId, createdByUserId, ...requestBody})
 
     res.status(StatusCodes.CREATED).json({response})
 }
@@ -59,10 +65,7 @@ const updateSession = async(req, res) => {
         user: {userId: createdByUserId},
         params: { routineId, sessionId }
     } = req
-    
-    if (!routineId) {
-        throw new BadRequestError('Missing routine Id!')
-    }
+
     if (!sessionId) {
         throw new BadRequestError('Missing session Id!')
     }
@@ -72,7 +75,15 @@ const updateSession = async(req, res) => {
         runValidators: true
     }
 
-    const response = await SessionModel.findOneAndUpdate({_id: sessionId, routineId, createdByUserId}, req.body, optObj)
+    // ignore if the req body has the key exercises.
+    const requestBody = {}
+    for (let [key, val] of Object.entries(req.body)) {
+        if (key !== 'exercises') {
+            requestBody[key] = val
+        }
+    }
+
+    const response = await SessionModel.findOneAndUpdate({_id: sessionId, routineId, createdByUserId}, requestBody, optObj)
 
     if (!response) {
         throw new NotFoundError('Session not found!')

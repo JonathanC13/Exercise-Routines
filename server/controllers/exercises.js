@@ -5,18 +5,12 @@ const SessionModel = require('../models/Session')
 const getAllExercises = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: { sessionId }
+        params: { sessionId },
+        sessDoc: response
     } = req
 
-    if (!sessionId) {
-        throw new BadRequestError('Missing session id!')
-    }
-
-    const response = await SessionModel.findOne({_id: sessionId, createdByUserId}).select('exercises').sort('order updatedAt')
-
-    if (!response) {
-        throw new NotFoundError('Exercises not found!')
-    }
+    // const response = await SessionModel.findOne({_id: sessionId, createdByUserId}).select('exercises').sort('order updatedAt')
+    response.select('exercises').sort('order updatedAt')
     
     res.status(StatusCodes.OK).json({response: response.exercises, count: response.exercises.length})
 }
@@ -24,17 +18,15 @@ const getAllExercises = async(req, res) => {
 const getExercise = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: { sessionId, exerciseId }
+        params: { sessionId, exerciseId },
+        sessDoc: parent
     } = req
 
-    if (!sessionId) {
-        throw new BadRequestError('Missing session id!')
-    }
     if (!exerciseId) {
         throw new BadRequestError('Missing exercise id!')
     }
 
-    const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
+    // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     const response = parent.exercises.id(exerciseId)
 
     res.status(StatusCodes.OK).json({response})
@@ -43,14 +35,16 @@ const getExercise = async(req, res) => {
 const createExercise = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: { sessionId }
+        params: { sessionId },
+        body: {name},
+        sessDoc: parent
     } = req
 
-    if (!sessionId) {
-        throw new BadRequestError('Missing session id!')
+    if (!name) {
+        throw new BadRequestError('Please provide an exercise name!')
     }
 
-    const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
+    // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     if (parent.exercises !== undefined) {
         parent.exercises.push(req.body)
     } else {
@@ -65,7 +59,8 @@ const createExercise = async(req, res) => {
 const updateExercise = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: { sessionId, exerciseId }
+        params: { sessionId, exerciseId },
+        sessDoc: parent
     } = req
     
     const optObj = {
@@ -91,7 +86,7 @@ const updateExercise = async(req, res) => {
         }
     }
 
-    const parent = await SessionModel.findOne({"createdByUserId": createdByUserId, "_id": sessionId})
+    // const parent = await SessionModel.findOne({"createdByUserId": createdByUserId, "_id": sessionId})
 
     if (!parent) {
         throw new NotFoundError('Session not found!')

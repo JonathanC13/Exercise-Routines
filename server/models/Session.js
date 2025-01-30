@@ -19,13 +19,13 @@ const SessionSchema = new mongoose.Schema({
     name: {
         type: String,
         trim: true,
-        required: [true, 'Please provide a name!'],
+        required: [true, 'Please provide a session name!'],
         maxLength: [50, 'Please provide a name that is 50 or less characters!']
     },
     description: {
         type: String,
         trim: true,
-        maxLength: 8000
+        maxLength: [500, 'Please provide a description that is less than 500 characters!']
     },
     exercises: {
         type: [ExerciseSchema],

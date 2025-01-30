@@ -83,7 +83,7 @@
 
 - Test 5: Length field validation.
     *Description*:
-        Request with too long name, invalid email, and too short password.
+        Request with too long name (> 50 characters), invalid email, and too short password (< 6 characters).
 
     *Body*: **JSON**
         {
@@ -127,11 +127,11 @@
         3. User document created in collection 'users'.
 
 - Test 7: Duplicate email.
-    *Prerequisite*:
-        1. Test 6 successful.
-
     *Description*:
         Request with an email that is already registered.
+
+    *Prerequisite*:
+        1. Test 6 successful.
 
     *Body*: **JSON**
         {
@@ -255,7 +255,7 @@
 # ./routes/routines
 ## GET : http://localhost:5000/api/v1/routines/
 *Prerequisites*:
-    1. Sucessful login that returned a valid JWT.
+    1. Successful login that returned a valid JWT.
 
 - Text X: Current user has 0 routines and GET requested.
     *Prerequisites*:
@@ -266,7 +266,11 @@
 
     *Expected results*:
         1. status code: 200.
-        2. response: emtpy array.
+        2. response: **JSON**
+            {
+                "response": [],
+                "count": 0
+            }
         3. In the cluster 'Exercise-Routines', no change in the documents in the collection 'routines'.    
 
 - Text X: Get all routines that were created by the current user.
@@ -278,12 +282,16 @@
 
     *Expected results*:
         1. status code: 200.
-        2. response: Array of the documents' objects.
+        2. response: **JSON**
+            {
+                "response": [documents' objects],
+                "count": 0
+            }
         3. In the cluster 'Exercise-Routines', no change in the documents in the collection 'routines'.
 
 ## POST : http://localhost:5000/api/v1/routines/
 *Prerequisites*:
-    1. Sucessful login that returned a valid JWT.
+    1. Successful login that returned a valid JWT.
 
 - Text X: Missing key "name"
     *Body*:
@@ -347,7 +355,7 @@
 
 ## GET : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
-    1. Sucessful login that returned a valid JWT.
+    1. Successful login that returned a valid JWT.
 
 - Test X: Invalid routine id.
     *Route params*:
@@ -368,7 +376,7 @@
         1. status code: 404.
         2. response: **JSON**
             {
-                message: That routine does not exist!
+                message: Routine not found!
             }
 
 - Test X: Successful get with Id that does exist.
@@ -376,17 +384,16 @@
         1. At least one routine document exists in the collection 'routines'.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid route _id
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
 
     *Expected results*:
         1. status code: 200.
         2. response: **JSON**
-            The document of the created routine.
-        3. The routine document created in the collection 'routines'.
+            The document of the routine.
 
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
-    1. Sucessful login that returned a valid JWT.
+    1. Successful login that returned a valid JWT.
 
 - Test X: Missing :routineId
     *Route params*:
@@ -427,7 +434,14 @@
         2. Record createdAt and updatedAt values.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid route _id
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        {
+            "order": 1,
+            "name": "NEW ROUTINE",
+            "description": "My first routine ??"
+        }
 
     *Expected results*:
         1. status code: 200.
@@ -439,7 +453,7 @@
 
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
-    1. Sucessful login that returned a valid JWT.
+    1. Successful login that returned a valid JWT.
 
 - Test X: Missing :routineId
     *Route params*:
@@ -532,40 +546,452 @@
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
         5. The comment documents with the exerciseId referenced are deleted from the the collection 'comments'.
 
---- HERE
+---
 
 # ./routes/sessions
-
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Text X: Get sessions with an empty routineid.
+    *Route params*:
+        :routineid = ''
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Id not found: sessions!
+            }
+
+- Test X: Get sessions with invalid routine id
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 67969cbe4163742abfe4d7d!
+            }
+
+- Test X: Get sessions with Id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7dA
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Routine not found!
+            }
+
+- Test X: Get sessions of a routine with an existing routine id.
+    *Prerequisites*:
+        1. A routine exitsts.
+        2. A session exists with a routineId that references the routine document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            {
+                {
+                    "response": [sessions],
+                    "count": 0
+                }
+            }
 
 ## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test X: Missing key "name".
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        {
+            "order": 2,
+            "description": "description111"
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Please provide a session name!
+            }
+        3. No session document created in collection 'sessions'.
+
+- Test X: Empty value for key "name".
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        {
+            "order": 2,
+            "name": "",
+            "description": "description111"
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Please provide a session name!
+            }
+        3. No session document created in collection 'sessions'.
+
+- Test X: Invalid lengths for name (> 50 characters) and descriptions (> 500 characters).
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        {
+            "order": 2,
+            "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
+            "description": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent."
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Validation failed for the following fields: Please provide a name that is 50 or less characters!, Please provide a description that is less than 500 characters!
+            }
+        3. No session document created in collection 'sessions'.
+
+- Test X: Successfully create a session.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        {
+            "order": 2,
+            "name": "my first session",
+            "description": "description111"
+        }
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            created document object
+        3. Session document created in collection 'sessions'.
 
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test X: Invalid session id.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routineId
+        :sessionId = 6796a5413cddc61acf7be05
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 6796a5413cddc61acf7be05!
+            }
+
+- Test X: session id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routineId
+        :sessionId = 6796a5413cddc61acf7be05A
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Session not found!
+            }
+
+- Test X: session id that does exist.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The document of the session.
 
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId
-- prereq, created exercises through the POST exercises route
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
 
-- X: patch only the Session info, exclude the exercises sub doc
+- Test X: Update session info excluding the exercises sub document.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+        2. Record createdAt and updatedAt values.
 
-- X: Specific test for updating exercises subdoc from routine route: update one exercise with all valid values.
-- X: Specific test for updating exercises subdoc from routine route: update one exercise with non valid values.
-- X: Specific test for updating exercises subdoc from routine route: update sub doc array by sending the request with modified array. 
-- X: Specific test for updating exercises subdoc from routine route: update sub doc array by sending the request with empty array. 
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        {
+            "order": 3,
+            "name": "sesh1",
+            "description": "description111222"
+        }
+        
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The document of the updated session.
+        3. The session document is updated in the collection 'sessions'.
+        4. createdAt value remains unchanged.
+        5. updatedAt changes to current time, account for timezone.
+
+- Test X: Specific test for attempting to update exercises subdoc.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+        2. At least one exercise document exists in the exercises sub document.
+        3. Record the information in the exercises sub document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        {
+            "order": 3,
+            "name": "sesh1",
+            "description": "description111222",
+            "exercises": []
+        }
+        
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The document of the updated session.
+        3. The session document is updated in the collection 'sessions'.
+        4. The exercises sub document array is unchanged.
 
 ## DELETE : http://localhost:5000/api/v1/routines/67969cbe4163742abfe4d7d5/sessions/:sessionId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
 
-- X: delete a session that has no exercises sub doc
-- X: delete a session with exercises but the exercises have no comments
-- X: delete a session with exercises but the exercises have comments
+- Test X: Delete a session that has no exercises sub documents in the array.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        N/A
+        
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A.
+        3. The session document is deleted from the collection 'sessions'.
+
+- Test X: Delete a session with exercises but the exercises have no comments.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+        2. At least one exercise in the exercises sub document array of the session.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        N/A
+        
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A.
+        3. The session document is deleted from the collection 'sessions'.
+
+- Test X: Delete a session with exercises but the exercises have comments.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+        2. At least one exercise in the exercises sub document array of the session.
+        3. At least one comment in the exercises sub document's comment sub document array. The comment also has a duplicate in the collection 'comments'
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        N/A
+        
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A.
+        3. The session document is deleted from the collection 'sessions'.
+        4. The comment document is deleted from the collection 'comments'.
 
 ---
 
 # ./routes/exercises
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test X: Invalid session id
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 6796a5413cddc61acf7be05!
+            }
+
+- Test X: session Id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            {
+                response: [],
+                count: 0
+            }
+
+- Test X: Valid session Id.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            {
+                response: [exercises],
+                count: 0
+            }
 
 ## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test X: Attempt to create an exercise with missing "name".
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        {
+            {
+                "order": 3,
+                "description": "DESSS1111", 
+                "sets": 10,
+                "repsOrDuration": "6",
+                "restTimeSeconds": 90
+            }
+        }
+        
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Please provide an exercise name!
+            }
+        3. No created exercise sub document in the session's exercises sub document array.
+
+- Test X: Attempt to create an exercise with no value for the key "name".
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        {
+            {
+                "order": 3,
+                "name": "",
+                "description": "DESSS1111",
+                "sets": 10,
+                "repsOrDuration": "6",
+                "restTimeSeconds": 90
+            }
+        }
+        
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Please provide an exercise name!
+            }
+        3. No created exercise sub document in the session's exercises sub document array.
+
+- Test X: Invalid length for "name" value. Max 50 characters.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        {
+            {
+                "order": 3,
+                "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
+                "description": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent.",
+                "sets": 10,
+                "repsOrDuration": "6",
+                "restTimeSeconds": 90
+            }
+        }
+        
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Please provide a name that is 50 or less characters!, Please provide a description that is 500 or less characters!
+            }
+        3. No created exercise sub document in the session's exercises sub document array.
+
+- Test X: Successfully create an exercise.
+    *Prerequisites*:
+        1. At least one session document exists in the collection 'sessions'.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        {
+            {
+                "order": 3,
+                "name": "Lorem ipsum odor",
+                "description": "Lorem ipsum odor amet",
+                "sets": 10,
+                "repsOrDuration": "6",
+                "restTimeSeconds": 90
+            }
+        }
+        
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The updated session document object.
+        3. The session document is updated to include the new exercise in the exercises sub document array.
 
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId
+
+-- HERE
 
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId
 - X: Update only the exercise info, exclude the "comments" key for the sub doc array
@@ -584,8 +1010,10 @@
 
 
 **TODO**
-Back end:
+middleware/validate-route-params/validate-exerciseId.js     to validate the exercise Id before moving onto the comments.js controller
 
+Back end:
+    * TO TEST
     2. controllers comments
         redo with CommentSchema
         get:

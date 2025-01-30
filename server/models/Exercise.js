@@ -8,14 +8,14 @@ const ExerciseSchema = new mongoose.Schema({
     },
     name: {
         type: String,
-        required: [true, 'Please provide a name!'],
+        required: [true, 'Please provide an exercise name!'],
         trim: true,
         maxLength: [50, 'Please provide a name that is 50 or less characters!']
     },
     description: {
         type: String,
         trim: true,
-        maxLength: 8000
+        maxLength: [500, 'Please provide a name that is 500 or less characters!']
     }, 
     sets: {
         type: Number,

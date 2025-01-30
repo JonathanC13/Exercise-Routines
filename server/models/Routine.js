@@ -12,7 +12,7 @@ const RoutineSchema = new mongoose.Schema({
     }, 
     name: {
         type: String,
-        required: [true, 'Please provide a name!'],
+        required: [true, 'Please provide a routine name!'],
         trim: true,
         maxLength: [50, 'Please provide a name that is 50 or less characters!']
     },

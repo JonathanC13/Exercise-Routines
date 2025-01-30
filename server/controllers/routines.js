@@ -35,7 +35,7 @@ const getRoutine = async(req, res, next) => {
     const response = await RoutineModel.findById(routineId)
 
     if (!response) {
-        throw new NotFoundError('That routine does not exist!')
+        throw new NotFoundError('Routine not found!')
     }
 
     res.status(StatusCodes.OK).json({response})
