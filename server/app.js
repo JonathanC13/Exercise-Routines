@@ -20,6 +20,7 @@ const commentsRouter = require('./routes/comments')
 const authorizationMiddleware = require('./middleware/authorization')
 const validateRoutineIdMiddleware = require('./middleware/validate-route-params/validate-routineId')
 const validateSessionIdMiddleware = require('./middleware/validate-route-params/validate-sessionId')
+const validateExerciseIdMiddleware = require('./middleware/validate-route-params/validate-exerciseId')
 
 // error handler
 const errorHandlerMiddleware = require('./middleware/error-handler')
@@ -54,7 +55,7 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/routines', authorizationMiddleware, routineRouter)
 routineRouter.use('/:routineId/sessions', validateRoutineIdMiddleware, sessionsRouter)
 sessionsRouter.use('/:sessionId/exercises', validateSessionIdMiddleware, exercisesRouter)
-exercisesRouter.use('/:exerciseId/comments', commentsRouter)
+exercisesRouter.use('/:exerciseId/comments', validateExerciseIdMiddleware, commentsRouter)
 
 // error routes
 app.use(errorHandlerMiddleware)

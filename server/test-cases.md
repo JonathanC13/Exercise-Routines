@@ -4,12 +4,13 @@
     *Description*:
         Request POST to register with missing "name" in the body.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "email": "test1@.com",
-                "password": "123456"
-            }
+            "email": "test1@.com",
+            "password": "123456"
         }
 
     *Expected results*:
@@ -24,13 +25,15 @@
     *Description*:
         Request POST to register with missing "email" in the body.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "name": "test2"
-                "password": "123456"
-            }
+            "name": "test2"
+            "password": "123456"
         }
+        
 
     *Expected results*:
         1. status code: 400.
@@ -43,13 +46,14 @@
 - Test 3: Missing key "password"
     *Description*:
         Request POST to register with missing "password" in the body.
+    
+    *Route params*: 
+        N/A
 
     *Body*: **JSON**
         {
-            {
-                "name": "test3",
-                "email": "test3@.com"
-            }
+            "name": "test3",
+            "email": "test3@.com"
         }
 
     *Expected results*:
@@ -64,13 +68,14 @@
     *Description*:
         Request with missing values in the name, email, and password.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "name": "",
-                "email": "",
-                "password": ""
-            }
+            "name": "",
+            "email": "",
+            "password": ""
         }
 
     *Expected results*:
@@ -85,13 +90,14 @@
     *Description*:
         Request with too long name (> 50 characters), invalid email, and too short password (< 6 characters).
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
-                "email": "A@B",
-                "password": "12345"
-            }
+            "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
+            "email": "A@B",
+            "password": "12345"
         }
 
     *Expected results*:
@@ -106,13 +112,14 @@
     *Description*:
         Request with valid body.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "name": "Jon",
-                "email": "Apple@Billy.com",
-                "password": "123456"
-            }
+            "name": "Jon",
+            "email": "Apple@Billy.com",
+            "password": "123456"
         }
 
     *Expected results*:
@@ -133,13 +140,14 @@
     *Prerequisite*:
         1. Test 6 successful.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "name": "Jonny",
-                "email": "Apple@Billy.com",
-                "password": "1234567"
-            }
+            "name": "Jonny",
+            "email": "Apple@Billy.com",
+            "password": "1234567"
         }
 
     *Expected results*:
@@ -158,11 +166,12 @@
     *Description*:
         Request POST to login with missing "email" in the body.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "password": "123456"
-            }
+            "password": "123456"
         }
 
     *Expected results*:
@@ -176,11 +185,12 @@
     *Description*:
         Request POST to login with missing "password" in the body.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "email": "Apple@Billy.com"
-            }
+            "email": "Apple@Billy.com"
         }
 
     *Expected results*:
@@ -194,12 +204,13 @@
     *Description*:
         Request POST to login with email that has not been registered.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "email": "A@B.com",
-                "password": "123456"
-            }
+            "email": "A@B.com",
+            "password": "123456"
         }
 
     *Expected results*:
@@ -213,12 +224,13 @@
     *Description*:
         Request POST to login with valid email but incorrect password.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "email": "Apple@Billy.com",
-                "password": "111111"
-            }
+            "email": "Apple@Billy.com",
+            "password": "111111"
         }
 
     *Expected results*:
@@ -232,12 +244,13 @@
     *Description*:
         Request with valid email and password.
 
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
-            {
-                "email": "Apple@Billy.com",
-                "password": "123456"
-            }
+            "email": "Apple@Billy.com",
+            "password": "123456"
         }
 
     *Expected results*:
@@ -261,6 +274,9 @@
     *Prerequisites*:
         1. 0 routines created by the current user.
 
+    *Route params*: 
+        N/A
+
     *Body*:
         N/A
 
@@ -276,6 +292,9 @@
 - Text X: Get all routines that were created by the current user.
     *Prerequisites*:
         1. 1 or more routines created by the current user.
+
+    *Route params*: 
+        N/A
 
     *Body*:
         N/A
@@ -294,6 +313,9 @@
     1. Successful login that returned a valid JWT.
 
 - Text X: Missing key "name"
+    *Route params*: 
+        N/A
+
     *Body*:
         {
             "order": 1,
@@ -309,6 +331,9 @@
         3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
 - Text X: Empty value for key "name".
+    *Route params*: 
+        N/A
+
     *Body*:
         {
             "order": 1,
@@ -325,6 +350,9 @@
         3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
 - Test X: Value for key "name" is longer than 50 characters and description is longer than 8000 characters.
+    *Route params*: 
+        N/A
+
     *Body*:
         {
             "order": 1,
@@ -341,6 +369,9 @@
         3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
 - Test X: Successful creation
+    *Route params*: 
+        N/A
+
     *Body*: **JSON**
         {
             "order": 1,
@@ -361,6 +392,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 404.
         2. response: **JSON**
@@ -371,6 +405,9 @@
 - Test X: Id that does not exist.
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7dA
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 404.
@@ -386,6 +423,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 200.
         2. response: **JSON**
@@ -399,6 +439,9 @@
     *Route params*:
         :routineid = ''
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 400.
         2. response: **JSON**
@@ -410,6 +453,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 404.
         2. response: **JSON**
@@ -420,6 +466,9 @@
 - Test X: Id that does not exist.
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7dA
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 404.
@@ -459,6 +508,9 @@
     *Route params*:
         :routineid = ''
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 400.
         2. response: **JSON**
@@ -470,6 +522,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 404.
         2. response: **JSON**
@@ -480,6 +535,9 @@
 - Test X: Id that does not exist.
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7dA
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 404.
@@ -495,6 +553,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 200.
         2. response: N/A
@@ -507,6 +568,9 @@
 
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 200.
@@ -523,6 +587,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 200.
         2. response: N/A
@@ -538,6 +605,9 @@
 
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 200.
@@ -557,6 +627,9 @@
     *Route params*:
         :routineid = ''
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 400.
         2. response: **JSON**
@@ -568,6 +641,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 404.
         2. response: **JSON**
@@ -578,6 +654,9 @@
 - Test X: Get sessions with Id that does not exist.
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7dA
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 404.
@@ -593,6 +672,9 @@
 
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 200.
@@ -690,6 +772,9 @@
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routineId
         :sessionId = 6796a5413cddc61acf7be05
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 404.
         2. response: **JSON**
@@ -701,6 +786,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routineId
         :sessionId = 6796a5413cddc61acf7be05A
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 404.
@@ -716,6 +804,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
         :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 200.
@@ -843,6 +934,9 @@
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
         :sessionId = 6796a5413cddc61acf7be05
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 404.
         2. response: **JSON**
@@ -854,6 +948,9 @@
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
         :sessionId = 6796a5413cddc61acf7be05A
+
+    *Body*:
+        N/A
 
     *Expected results*:
         1. status code: 200.
@@ -868,6 +965,9 @@
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
         :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
 
+    *Body*:
+        N/A
+
     *Expected results*:
         1. status code: 200.
         2. response: **JSON**
@@ -879,6 +979,7 @@
 ## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId and sessionId.
 
 - Test X: Attempt to create an exercise with missing "name".
     *Prerequisites*:
@@ -890,13 +991,11 @@
 
     *Body*:
         {
-            {
-                "order": 3,
-                "description": "DESSS1111", 
-                "sets": 10,
-                "repsOrDuration": "6",
-                "restTimeSeconds": 90
-            }
+            "order": 3,
+            "description": "DESSS1111", 
+            "sets": 10,
+            "repsOrDuration": "6",
+            "restTimeSeconds": 90
         }
         
     *Expected results*:
@@ -917,14 +1016,12 @@
 
     *Body*:
         {
-            {
-                "order": 3,
-                "name": "",
-                "description": "DESSS1111",
-                "sets": 10,
-                "repsOrDuration": "6",
-                "restTimeSeconds": 90
-            }
+            "order": 3,
+            "name": "",
+            "description": "DESSS1111",
+            "sets": 10,
+            "repsOrDuration": "6",
+            "restTimeSeconds": 90
         }
         
     *Expected results*:
@@ -945,14 +1042,12 @@
 
     *Body*:
         {
-            {
-                "order": 3,
-                "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
-                "description": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent.",
-                "sets": 10,
-                "repsOrDuration": "6",
-                "restTimeSeconds": 90
-            }
+            "order": 3,
+            "name": "Lorem ipsum odor amet aawe Lorem ipsum odor amet aa",
+            "description": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent.",
+            "sets": 10,
+            "repsOrDuration": "6",
+            "restTimeSeconds": 90
         }
         
     *Expected results*:
@@ -973,14 +1068,12 @@
 
     *Body*:
         {
-            {
-                "order": 3,
-                "name": "Lorem ipsum odor",
-                "description": "Lorem ipsum odor amet",
-                "sets": 10,
-                "repsOrDuration": "6",
-                "restTimeSeconds": 90
-            }
+            "order": 3,
+            "name": "Lorem ipsum odor",
+            "description": "Lorem ipsum odor amet",
+            "sets": 10,
+            "repsOrDuration": "6",
+            "restTimeSeconds": 90
         }
         
     *Expected results*:
@@ -990,24 +1083,257 @@
         3. The session document is updated to include the new exercise in the exercises sub document array.
 
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId and sessionId.
 
--- HERE
+- Test X: Provide invalid exerciseId
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Id not found: 6796a9b30a23b77a579881e!
+            }
+
+- Test X: Provide exerciseId that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881eA
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Exercise not found!
+            }
+
+- Test X: Provide valid exerciseId
+    *Prerequisites*:
+        1. An exercise was created within a session document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            exercise sub document object.
 
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId
-- X: Update only the exercise info, exclude the "comments" key for the sub doc array
-- X: Update only the exercise info, include the "comments" key for the sub doc array. It will be ignored!
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId and sessionId.
 
-- ** Front end will not be able to update the comments for the exercise route!
+- Test X: Update only the exercise info, exclude the "comments" key for the sub doc array.
+    *Prerequisites*:
+        1. An exercise was created within a session document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        {
+            "order": 5,
+            "name": "EXERCISE1",
+            "description": "YEESH", 
+            "sets": 5,
+            "repsOrDuration": "6",
+            "restTimeSeconds": 90
+        }
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The updated exercise sub document object.
+        3. The exercise sub document was updated in the session document.
+
+- X: Update only the exercise info, include the "comments" key for the sub doc array.
+    *Prerequisites*:
+        1. An exercise was created within a session document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        {
+            "order": 5,
+            "name": "EXERCISE1",
+            "description": "YEESH", 
+            "sets": 5,
+            "repsOrDuration": "6",
+            "restTimeSeconds": 90,
+            "comments": []
+        }
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            The updated exercise sub document object, but the comments value is not updated.
+        3. The exercise sub document was updated in the session document, but the comments value is not updated.
 
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId
-- X: delete exercise with no comments
-- X: delete exercise with comments. Will delete comments with the exercise id in the collection 'comments'
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId and sessionId.
+
+- X: Delete exercise with no comments.
+    *Prerequisites*:
+        1. An exercise was created within a session document.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. The exercise sub document has been deleted in the session document.
+
+- X: Delete exercise with comments. Will delete comments with the exercise id in the collection 'comments'
+    *Prerequisites*:
+        1. An exercise was created within a session document.
+        2. 1 or more comments created for the exercise. A comment in the exercise's comments sub document array has a duplicate in the collection 'comments'.
+        3. Record the exercise _id and comment _id.
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. The exercise sub document has been deleted in the session document.
+        4. The reference comments have been deleted from the collection 'comments'.
 
 ---
 
 # ./routes/comments
-## 
+## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId and sessionId.
 
+- Test X: Invalid route param :exerciseId.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Id not found: 6796a9b30a23b77a579881e!
+            }
+        3. The exercise sub document has been deleted in the session document.
+
+- Test X: Valid route param :exerciseId.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id.
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            {
+                response: [array of comment document objects],
+                count: doc count int
+            }
+
+## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId, sessionId, and exerciseId.
+
+- Test X: Create a valid comment.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        {
+            "text": "This is a comment!"
+        }
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: **JSON**
+            {
+                response: the comment's document object.
+            }  
+        3. The comment is created in the collection 'comments'
+        4. In the session's exercises sub document array, the comment is created.
+
+- Test X: Length validation for comment (<= 500 characters).
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        {
+            "text": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent."
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                response: Please provide a comment that is 500 characters or less!
+            }  
+        3. No comment created in the collection 'comments' and comment sub document in the exercise.
+
+- Test X: Create more than 3 comments for a single exercise.
+    *Description*:
+        The exercise's comment sub document array will only hold maximum 3 most recently added comments.
+
+    *Steps*:
+        Add 3 comments, record the oldest comment.
+        Add the 4th comment, the exercise's comment sub document array will remove the oldest comment and have the most 3 recent comments.
+        The collection 'comments' will have all 4 comments.
+
+## GET : 
+
+## PATCH : 
+
+## DELETE : 
 
 **TODO**
 middleware/validate-route-params/validate-exerciseId.js     to validate the exercise Id before moving onto the comments.js controller

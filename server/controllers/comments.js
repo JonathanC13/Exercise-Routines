@@ -7,12 +7,9 @@ const mongoose = require('mongoose')
 const getAllComments = async(req, res) => {
     const { 
         user: { userId: createdByUserId },
-        params: { exerciseId }
+        params: { exerciseId },
+        exerciseDoc: exerciseDoc
     } = req
-
-    if (!exerciseId) {
-        throw new BadRequestError('Missing exercise id!')
-    }
 
     const response = await CommentModel.find({createdByUserId, exerciseId})
 
@@ -26,7 +23,8 @@ const getAllComments = async(req, res) => {
 const getComment = async(req, res) => {
     const {
         user: { userId: createdByUserId },
-        params: { commentId }
+        params: { commentId },
+        exerciseDoc: exerciseDoc
     } = req
 
     const response = await CommentModel.find({_id: commentId, createdByUserId})
@@ -37,7 +35,8 @@ const getComment = async(req, res) => {
 const createComment = async(req, res) => {
     const {
         user: { userId: createdByUserId },
-        params: { sessionId, exerciseId }
+        params: { sessionId, exerciseId },
+        exerciseDoc: exerciseDoc
     } = req
 
     // Start a session
@@ -53,9 +52,9 @@ const createComment = async(req, res) => {
         // const crComId = commentRes._id
 
         // 2. create the comment in the Session -> exercises sub doc -> comments sub doc
-        const session = await SessionModel.findById(sessionId)
-        //const comments = session.exercises.id(exerciseId).comments.push({commentId: crComId, ...req.body})
-        const comments = session.exercises.id(exerciseId).comments.push(commentRes)
+        //const session = await SessionModel.findById(sessionId)
+        //--const comments = session.exercises.id(exerciseId).comments.push({commentId: crComId, ...req.body})
+        const comments = exerciseDoc.comments.push(commentRes)  //session.exercises.id(exerciseId).comments.push(commentRes)
         comments.sort((a, b) => {return new Date(b.createdAt) - new Date(a.createdAt)})
         session.exercises.id(exerciseId).comments = session.exercises.id(exerciseId).comments.slice(0, 3)
 
@@ -65,7 +64,7 @@ const createComment = async(req, res) => {
         // Commit the transaction
         await session.commitTransaction();
 
-        return res.status(StatusCodes.CREATED).json({response})
+        return res.status(StatusCodes.CREATED).json({response: commentRes})
     } catch (err) {
         throw new BadRequestError('Something has gone wrong!')
     } finally {
@@ -76,7 +75,8 @@ const createComment = async(req, res) => {
 const updateComment = async(req, res) => {
     const {
         user: { userId: createdByUserId },
-        params: { sessionId, exerciseId, commentId }
+        params: { sessionId, exerciseId, commentId },
+        exerciseDoc: exerciseDoc
     } = req
 
     // Start a session
@@ -91,8 +91,8 @@ const updateComment = async(req, res) => {
         const commentRes = await CommentModel.findAndUpdate({_id: commentId, createdByUserId, exerciseId}, req.body, {new: true, runValidators: true})
 
         // 2. update the comment in the Session -> exercises sub doc -> comments sub doc
-        const session = await SessionModel.findById(sessionId)
-        const comment = session.exercises.id(exerciseId).comments.id(commentId)
+        //const session = await SessionModel.findById(sessionId)
+        const comment = exerciseDoc.comments.id(commentId) //session.exercises.id(exerciseId).comments.id(commentId)
 
         // update the comment
         for (let [key, val] of Object.entries(req.body)) {
@@ -106,7 +106,7 @@ const updateComment = async(req, res) => {
         // Commit the transaction
         await session.commitTransaction();
 
-        return res.status(StatusCodes.OK).json({response})
+        return res.status(StatusCodes.OK).json({response: commentRes})
     } catch (err) {
         throw new BadRequestError('Something has gone wrong!')
     } finally {

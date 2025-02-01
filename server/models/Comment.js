@@ -14,7 +14,7 @@ const CommentSchema = new mongoose.Schema({
     text: {
         type: String,
         trim: true,
-        maxLength: 8000
+        maxLength: [500, 'Please provide a comment that is 500 characters or less!']
     }
 }, {timestamps: true})
 

@@ -29,6 +29,10 @@ const getExercise = async(req, res) => {
     // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     const response = parent.exercises.id(exerciseId)
 
+    if (!response) {
+        throw new BadRequestError('Exercise not found!')
+    }
+
     res.status(StatusCodes.OK).json({response})
 }
 
@@ -101,7 +105,7 @@ const updateExercise = async(req, res) => {
         throw new NotFoundError('Exercise not found!')
     }
 
-    res.status(StatusCodes.OK).json({response})
+    res.status(StatusCodes.OK).json({response: response.exercises.id(exerciseId)})
 }
 
 const deleteExercise = async(req, res) => {

@@ -13,11 +13,11 @@ const validateSessionId = async(req, res, next) => {
 
     const response = await SessionModel.find({'_id': sessionId, createdByUserId})
 
-    if (!response) {
-        throw new NotFoundError('Session not found!')
+    if (!response || response.length !== 1) {
+        throw new NotFoundError('Err: Session not found!')
     }
-
-    req.sessDoc = response
+    
+    req.sessDoc = response[0]
 
     next()
 }
