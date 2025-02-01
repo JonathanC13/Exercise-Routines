@@ -16,7 +16,7 @@ const getAllComments = async(req, res) => {
     if (!response) {
         throw new NotFoundError('Comments not found!')
     }
-
+    // ok if empty array
     res.status(StatusCodes.OK).json({response, count: response.length})
 }
 
@@ -28,6 +28,10 @@ const getComment = async(req, res) => {
     } = req
 
     const response = await CommentModel.find({_id: commentId, createdByUserId})
+
+    if (!response || response.length === 0) {
+        throw new NotFoundError('Comment not found!')
+    }
 
     res.status(StatusCodes.OK).json({response})
 }
@@ -90,9 +94,17 @@ const updateComment = async(req, res) => {
         // 1. update the comment in the Comment collection
         const commentRes = await CommentModel.findAndUpdate({_id: commentId, createdByUserId, exerciseId}, req.body, {new: true, runValidators: true})
 
+        if (!commentRes) {
+            throw new NotFoundError('Comment not found!')
+        }
+
         // 2. update the comment in the Session -> exercises sub doc -> comments sub doc
         //const session = await SessionModel.findById(sessionId)
         const comment = exerciseDoc.comments.id(commentId) //session.exercises.id(exerciseId).comments.id(commentId)
+
+        if (!comment) {
+            throw new NotFoundError('Comment not found!')
+        }
 
         // update the comment
         for (let [key, val] of Object.entries(req.body)) {

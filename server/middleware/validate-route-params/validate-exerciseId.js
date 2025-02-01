@@ -12,8 +12,8 @@ const validateExerciseId = async(req, res, next) => {
     if (!exerciseId) {
         throw new BadRequestError('Missing exercise id!')
     }
-
-    const exerciseDoc = sessDoc[0].exercises.id(exerciseId)
+    
+    const exerciseDoc = sessDoc.exercises.id(exerciseId)
 
     if (!exerciseDoc || exerciseDoc.length !== 1) {
         throw new NotFoundError('Err: Exercise not found!')

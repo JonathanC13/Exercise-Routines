@@ -1325,19 +1325,153 @@
         The exercise's comment sub document array will only hold maximum 3 most recently added comments.
 
     *Steps*:
-        Add 3 comments, record the oldest comment.
-        Add the 4th comment, the exercise's comment sub document array will remove the oldest comment and have the most 3 recent comments.
-        The collection 'comments' will have all 4 comments.
+        1. Add 3 comments, record the oldest comment.
+        2. Add the 4th comment.
+        
+    *Expected results*:
+        1. The exercise's comment sub document array will remove the oldest comment and have the most 3 recent comments.
+        2. The collection 'comments' will have all 4 comments.
 
-## GET : 
+## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId, sessionId, and exerciseId.
 
-## PATCH : 
+- Test X: Invalid comment Id.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e
 
-## DELETE : 
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400
+        2. response: **JSON**
+            {
+                message: Id not found: 6796a9b30a23b77a579881e!
+            }
+
+- Test X: Comment Id that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e4
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400
+        2. response: **JSON**
+            {
+                message: Comment not found!
+            }
+- Test X: Comment Id that does not exist.
+    *Prerequisites*:
+        1. Exercise contains at least 1 comment
+
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e9   // your valid comment _id
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: **JSON**
+            {
+                response: the comment document object.
+            }
+
+## PATCH : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId, sessionId, and exerciseId.
+
+- Test X: Update comment that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e2
+
+    *Body*:
+        {
+            "text": "hi"
+        }
+
+    *Expected results*:
+        1. status code: 400
+        2. response: **JSON**
+            {
+                message: Comment does not exist.
+            }
+
+- Test X: Update comment that does exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e9   // your valid comment _id
+
+    *Body*:
+        {
+            "text": "hi"
+        }
+
+    *Expected results*:
+        1. status code: 200
+        2. response: **JSON**
+            {
+                response: the comment document object
+            }
+        3. The comment is updated in the collection 'comments'.
+        4. The comment is updated in the collection 'sessions' session document -> exercise sub document -> comments sub document.
+
+## DELETE : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+    2. Valid route params: routineId, sessionId, and exerciseId.
+
+- Test X: Delete comment that does not exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e1
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400
+        2. response: **JSON**
+            {
+                message: Something has gone wrong!
+            }
+
+- Test X: Delete comment that does exist.
+    *Route params*:
+        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
+        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :commentId = 6796a9b30a23b77a579881e9   // your valid comment _id
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: N/A
 
 **TODO**
-middleware/validate-route-params/validate-exerciseId.js     to validate the exercise Id before moving onto the comments.js controller
-
 Back end:
     * TO TEST
     2. controllers comments
