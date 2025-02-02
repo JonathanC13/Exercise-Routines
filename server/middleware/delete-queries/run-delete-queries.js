@@ -1,5 +1,8 @@
 const mongoose = require('mongoose')
 const { BadRequestError } = require('../../errors')
+const RoutineModel = require('../../models/Routine')
+const SessionModel = require('../../models/Session')
+const { CommentModel:Comment } = require('../../models/Comment')
 
 const runDeleteQueries = async(req, res, next) => {
     const {
@@ -19,13 +22,17 @@ const runDeleteQueries = async(req, res, next) => {
 
         // Transaction queries
         for (let i = 0; i < queries.length; i ++) {
-            await queries[i]
+            const response = await queries[i][1]
+            
+            if (!response) {
+                throw new BadRequestError('Cascade delete error: ' + queries[i][0] + ".")
+            }
         }
 
         // Commit the transaction
         await session.commitTransaction();
     } catch (err) {
-        throw new BadRequestError('Something has gone wrong!')
+        throw new BadRequestError('Something has gone wrong! ' + err.message)
     } finally {
         session.endSession()
     }

@@ -88,7 +88,7 @@ const updateRoutine = async(req, res, next) => {
     }
 
     const response = await RoutineModel.findOneAndUpdate({createdByUserId, _id: routineId}, req.body, optObj)
-
+    
     if (!response) {
         throw new NotFoundError('Routine not found!')
     }

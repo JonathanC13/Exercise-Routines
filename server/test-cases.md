@@ -1,6 +1,6 @@
 # ./routes/auth
 ## POST : http://localhost:5000/api/v1/auth/register
-- Test 1: Missing key "name"
+- Test 1: Missing key "name".
     *Description*:
         Request POST to register with missing "name" in the body.
 
@@ -21,7 +21,9 @@
             }
         3. No user document created in collection 'users'.
 
-- Test 2: Missing key "email"
+    *Status*: Pass
+
+- Test 2: Missing key "email".
     *Description*:
         Request POST to register with missing "email" in the body.
 
@@ -34,7 +36,6 @@
             "password": "123456"
         }
         
-
     *Expected results*:
         1. status code: 400.
         2. response: **JSON**
@@ -43,7 +44,9 @@
             }
         3. No user document created in collection 'users'.
 
-- Test 3: Missing key "password"
+    *Status*: Pass
+
+- Test 3: Missing key "password".
     *Description*:
         Request POST to register with missing "password" in the body.
     
@@ -64,6 +67,8 @@
             }
         3. No user document created in collection 'users'.
 
+    *Status*: Pass
+
 - Test 4: Required field validation.
     *Description*:
         Request with missing values in the name, email, and password.
@@ -82,9 +87,11 @@
         1. status code: 400.
         2. response: **JSON**
             {
-                message: Validation failed for the following fields: Please provide a name!, Please provide an email!, Please provide a password!
+                message: Please provide the required fields!
             }
         3. No user document created in collection 'users'.
+
+    *Status*: Pass
 
 - Test 5: Length field validation.
     *Description*:
@@ -107,6 +114,8 @@
                 message: Validation failed for the following fields: Please provide a name 50 or less characters!, Please provide a valid email!, Please provide a password that is 6 or more characters!
             }
         3. No user document created in collection 'users'.
+
+    *Status*: Pass
 
 - Test 6: Successful registration.
     *Description*:
@@ -133,6 +142,8 @@
             }
         3. User document created in collection 'users'.
 
+    *Status*: Pass
+
 - Test 7: Duplicate email.
     *Description*:
         Request with an email that is already registered.
@@ -158,11 +169,13 @@
             }
         3. No user document created in collection 'users'.
 
+    *Status*: Pass
+
 ## POST : http://localhost:5000/api/v1/auth/login
 *Prerequisites*:
     1. At least one account successfully registered.
 
-- Test 1: Missing key "email"
+- Test 1: Missing key "email".
     *Description*:
         Request POST to login with missing "email" in the body.
 
@@ -180,8 +193,10 @@
             {
                 message: Please provide the required fields!
             }
+    
+    *Status*: Pass
 
-- Test 2: Missing key "password"
+- Test 2: Missing key "password".
     *Description*:
         Request POST to login with missing "password" in the body.
 
@@ -199,6 +214,8 @@
             {
                 message: Please provide the required fields!
             }
+
+    *Status*: Pass
 
 - Test 3: Enter email that has not been registered.
     *Description*:
@@ -220,6 +237,8 @@
                 message: Invalid credentials!
             }
 
+    *Status*: Pass
+
 - Test 4: Invalid password.
     *Description*:
         Request POST to login with valid email but incorrect password.
@@ -239,6 +258,8 @@
             {
                 message: Invalid credentials!
             }
+
+    *Status*: Pass
 
 - Test 5: Successful login.
     *Description*:
@@ -263,6 +284,8 @@
                 token: JWT
             }
 
+    *Status*: Pass
+
 ---
 
 # ./routes/routines
@@ -270,7 +293,10 @@
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
 
-- Text X: Current user has 0 routines and GET requested.
+- Text 1: Current user has 0 routines and GET requested.
+    *Description*:
+        Request GET to the route /routines to get all the logged in user's routines, but since there are none, the response is an empty array.
+
     *Prerequisites*:
         1. 0 routines created by the current user.
 
@@ -287,9 +313,14 @@
                 "response": [],
                 "count": 0
             }
-        3. In the cluster 'Exercise-Routines', no change in the documents in the collection 'routines'.    
+        3. In the cluster 'Exercise-Routines', no change in the documents in the collection 'routines'.
 
-- Text X: Get all routines that were created by the current user.
+    *Status*: Pass   
+
+- Text 2: Get all routines that were created by the current user.
+    *Description*:
+        Get all routines that were created by the current user, need to test routine creation first.
+
     *Prerequisites*:
         1. 1 or more routines created by the current user.
 
@@ -308,11 +339,43 @@
             }
         3. In the cluster 'Exercise-Routines', no change in the documents in the collection 'routines'.
 
+    *Status*: Pass
+
+        response: 200
+        {
+            "response": [
+                {
+                    "_id": "679fd2b27042f9426a4c74a9",
+                    "createdByUserId": "679fce257042f9426a4c749a",
+                    "order": 1,
+                    "name": "routine 1",
+                    "description": "My first routine",
+                    "createdAt": "2025-02-02T20:16:50.242Z",
+                    "updatedAt": "2025-02-02T20:16:50.242Z",
+                    "__v": 0
+                },
+                {
+                    "_id": "679fd498dca2129f77c3f997",
+                    "createdByUserId": "679fce257042f9426a4c749a",
+                    "order": 2,
+                    "name": "routine 2",
+                    "description": "My second routine",
+                    "createdAt": "2025-02-02T20:24:56.013Z",
+                    "updatedAt": "2025-02-02T20:24:56.013Z",
+                    "__v": 0
+                }
+            ],
+            "count": 2
+        }
+
 ## POST : http://localhost:5000/api/v1/routines/
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
 
-- Text X: Missing key "name"
+- Text 1: Missing key "name"
+    *Decription*:
+        Within the request body, omit the "name" key.
+
     *Route params*: 
         N/A
 
@@ -330,7 +393,12 @@
             }
         3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
-- Text X: Empty value for key "name".
+    *Status*: Pass
+
+- Text 2: Empty value for key "name".
+    *Decription*:
+        In the request body provide the "name" key, but the value is an empty String.
+
     *Route params*: 
         N/A
 
@@ -345,11 +413,17 @@
         1. status code: 400.
         2. response: **JSON**
             {
-                message: Validation failed for the following fields: Please provide a name!
+                message: Please provide a routine name!
             }
         3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
-- Test X: Value for key "name" is longer than 50 characters and description is longer than 8000 characters.
+    *Status*: Pass
+
+- Test 3: Value for key "name" is longer than 50 characters and description is longer than 500 characters.
+    *Description*:
+        In the request body provide the "name" key and the value is longer than 50 characters.
+        In the request body provide the "description" key and the value is longer than 500 characters.
+
     *Route params*: 
         N/A
 
@@ -368,14 +442,19 @@
             }
         3. In the cluster 'Exercise-Routines', no created document in the collection 'routines'.
 
-- Test X: Successful creation
+    *Status*: Pass
+
+- Test 4: Successful routine creation.
+    *Decription*:
+        The request body has a valid "name" value. "description" is optional.
+
     *Route params*: 
         N/A
 
     *Body*: **JSON**
         {
             "order": 1,
-            "name": "new routine",
+            "name": "routine 1",
             "description": "My first routine"
         }
 
@@ -384,11 +463,30 @@
         2. response: The object of the created document.
         3. In the cluster 'Exercise-Routines', a new document is created in the collection 'routines' with the exact values in the request.
 
+    *Status*: Pass
+
+        response: 201
+        {
+            "response": {
+                "createdByUserId": "679fce257042f9426a4c749a",
+                "order": 1,
+                "name": "routine 1",
+                "description": "My first routine",
+                "_id": "679fd2b27042f9426a4c74a9",
+                "createdAt": "2025-02-02T20:16:50.242Z",
+                "updatedAt": "2025-02-02T20:16:50.242Z",
+                "__v": 0
+            }
+        }
+
 ## GET : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
 
-- Test X: Invalid routine id.
+- Test 1: Invalid routine id.
+    *Description*:
+        In the route param :routineId, enter an invalid routine id.
+
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d
 
@@ -402,7 +500,12 @@
                 message: Id not found: 67969cbe4163742abfe4d7d!
             }
 
-- Test X: Id that does not exist.
+    *Status*: Pass
+
+- Test 2: Id that does not exist.
+    *Description*:
+        In the route param :routineId, enter an valid length routine id but an _id that does not exist in the collection 'routine'.
+
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7dA
 
@@ -416,12 +519,17 @@
                 message: Routine not found!
             }
 
-- Test X: Successful get with Id that does exist.
+    *Status*: Pass
+
+- Test 3: Successful get with Id that does exist.
+    *Description*:
+        In the route param :routineId, enter an valid length routine id but an _id that does exist in the collection 'routine'.
+
     *Prerequisites*:
         1. At least one routine document exists in the collection 'routines'.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :routineId = 679fd2b27042f9426a4c74a9   // your valid routine _id
 
     *Body*:
         N/A
@@ -431,11 +539,30 @@
         2. response: **JSON**
             The document of the routine.
 
+    *Status*: Pass
+    
+        response: 200
+        {
+            "response": {
+                "_id": "679fd2b27042f9426a4c74a9",
+                "createdByUserId": "679fce257042f9426a4c749a",
+                "order": 1,
+                "name": "routine 1",
+                "description": "My first routine",
+                "createdAt": "2025-02-02T20:16:50.242Z",
+                "updatedAt": "2025-02-02T20:16:50.242Z",
+                "__v": 0
+            }
+        }
+
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
 
-- Test X: Missing :routineId
+- Test 1: Missing :routineId
+    *Description*:
+        Within the request URL, omit the :routineId entirely. It should trigger page not found since the route does not exist.
+
     *Route params*:
         :routineid = ''
 
@@ -443,52 +570,92 @@
         N/A
 
     *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Page not found!
+            }
+
+    *Status*: Pass
+
+- Test 2: Invalid routine id.
+    *Description*:
+        Within the URL, enter an invalid routine id, not the correct _id length.
+
+    *Route params*:
+        :routineId = 679fd2b27042f9426a4c74a
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Id not found: 679fd2b27042f9426a4c74a!
+            }
+
+    *Status*: Pass
+
+- Test 3: routine Id that does not exist.
+    *Description*:
+        Within the URL, enter a routine _id that does not exist in the collection 'routines'.
+
+    *Route params*:
+        :routineId = 679fd2b27042f9426a4c74a8
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Routine not found!
+            }
+
+    *Status*: Pass
+
+- Test 4: routine Id that does exist and test validation for the "name".
+    *Description*:
+        Within the URL, enter a routine _id that does exist in the collection 'routines'.
+        In the body, enter the value for the "name" to be greater than 50 characters.
+
+    *Route params*:
+        :routineId = 679fd2b27042f9426a4c74a9
+
+    *Body*:
+        {
+            "order": 1,
+            "name": "NEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINENEW ROUTINE",
+            "description": "My first routine ??"
+        }
+
+    *Expected results*:
         1. status code: 400.
         2. response: **JSON**
             {
-                message: Missing routine id!
+                message: Validation failed for the following fields: Please provide a name that is 50 or less characters!
             }
 
-- Test X: Invalid routine id
-    *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d
+    *Status*: Pass
 
-    *Body*:
-        N/A
+- Test 5: Successful update with routine Id that does exist.
+    *Description*:
+        Within the URL, provide a routine _id that exists in the collection 'routines'.
+        Enter the field values with valid input.
 
-    *Expected results*:
-        1. status code: 404.
-        2. response: **JSON**
-            {
-                message: Id not found: 67969cbe4163742abfe4d7d!
-            }
-
-- Test X: Id that does not exist.
-    *Route params*:
-        :routineId = 67969cbe4163742abfe4d7dA
-
-    *Body*:
-        N/A
-
-    *Expected results*:
-        1. status code: 404.
-        2. response: **JSON**
-            {
-                message: That routine does not exist!
-            }
-
-- Test X: Successful update with Id that does exist.
     *Prerequisites*:
         1. At least one routine document exists in the collection 'routines'.
         2. Record createdAt and updatedAt values.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :routineId = 679fd2b27042f9426a4c74a9   // your valid routine _id
 
     *Body*:
         {
             "order": 1,
-            "name": "NEW ROUTINE",
+            "name": "routine 1 again",
             "description": "My first routine ??"
         }
 
@@ -500,11 +667,43 @@
         4. createdAt value remains unchanged.
         5. updatedAt changes to current time, account for timezone.
 
+    *Status*: Pass
+
+        original:
+            {
+                "_id": "679fd2b27042f9426a4c74a9",
+                "createdByUserId": "679fce257042f9426a4c749a",
+                "order": 1,
+                "name": "routine 1",
+                "description": "My first routine",
+                "createdAt": "2025-02-02T20:16:50.242Z",
+                "updatedAt": "2025-02-02T20:16:50.242Z",
+                "__v": 0
+            }
+
+        response: 200
+            {
+                "response": {
+                    "_id": "679fd2b27042f9426a4c74a9",
+                    "createdByUserId": "679fce257042f9426a4c749a",
+                    "order": 1,
+                    "name": "routine 1 again",
+                    "description": "My first routine ??",
+                    "createdAt": "2025-02-02T20:16:50.242Z",
+                    "updatedAt": "2025-02-02T20:36:24.374Z",
+                    "__v": 0
+                }
+            }
+
+
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
 
-- Test X: Missing :routineId
+- Test 1: Missing :routineId
+    *Description*:
+        In the request URL, omit the routine id.
+
     *Route params*:
         :routineid = ''
 
@@ -512,15 +711,20 @@
         N/A
 
     *Expected results*:
-        1. status code: 400.
+        1. status code: 404.
         2. response: **JSON**
             {
-                message: Missing routine id!
+                message: Page not found!
             }
 
-- Test X: Invalid routine id
+    *Status*: Pass
+
+- Test 2: Invalid routine id
+    *Description*:
+        In the request URL, enter an invalid length routine id.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d
+        :routineId = 679fd2b27042f9426a4c74a
 
     *Body*:
         N/A
@@ -529,12 +733,17 @@
         1. status code: 404.
         2. response: **JSON**
             {
-                message: Id not found: 67969cbe4163742abfe4d7d!
+                message: Id not found: 679fd2b27042f9426a4c74a!
             }
 
-- Test X: Id that does not exist.
+    *Status*: Pass
+
+- Test 3: Id that does not exist.
+    *Description*:
+        In the request URL, provide a routine _id that does not exist in the collection 'routines'.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7dA
+        :routineId = 679fd2b27042f9426a4c74a8
 
     *Body*:
         N/A
@@ -543,15 +752,20 @@
         1. status code: 404.
         2. response: **JSON**
             {
-                message: That routine does not exist!
+                message: Something has gone wrong! Cascade delete error: routine.
             }
 
-- Test X: Delete a routine that has no additional related documents in other collections.
+    *Status*: Pass
+
+- Test 4: Delete a routine that has no additional related documents in other collections.
+    *Description*:
+        Delete a routine document from the collection 'routines' that has no other documents that reference the routine _id.
+
     *Prerequisites*:
-        1. Create a routine document.
+        1. A routine document exists for the current user.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
+        :routineId = 679fd2b27042f9426a4c74a9   // your valid routine _id
 
     *Body*:
         N/A
@@ -561,10 +775,16 @@
         2. response: N/A
         3. The document is deleted from the collection 'routines'.
 
-- Test X: Delete a routine that has related session documents in the collection 'sessions'.
+    *Status*: Pass
+
+- Test 5: Delete a routine that has related session documents in the collection 'sessions'.
+    *Description*:
+        To test the cascading delete when routine is deleted.
+        With a routine document that has a session document in collection 'sessions' that has a reference to the routine _id. session document field routineId.
+
     *Prerequisites*:
-        1. Create a routine document.
-        2. Create 2 session document that references the routine document id.
+        1. Created a routine document.
+        2. Created 2 session document that references the routine document id.
 
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
@@ -578,10 +798,17 @@
         3. The routine document is deleted from the collection 'routines'.
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
 
-- Test X: Delete a routine that has related session documents and those sessions have sub documents of exercises.
+    *Status*: todo
+
+- Test 6: Delete a routine that has related session documents and those sessions have sub documents in the array exercises.
+    *Description*:
+        To test the cascading delete when routine is deleted.
+        With a routine document that has 2 session documents in collection 'sessions' that has a reference to the routine _id. session document field routineId.
+        Within each session document's exercises sub document array, there are 2 exercises.
+
     *Prerequisites*:
-        1. Create a routine document.
-        2. Create 2 session document that references the routine document id.
+        1. Created a routine document.
+        2. Created 2 session document that references the routine document id.
         3. Each session document, add 2 exercises to the exercises sub document array.
 
     *Route params*:
@@ -596,10 +823,18 @@
         3. The routine document is deleted from the collection 'routines'.
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
 
-- Test X: Delete a routine that has related session documents and those sessions have sub documents of exercises and some of the exercises have comments in a subset pattern.
+    *Status*: todo
+
+- Test 7: Delete a routine that has related session documents and those sessions have sub documents of exercises and some of the exercises have comments in a subset pattern.
+    *Description*:
+        To test the cascading delete when routine is deleted.
+        With a routine document that has 2 session documents in collection 'sessions' that has a reference to the routine _id. session document field routineId.
+        Within each session document's exercises sub document array, there are 2 exercises.
+        For at least 2 exercises, add 2 or more comments each.
+
     *Prerequisites*:
-        1. Create a routine document.
-        2. Create 2 session document that references the routine document id.
+        1. Created a routine document.
+        2. Created 2 session document that references the routine document id.
         3. Each session document, add 2 exercises to the exercises sub document array.
         4. For at least 2 exercises, add 2 or more comments each.
 
@@ -616,7 +851,9 @@
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
         5. The comment documents with the exerciseId referenced are deleted from the the collection 'comments'.
 
----
+    *Status*: todo
+
+--- HERE
 
 # ./routes/sessions
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/

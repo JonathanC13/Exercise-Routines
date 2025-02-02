@@ -16,7 +16,7 @@ const routineDeleteQuery = (req, res, next) => {
     if (!req.queries) {
         req.queries = []
     }
-    req.queries.push(query)
+    req.queries.push(['routine', query])
 
     req.routineId = routineId
 

@@ -32,7 +32,7 @@ const exerciseDeleteQuery = async(req, res, next) => {
     if (!req.queries) {
         req.queries = []
     }
-    req.queries.push(query)
+    req.queries.push(['exercises', query])
 
     req.exerciseIds = exerciseIds
 

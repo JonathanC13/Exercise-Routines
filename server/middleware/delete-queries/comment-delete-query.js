@@ -1,5 +1,5 @@
 const SessionModel = require('../../models/Session')
-const CommentModel = require('../../models/Comment')
+const { CommentModel } = require('../../models/Comment')
 const {BadRequestError} = require('../../errors')
 
 const commentDeleteQuery = async(req, res, next) => {
@@ -12,7 +12,7 @@ const commentDeleteQuery = async(req, res, next) => {
 
     if (exerciseIds) {
         // if here, it means the entire exercise is being deleted so just handle Comment collection here
-        queries.push(CommentModel.deleteMany({exerciseId: [...exerciseIds]}))
+        queries.push(['comment', CommentModel.deleteMany({exerciseId: [...exerciseIds]})])
     } else {
         if (!commentId) {
             throw new BadRequestError('Missing comment Id!')
@@ -26,9 +26,9 @@ const commentDeleteQuery = async(req, res, next) => {
             }
         })
         subdocQ.save()
-        queries.push(subdocQ)
+        queries.push(['comment', subdocQ])
 
-        queries.push(CommentModel.findByIdAndDelete(commentId))
+        queries.push(['comment', CommentModel.findByIdAndDelete(commentId)])
     }
 
     

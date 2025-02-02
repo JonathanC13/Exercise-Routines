@@ -39,7 +39,7 @@ const sessionDeleteQuery = async(req, res, next) => {
     if (!req.queries) {
         req.queries = []
     }
-    req.queries.push(query)
+    req.queries.push(['session', query])
 
     req.exerciseIds = exerciseIds
 
