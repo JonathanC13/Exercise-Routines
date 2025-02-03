@@ -29,10 +29,12 @@ const sessionDeleteQuery = async(req, res, next) => {
 
         query = SessionModel.findByIdAndDelete(sessionId)
 
-        const response = await SessionModel.findById(sessionId).select('exercises')
-        response['exercises'].forEach((obj) => {
-            exerciseIds.push(obj._id)
-        })
+        const response = await SessionModel.findById(sessionId)
+        if (response && response.exercises !== undefined) {
+            response.exercises.forEach((obj) => {
+                exerciseIds.push(obj._id)
+            })
+        }
 
     }
 

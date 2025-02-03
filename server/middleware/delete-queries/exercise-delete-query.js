@@ -21,9 +21,11 @@ const exerciseDeleteQuery = async(req, res, next) => {
         exerciseIds = [exerciseId]
     } else {
         const resp = await SessionModel.findById(sessionId)
-        resp.exercises.forEach((ex) => {
-            exerciseIds.push(ex._id)
-        })
+        if (resp && resp.exercises !== undefined) {
+            resp.exercises.forEach((ex) => {
+                exerciseIds.push(ex._id)
+            })
+        }
 
         query.exercises = []
         query.save()

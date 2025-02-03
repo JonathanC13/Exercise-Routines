@@ -10,9 +10,16 @@ const getAllExercises = async(req, res) => {
     } = req
 
     // const response = await SessionModel.findOne({_id: sessionId, createdByUserId}).select('exercises').sort('order updatedAt')
-    response.select('exercises').sort('order updatedAt')
+    const exArr = response.exercises
+    // sort order asc, if same then sort updatedAt desc.
+    exArr.sort((a, b) => {
+        if (a.order - b.order === 0) {
+            return new Date(b.updatedAt) - new Date(a.updatedAt)
+        }
+        return a.order - b.order
+    })
     
-    res.status(StatusCodes.OK).json({response: response.exercises, count: response.exercises.length})
+    res.status(StatusCodes.OK).json({response: exArr, count: exArr.length})
 }
 
 const getExercise = async(req, res) => {
@@ -25,10 +32,10 @@ const getExercise = async(req, res) => {
     if (!exerciseId) {
         throw new BadRequestError('Missing exercise id!')
     }
-
+    
     // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     const response = parent.exercises.id(exerciseId)
-
+    
     if (!response) {
         throw new BadRequestError('Exercise not found!')
     }
