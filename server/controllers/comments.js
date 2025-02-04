@@ -68,7 +68,7 @@ const createComment = async(req, res) => {
 
         return res.status(StatusCodes.CREATED).json({response: commentRes})
     } catch (err) {
-        throw new BadRequestError('Something has gone wrong!')
+        throw new BadRequestError('Something has gone wrong! err: ' + err.message)
     } finally {
         session.endSession()
     }

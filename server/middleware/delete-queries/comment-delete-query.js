@@ -5,6 +5,7 @@ const {BadRequestError} = require('../../errors')
 const commentDeleteQuery = async(req, res, next) => {
     const {
         params: {sessionId, exerciseId, commentId},
+        user: { userId: createdByUserId },
         exerciseIds
     } = req
 
@@ -12,14 +13,14 @@ const commentDeleteQuery = async(req, res, next) => {
 
     if (exerciseIds) {
         // if here, it means the entire exercise is being deleted so just handle Comment collection here
-        queries.push(['comment', CommentModel.deleteMany({exerciseId: [...exerciseIds]})])
+        queries.push(['comment', CommentModel.deleteMany({createdByUserId, exerciseId: [...exerciseIds]})])
     } else {
         if (!commentId) {
             throw new BadRequestError('Missing comment Id!')
         }
 
         // if specific Id, must remove from exercise sub doc array and in Comment collection
-        const subdocQ = SessionModel.findById(sessionId)
+        const subdocQ = SessionModel.findOne({_id: sessionId, createdByUserId})
         subdocQ.exercises.id(exerciseId) = subdocQ.exercises.id(exerciseId).comments.filter((comment) => {
             if (comment._id !== commentId) {
                 return comment
@@ -28,7 +29,7 @@ const commentDeleteQuery = async(req, res, next) => {
         subdocQ.save()
         queries.push(['comment', subdocQ])
 
-        queries.push(['comment', CommentModel.findByIdAndDelete(commentId)])
+        queries.push(['comment', CommentModel.findOneAndDelete({_id: commentId, createdByUserId})])
     }
 
     

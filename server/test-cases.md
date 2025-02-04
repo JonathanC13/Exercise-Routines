@@ -1929,8 +1929,10 @@
         3. The exercise sub document has been deleted in the session document.
         4. The reference comments have been deleted from the collection 'comments'.
 
-    *Status*: 
-
+    *Status*: Pass
+        Before:
+            Exercise id = 67a16059416c3846e3bb145c
+            Comment Ids = [67a1664ce6f51a0420d4aa45, 67a16653e6f51a0420d4aa4f, 67a16677e6f51a0420d4aa5a, 67a16696e6f51a0420d4aa65]
 ---
 
 # ./routes/comments
@@ -1939,28 +1941,56 @@
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId and sessionId.
 
-- Test X: Invalid route param :exerciseId.
+- Test 1: Invalid route param :exerciseId.
+    *Description*:
+        In the request URL, provide an :exercide Id that is an invalid length.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b0
 
     *Body*:
         N/A
 
     *Expected results*:
-        1. status code: 400.
+        1. status code: 404.
         2. response: **JSON**
             {
-                message: Id not found: 6796a9b30a23b77a579881e!
+                message: Err: Exercise not found!
             }
-        3. The exercise sub document has been deleted in the session document.
 
-- Test X: Valid route param :exerciseId.
+    *Status*: Pass
+
+- Test 2: Route param :exerciseId that does not exist.
+    *Description*:
+        In the request URL, provide an :exercide Id that is valid length but does not exist in the session's exercises sub document array.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id.
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b01  
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Err: Exercise not found!
+            }
+
+    *Status*: Pass
+
+- Test 3: Valid route param :exerciseId.
+    *Description*:
+        In the request URL, provide a valid :exerciseId.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id.
 
     *Body*:
         N/A
@@ -1973,16 +2003,87 @@
                 count: doc count int
             }
 
+    *Status*: Pass
+
 ## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId, sessionId, and exerciseId.
 
-- Test X: Create a valid comment.
+- Test 1: Invalid route param :exerciseId.
+    *Description*:
+        In the request URL, provide an :exercide Id that is an invalid length.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b0
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Err: Exercise not found!
+            }
+
+    *Status*: Pass
+
+- Test 2: Route param :exerciseId that does not exist.
+    *Description*:
+        In the request URL, provide an :exercide Id that is valid length but does not exist in the session's exercises sub document array.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b01  
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404.
+        2. response: **JSON**
+            {
+                message: Err: Exercise not found!
+            }
+
+    *Status*: Pass
+
+- Test 3: Length validation for comment (<= 500 characters).
+    *Description*:
+        In the request body, provide a value for the "text" field that is more than 500 characters.
+
     *Route params*:
         :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
         :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
         :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+
+    *Body*:
+        {
+            "text": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent."
+        }
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Something has gone wrong! err: Comment validation failed: text: Please provide a comment that is 500 characters or less!
+            }  
+        3. No comment created in the collection 'comments' and comment sub document in the exercise.
+
+    *Status*: Pass
+
+- Test 4: Create a valid comment.
+    *Description*:
+        In the request body, provide a value for the "text" field that is less than 500 characters.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
 
     *Body*:
         {
@@ -1998,37 +2099,32 @@
         3. The comment is created in the collection 'comments'
         4. In the session's exercises sub document array, the comment is created.
 
-- Test X: Length validation for comment (<= 500 characters).
-    *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+    *Status*: Pass
 
-    *Body*:
-        {
-            "text": "Lorem ipsum odor amet, consectetuer adipiscing elit. Odio erat suscipit taciti nullam ligula elit. Massa mattis cras habitasse nostra morbi ornare ex vel. Libero sodales ultrices feugiat vivamus ex mattis nam massa. Aliquet litora sem lacinia dictum venenatis urna suscipit ullamcorper consequat. Aliquam mattis dui mattis senectus eleifend phasellus tincidunt. Magna elit viverra facilisis varius quisque arcu magnis magnis. Torquent volutpat magna mi sollicitudin; sollicitudin massa dis litora. Integer sit sociosqu donec arcu ante mollis tortor. Sollicitudin feugiat nascetur fringilla commodo aliquet praesent nullam praesent."
-        }
-
-    *Expected results*:
-        1. status code: 400.
-        2. response: **JSON**
-            {
-                response: Please provide a comment that is 500 characters or less!
-            }  
-        3. No comment created in the collection 'comments' and comment sub document in the exercise.
-
-- Test X: Create more than 3 comments for a single exercise.
+- Test 5: Create more than 3 comments for a single exercise.
     *Description*:
-        The exercise's comment sub document array will only hold maximum 3 most recently added comments.
+        The exercise's comment sub document array will only hold maximum 3 most recently added comments. Therefore, add more than 3 comments for a single exercise to validate that in the exercise's comments sub document array only hold the 3 most recently created ordered from most recent to last and that the collection 'comments' holds all the comments.
 
     *Steps*:
-        1. Add 3 comments, record the oldest comment.
+        1. Add 3 comments, record the comment Ids.
         2. Add the 4th comment.
         
     *Expected results*:
-        1. The exercise's comment sub document array will remove the oldest comment and have the most 3 recent comments.
+        1. The exercise's comment sub document array will only contain the 3 most recently created comments ordered from most recent to last.
         2. The collection 'comments' will have all 4 comments.
 
+    *Status*: Pass
+
+        67a27eefe2c6979e183ed5ce    4th
+        67a27d87e2c6979e183ed5c2    3rd
+        67a27bcfb9615d5a753cafc5    2nd
+        67a27636efc925fa402a2b0c    1st
+
+        exercise's comment sub document array
+            67a27eefe2c6979e183ed5ce    4th
+            67a27d87e2c6979e183ed5c2    3rd
+            67a27bcfb9615d5a753cafc5    2nd
+HERE
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.

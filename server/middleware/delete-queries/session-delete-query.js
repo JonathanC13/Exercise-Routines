@@ -5,6 +5,7 @@ const sessionDeleteQuery = async(req, res, next) => {
 
     const {
         params: {sessionId},
+        user: { userId: createdByUserId },
         routineId
     } = req
 
@@ -27,9 +28,9 @@ const sessionDeleteQuery = async(req, res, next) => {
             throw new BadRequestError('Missing session Id!')
         }
 
-        query = SessionModel.findByIdAndDelete(sessionId)
+        query = SessionModel.findOneAndDelete({_id: sessionId, createdByUserId})
 
-        const response = await SessionModel.findById(sessionId)
+        const response = await SessionModel.findOne({_id: sessionId, createdByUserId})
         if (response && response.exercises !== undefined) {
             response.exercises.forEach((obj) => {
                 exerciseIds.push(obj._id)

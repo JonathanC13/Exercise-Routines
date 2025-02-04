@@ -4,14 +4,15 @@ const {BadRequestError} = require('../../errors')
 const routineDeleteQuery = (req, res, next) => {
 
     const {
-        params: {routineId}
+        params: {routineId},
+        user: { userId: createdByUserId }
     } = req
 
     if (!routineId) {
         throw new BadRequestError('Missing routine id!')
     }
 
-    const query = RoutineModel.findByIdAndDelete(routineId)
+    const query = RoutineModel.findOneAndDelete({_id: routineId, createdByUserId})
 
     if (!req.queries) {
         req.queries = []
