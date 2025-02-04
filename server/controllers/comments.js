@@ -1,5 +1,5 @@
 const SessionModel = require('../models/Session')
-const CommentModel = require('../models/Comment')
+const {CommentModel} = require('../models/Comment')
 const {StatusCodes} = require('http-status-codes')
 const {BadRequestError, NotFoundError} = require('../errors')
 const mongoose = require('mongoose')
@@ -40,31 +40,29 @@ const createComment = async(req, res) => {
     const {
         user: { userId: createdByUserId },
         params: { sessionId, exerciseId },
+        sessDoc: sessDoc,
         exerciseDoc: exerciseDoc
     } = req
 
     // Start a session
     const session = await mongoose.startSession();
-
     try {
         // Start a transaction
         session.startTransaction();
-
         // Transaction queries
         // 1. create comment in the Comment collection
+        
         const commentRes = await CommentModel.create({createdByUserId, exerciseId, ...req.body})
         // const crComId = commentRes._id
 
         // 2. create the comment in the Session -> exercises sub doc -> comments sub doc
         //const session = await SessionModel.findById(sessionId)
         //--const comments = session.exercises.id(exerciseId).comments.push({commentId: crComId, ...req.body})
-        const comments = exerciseDoc.comments.push(commentRes)  //session.exercises.id(exerciseId).comments.push(commentRes)
-        comments.sort((a, b) => {return new Date(b.createdAt) - new Date(a.createdAt)})
-        session.exercises.id(exerciseId).comments = session.exercises.id(exerciseId).comments.slice(0, 3)
+        exerciseDoc.comments.push(commentRes)
+        exerciseDoc.comments.sort((a, b) => {return new Date(b.createdAt) - new Date(a.createdAt)})
+        exerciseDoc.comments = exerciseDoc.comments.slice(0, 3)
 
-        console.log(comments)
-        const response = await session.save()
-        console.log(response)
+        const response = await sessDoc.save()
         // Commit the transaction
         await session.commitTransaction();
 

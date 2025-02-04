@@ -1673,14 +1673,59 @@
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId and sessionId.
 
-- Test X: Update only the exercise info, exclude the "comments" key for the sub doc array. -- HERE
+- Test 1: Provide invalid exerciseId.
+    *Description*:
+        In the request URL, provide a :exerciseId that is an invalid length.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a12f1aa86add8b2d09710
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Id not found: 67a12f1aa86add8b2d09710!
+            }
+
+    *Status*: Pass
+
+- Test 2: Provide exerciseId that does not exist.
+    *Description*:
+        In the request URL, provide an :exerciseId that does not exist in the session's exercises sub document array.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a12f1aa86add8b2d097104
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 400.
+        2. response: **JSON**
+            {
+                message: Exercise not found!
+            }
+
+    *Status*: Pass
+
+- Test 3: Update only the exercise info, exclude the "comments" key for the sub doc array.
+    *Description*:
+        In the request body, provide all valid information to update the exercise sub document. Exclude the "comments" field.
+
     *Prerequisites*:
         1. An exercise was created within a session document.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a12f1aa86add8b2d097105  // your valid exercise _id
 
     *Body*:
         {
@@ -1689,7 +1734,7 @@
             "description": "YEESH", 
             "sets": 5,
             "repsOrDuration": "6",
-            "restTimeSeconds": 90
+            "restTimeSeconds": 60
         }
 
     *Expected results*:
@@ -1698,7 +1743,45 @@
             The updated exercise sub document object.
         3. The exercise sub document was updated in the session document.
 
-- X: Update only the exercise info, include the "comments" key for the sub doc array.
+    *Status*: Pass
+        Before:
+            {
+                "response": {
+                    "order": 1,
+                    "name": "exercise 1",
+                    "description": "DESCRIPTION",
+                    "sets": 3,
+                    "repsOrDuration": "12",
+                    "restTimeSeconds": 90,
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-03T21:03:22.305Z"
+                }
+            }
+
+        After:
+            response: 200
+            {
+                "response": {
+                    "order": 5,
+                    "name": "EXERCISE1",
+                    "description": "YEESH",
+                    "sets": 5,
+                    "repsOrDuration": "6",
+                    "restTimeSeconds": 60,
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-04T00:04:58.276Z"
+                }
+            }
+
+- Test 4: Update the exercise info, include the "comments" key for the sub doc array.
+    *Description*:
+        In the request body, provide all valid information to update the exercise sub document. Include the "comments" field.
+        The comments should not be updated, no matter what value.
+
     *Prerequisites*:
         1. An exercise was created within a session document.
 
@@ -1709,12 +1792,12 @@
 
     *Body*:
         {
-            "order": 5,
-            "name": "EXERCISE1",
-            "description": "YEESH", 
-            "sets": 5,
-            "repsOrDuration": "6",
-            "restTimeSeconds": 90,
+            "order": 2,
+            "name": "EXERCISE 11",
+            "description": "desc", 
+            "sets": 3,
+            "repsOrDuration": "8",
+            "restTimeSeconds": 100,
             "comments": []
         }
 
@@ -1724,19 +1807,94 @@
             The updated exercise sub document object, but the comments value is not updated.
         3. The exercise sub document was updated in the session document, but the comments value is not updated.
 
+    *Status*: Pass
+        Before:
+            {
+                "response": {
+                    "order": 5,
+                    "name": "EXERCISE1",
+                    "description": "YEESH",
+                    "sets": 5,
+                    "repsOrDuration": "6",
+                    "restTimeSeconds": 60,
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-04T00:04:58.276Z"
+                }
+            }
+        
+        After:
+            response: 200
+            {
+                "response": {
+                    "order": 2,
+                    "name": "EXERCISE 11",
+                    "description": "desc",
+                    "sets": 3,
+                    "repsOrDuration": "8",
+                    "restTimeSeconds": 100,
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-04T00:07:43.636Z"
+                }
+            }
+
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId and sessionId.
 
-- X: Delete exercise with no comments.
+- Test 1: Provide invalid exerciseId.
+    *Description*:
+        In the request URL, provide a :exerciseId that is an invalid length.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a12f1aa86add8b2d09710
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. Nothing actually deleted.
+
+    *Status*: Pass
+
+- Test 2: Provide exerciseId that does not exist.
+    *Description*:
+        In the request URL, provide an :exerciseId that does not exist in the session's exercises sub document array.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a12f1aa86add8b2d097104
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200.
+        2. response: N/A
+        3. Nothing actually deleted.
+
+    *Status*: Pass
+
+- Test 3: Delete exercise with no comments.
+    *Description*:
+        In the request URL, provide an :exerciseId that does exist in the session's exercises sub document array. That document should have an empty comments sub document array.
+
     *Prerequisites*:
         1. An exercise was created within a session document.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a16059416c3846e3bb145c  // your valid exercise _id
 
     *Body*:
         N/A
@@ -1746,16 +1904,21 @@
         2. response: N/A
         3. The exercise sub document has been deleted in the session document.
 
-- X: Delete exercise with comments. Will delete comments with the exercise id in the collection 'comments'
+    *Status*: Pass
+
+- Test 4: Delete exercise with comments. Will delete comments with the exercise id in the collection 'comments'. --HERE
+    *Description*:
+        In the request URL, provide an :exerciseId that does exist in the session's exercises sub document array. That document should have an non-empty comments sub document array.
+
     *Prerequisites*:
         1. An exercise was created within a session document.
         2. 1 or more comments created for the exercise. A comment in the exercise's comments sub document array has a duplicate in the collection 'comments'.
         3. Record the exercise _id and comment _id.
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a16059416c3846e3bb145c  // your valid exercise _id
 
     *Body*:
         N/A
@@ -1765,6 +1928,8 @@
         2. response: N/A
         3. The exercise sub document has been deleted in the session document.
         4. The reference comments have been deleted from the collection 'comments'.
+
+    *Status*: 
 
 ---
 

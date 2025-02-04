@@ -14,12 +14,12 @@ const validateExerciseId = async(req, res, next) => {
     }
     
     const exerciseDoc = sessDoc.exercises.id(exerciseId)
-
-    if (!exerciseDoc || exerciseDoc.length !== 1) {
+    
+    if (!exerciseDoc) {
         throw new NotFoundError('Err: Exercise not found!')
     }
-
-    req.exerciseDoc = exerciseDoc[0]
+    
+    req.exerciseDoc = exerciseDoc
 
     next()
 }

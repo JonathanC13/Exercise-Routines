@@ -14,11 +14,13 @@ const exerciseDeleteQuery = async(req, res, next) => {
         throw new BadRequestError('Missing exercise Id!')
     }
 
-    query = SessionModel.findById(sessionId)
-
     if (exerciseId) {
-        query.exercises.id(exerciseId).remove()
-        exerciseIds = [exerciseId]
+        const resp = await SessionModel.findById(sessionId)
+        if (resp && resp.exercises !== undefined && resp.exercises.id(exerciseId)) {
+            resp.exercises.id(exerciseId).deleteOne()
+        }
+        query = resp.save()
+        exerciseIds.push(exerciseId)
     } else {
         const resp = await SessionModel.findById(sessionId)
         if (resp && resp.exercises !== undefined) {
@@ -26,7 +28,7 @@ const exerciseDeleteQuery = async(req, res, next) => {
                 exerciseIds.push(ex._id)
             })
         }
-
+        query = SessionModel.findById(sessionId)
         query.exercises = []
         query.save()
     }
