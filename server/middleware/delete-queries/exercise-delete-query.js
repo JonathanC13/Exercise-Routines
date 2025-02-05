@@ -4,7 +4,8 @@ const {BadRequestError} = require('../../errors')
 const exerciseDeleteQuery = async(req, res, next) => {
 
     const {
-        params: { sessionId, exerciseId }
+        params: { sessionId, exerciseId },
+        session: session
     } = req
 
     let query = ''
@@ -14,21 +15,26 @@ const exerciseDeleteQuery = async(req, res, next) => {
         throw new BadRequestError('Missing exercise Id!')
     }
 
+    let newSession = session
+    if (!newSession) {
+        newSession = await mongoose.startSession();
+    }
+
     if (exerciseId) {
-        const resp = await SessionModel.findById(sessionId)
+        const resp = await SessionModel.findByOne({_id: sessionId, createdByUserId})
         if (resp && resp.exercises !== undefined && resp.exercises.id(exerciseId)) {
             resp.exercises.id(exerciseId).deleteOne()
         }
         query = resp.save()
         exerciseIds.push(exerciseId)
     } else {
-        const resp = await SessionModel.findById(sessionId)
+        const resp = await SessionModel.findByOne({_id: sessionId, createdByUserId})
         if (resp && resp.exercises !== undefined) {
             resp.exercises.forEach((ex) => {
                 exerciseIds.push(ex._id)
             })
         }
-        query = SessionModel.findById(sessionId)
+        query = SessionModel.findOne({_id: sessionId, createdByUserId})
         query.exercises = []
         query.save()
     }
@@ -39,6 +45,7 @@ const exerciseDeleteQuery = async(req, res, next) => {
     req.queries.push(['exercises', query])
 
     req.exerciseIds = exerciseIds
+    req.session = newSession
 
     next()
 }

@@ -6,17 +6,23 @@ const sessionDeleteQuery = async(req, res, next) => {
     const {
         params: {sessionId},
         user: { userId: createdByUserId },
-        routineId
+        routineId,
+        session: session
     } = req
 
     let query = ''
     const exerciseIds = []
 
+    let newSession = session
+    if (!newSession) {
+        newSession = await mongoose.startSession();
+    }
+
     if (routineId) {
         // delete coming from Routine delete
-        query = SessionModel.deleteMany({routineId})
+        query = SessionModel.deleteMany({routineId, createdByUserId}, {session: newSession})
         // get all exercise ids
-        const response = await SessionModel.find({routineId})
+        const response = await SessionModel.find({routineId, createdByUserId})
         response.forEach((obj) => {
             response['exercises'].forEach((obj) => {
                 exerciseIds.push(obj._id)
@@ -28,7 +34,7 @@ const sessionDeleteQuery = async(req, res, next) => {
             throw new BadRequestError('Missing session Id!')
         }
 
-        query = SessionModel.findOneAndDelete({_id: sessionId, createdByUserId})
+        query = SessionModel.findOneAndDelete({_id: sessionId, createdByUserId}, {session: newSession})
 
         const response = await SessionModel.findOne({_id: sessionId, createdByUserId})
         if (response && response.exercises !== undefined) {
@@ -45,6 +51,7 @@ const sessionDeleteQuery = async(req, res, next) => {
     req.queries.push(['session', query])
 
     req.exerciseIds = exerciseIds
+    req.session = newSession
 
     next()
 }

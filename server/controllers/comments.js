@@ -90,35 +90,34 @@ const updateComment = async(req, res) => {
 
         // Transaction queries
         // 1. update the comment in the Comment collection
-        const commentRes = await CommentModel.findAndUpdate({_id: commentId, createdByUserId, exerciseId}, req.body, {new: true, runValidators: true})
-
+        const commentRes = await CommentModel.findOneAndUpdate({_id: commentId, createdByUserId, exerciseId}, req.body, {new: true, runValidators: true, session: session})
+        
         if (!commentRes) {
             throw new NotFoundError('Comment not found!')
         }
 
-        // 2. update the comment in the Session -> exercises sub doc -> comments sub doc
+        // 2. if exists, update the comment in the Session -> exercises sub doc -> comments sub doc
         //const session = await SessionModel.findById(sessionId)
-        const comment = exerciseDoc.comments.id(commentId) //session.exercises.id(exerciseId).comments.id(commentId)
+        const ses = await SessionModel.findOne({_id: sessionId, createdByUserId}).session(session) 
+        const comment = ses.exercises.id(exerciseId).comments.id(commentId)
 
-        if (!comment) {
-            throw new NotFoundError('Comment not found!')
+        if (comment) {
+            // update the comment
+            for (let [key, val] of Object.entries(req.body)) {
+                comment[key] = val
+            }
+
+            const response = await ses.save()
         }
-
-        // update the comment
-        for (let [key, val] of Object.entries(req.body)) {
-            comment[key] = val
-        }
-
-        console.log(comment)
-        const response = await session.save()
-        console.log(response)
 
         // Commit the transaction
         await session.commitTransaction();
 
         return res.status(StatusCodes.OK).json({response: commentRes})
     } catch (err) {
-        throw new BadRequestError('Something has gone wrong!')
+        console.log('hi')
+        await session.abortTransaction();
+        throw err
     } finally {
         session.endSession()
     }

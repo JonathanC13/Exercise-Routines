@@ -6,15 +6,13 @@ const { CommentModel:Comment } = require('../../models/Comment')
 
 const runDeleteQueries = async(req, res, next) => {
     const {
-        queries
+        queries,
+        session: session
     } = req
 
     if (!queries) {
         throw new BadRequestError('Something has gone wrong!')
     }
-
-    // Start a session
-    const session = await mongoose.startSession();
 
     try {
         // Start a transaction
@@ -32,6 +30,7 @@ const runDeleteQueries = async(req, res, next) => {
         // Commit the transaction
         await session.commitTransaction();
     } catch (err) {
+        await session.abortTransaction();
         throw new BadRequestError('Something has gone wrong! ' + err.message)
     } finally {
         session.endSession()

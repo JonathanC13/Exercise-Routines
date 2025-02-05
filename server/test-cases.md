@@ -2124,54 +2124,68 @@
             67a27eefe2c6979e183ed5ce    4th
             67a27d87e2c6979e183ed5c2    3rd
             67a27bcfb9615d5a753cafc5    2nd
-HERE
+
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId, sessionId, and exerciseId.
 
-- Test X: Invalid comment Id.
+- Test 1: Invalid comment Id.
+    *Description*:
+        In the request URL, provide a :commentId that is an invalid length.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27636efc925fa402a2b0
 
     *Body*:
         N/A
 
     *Expected results*:
-        1. status code: 400
+        1. status code: 404
         2. response: **JSON**
             {
-                message: Id not found: 6796a9b30a23b77a579881e!
+                message: Id not found: 67a27636efc925fa402a2b0!
             }
 
-- Test X: Comment Id that does not exist.
+    *Status*: Pass
+
+- Test 2: Comment Id that does not exist.
+    *Description*:
+        In the request URL, provide a :commentId that is valid length but does not exist in the collection 'comments'.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e4
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27636efc925fa402a2b0a
 
     *Body*:
         N/A
 
     *Expected results*:
-        1. status code: 400
+        1. status code: 404
         2. response: **JSON**
             {
                 message: Comment not found!
             }
-- Test X: Comment Id that does not exist.
+
+    *Status*: Pass
+
+- Test 3: Comment Id that does exist.
+    *Description*:
+        In the request URL, provide a :commentId that does exist in the collection 'comments'.
+
     *Prerequisites*:
         1. Exercise contains at least 1 comment
 
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e9   // your valid comment _id
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27636efc925fa402a2b0c   // your valid comment _id
 
     *Body*:
         N/A
@@ -2183,40 +2197,106 @@ HERE
                 response: the comment document object.
             }
 
+    *Status*: Pass
+
 ## PATCH : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId, sessionId, and exerciseId.
 
-- Test X: Update comment that does not exist.
+- Test 1: Update commentId that is invalid.
+    *Description*:
+        In the request URL, provide a :commentId that is an invalid length.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e2
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27eefe2c6979e183ed5c
 
     *Body*:
         {
-            "text": "hi"
+            "text": "hi comment change"
         }
 
     *Expected results*:
-        1. status code: 400
+        1. status code: 404
         2. response: **JSON**
             {
-                message: Comment does not exist.
+                message: Id not found: 67a27eefe2c6979e183ed5c!
             }
 
-- Test X: Update comment that does exist.
+    *Status*: Pass
+
+- Test 2: Update comment that does not exist.
+    *Description*:
+        In the request URL, provide a :commentId that is a valid length, but does not exist in the collection 'comments'.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e9   // your valid comment _id
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27636efc925fa402a2b0a
 
     *Body*:
         {
-            "text": "hi"
+            "text": "hi comment change"
+        }
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Comment not found!
+            }
+
+    *Status*: Pass
+
+- Test 3: Update comment that does exist, but not in an exercise's comments sub document array.
+    *Description*:
+        In the request URL, provide a :commentId that is a valid length and does exist in the collection 'comments', but does not exist in an exercise's comments sub document array.
+        Since an exercise's comments sub document only holds the 3 most recently created comments, at least 4 comments for an exercise must be created.
+
+    *Prerequisites*:
+        1. For an exerciseId create 4 comments and then get the commentId that is no longer included in the exercise's comments sub document array but does exist in the collection 'comments' that has the exerciseId as a reference.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27636efc925fa402a2b0ce   // your valid comment _id
+
+    *Body*:
+        {
+            "text": "hi comment change"
+        }
+
+    *Expected results*:
+        1. status code: 200
+        2. response: **JSON**
+            {
+                response: the comment document object
+            }
+        3. The comment is updated in the collection 'comments'.
+
+    *Status*: Pass
+
+- Test 4: Update comment that does exist and in an exercise's comments sub document array.
+    *Description*:
+        In the request URL, provide a :commentId that does exist in the collection 'comments' and exist in an exercise's comments sub document array.
+
+    *Prerequisites*:
+        1. For an exerciseId select or create a comment that exists both in the collection 'comments' and in the exercise's comments sub document array.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27d87e2c6979e183ed5c2   // your valid comment _id
+
+    *Body*:
+        {
+            "text": "hi comment change"
         }
 
     *Expected results*:
@@ -2228,6 +2308,8 @@ HERE
         3. The comment is updated in the collection 'comments'.
         4. The comment is updated in the collection 'sessions' session document -> exercise sub document -> comments sub document.
 
+    *Status*: Pass
+-- HERE. delete cascading middleware with the session could be a problem. At each step, simulate abort by making a valid request buy manually put a throw error at the point you want to test it reverts.
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.

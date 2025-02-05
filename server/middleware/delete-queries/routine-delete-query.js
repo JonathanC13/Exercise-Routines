@@ -1,7 +1,7 @@
 const RoutineModel = require('../../models/Routine')
 const {BadRequestError} = require('../../errors')
 
-const routineDeleteQuery = (req, res, next) => {
+const routineDeleteQuery = async(req, res, next) => {
 
     const {
         params: {routineId},
@@ -12,7 +12,10 @@ const routineDeleteQuery = (req, res, next) => {
         throw new BadRequestError('Missing routine id!')
     }
 
-    const query = RoutineModel.findOneAndDelete({_id: routineId, createdByUserId})
+    // Start a session
+    const session = await mongoose.startSession();
+
+    const query = RoutineModel.findOneAndDelete({_id: routineId, createdByUserId}, {session: session})
 
     if (!req.queries) {
         req.queries = []
@@ -20,6 +23,8 @@ const routineDeleteQuery = (req, res, next) => {
     req.queries.push(['routine', query])
 
     req.routineId = routineId
+    // pass along session
+    req.session = session
 
     next()
 }
