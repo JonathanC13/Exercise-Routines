@@ -1,5 +1,6 @@
 const RoutineModel = require('../../models/Routine')
 const {BadRequestError} = require('../../errors')
+const mongoose = require('mongoose')
 
 const routineDeleteQuery = async(req, res, next) => {
 

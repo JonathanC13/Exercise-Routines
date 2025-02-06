@@ -21,7 +21,7 @@ const runDeleteQueries = async(req, res, next) => {
         // Transaction queries
         for (let i = 0; i < queries.length; i ++) {
             const response = await queries[i][1]
-            
+            // throw new BadRequestError('abort test: ' + queries[i][0])
             if (!response) {
                 throw new BadRequestError('Cascade delete error: ' + queries[i][0] + ".")
             }
@@ -31,7 +31,7 @@ const runDeleteQueries = async(req, res, next) => {
         await session.commitTransaction();
     } catch (err) {
         await session.abortTransaction();
-        throw new BadRequestError('Something has gone wrong! ' + err.message)
+        throw err
     } finally {
         session.endSession()
     }

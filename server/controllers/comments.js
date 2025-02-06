@@ -11,7 +11,7 @@ const getAllComments = async(req, res) => {
         exerciseDoc: exerciseDoc
     } = req
 
-    const response = await CommentModel.find({createdByUserId, exerciseId})
+    const response = await CommentModel.find({createdByUserId, exerciseId}).sort({createdAt: 'desc'})
 
     if (!response) {
         throw new NotFoundError('Comments not found!')
@@ -39,9 +39,7 @@ const getComment = async(req, res) => {
 const createComment = async(req, res) => {
     const {
         user: { userId: createdByUserId },
-        params: { sessionId, exerciseId },
-        sessDoc: sessDoc,
-        exerciseDoc: exerciseDoc
+        params: { sessionId, exerciseId }
     } = req
 
     // Start a session
@@ -52,16 +50,15 @@ const createComment = async(req, res) => {
         // Transaction queries
         // 1. create comment in the Comment collection
         
-        const commentRes = await CommentModel.create({createdByUserId, exerciseId, ...req.body})
+        const commentRes = await CommentModel.create([{createdByUserId: createdByUserId, exerciseId: exerciseId, ...req.body}], {session: session})
         // const crComId = commentRes._id
 
         // 2. create the comment in the Session -> exercises sub doc -> comments sub doc
         //const session = await SessionModel.findById(sessionId)
         //--const comments = session.exercises.id(exerciseId).comments.push({commentId: crComId, ...req.body})
-        exerciseDoc.comments.push(commentRes)
-        exerciseDoc.comments.sort((a, b) => {return new Date(b.createdAt) - new Date(a.createdAt)})
-        exerciseDoc.comments = exerciseDoc.comments.slice(0, 3)
-
+        const sessDoc = await SessionModel.findOne({_id: sessionId, createdByUserId}).session(session)
+        sessDoc.exercises.id(exerciseId).comments.push(commentRes[0])
+        sessDoc.exercises.id(exerciseId).comments.sort((a, b) => {return new Date(b.createdAt) - new Date(a.createdAt)}).slice(0, 3)
         const response = await sessDoc.save()
         // Commit the transaction
         await session.commitTransaction();

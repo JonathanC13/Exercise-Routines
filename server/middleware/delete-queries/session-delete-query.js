@@ -1,5 +1,6 @@
 const SessionModel = require('../../models/Session')
 const {BadRequestError} = require('../../errors')
+const mongoose = require('mongoose')
 
 const sessionDeleteQuery = async(req, res, next) => {
 
@@ -10,7 +11,10 @@ const sessionDeleteQuery = async(req, res, next) => {
         session: session
     } = req
 
-    let query = ''
+    if (!req.queries) {
+        req.queries = []
+    }
+
     const exerciseIds = []
 
     let newSession = session
@@ -20,7 +24,7 @@ const sessionDeleteQuery = async(req, res, next) => {
 
     if (routineId) {
         // delete coming from Routine delete
-        query = SessionModel.deleteMany({routineId, createdByUserId}, {session: newSession})
+        req.queries.push(['session', SessionModel.deleteMany({routineId, createdByUserId}, {session: newSession})])
         // get all exercise ids
         const response = await SessionModel.find({routineId, createdByUserId})
         response.forEach((obj) => {
@@ -29,12 +33,12 @@ const sessionDeleteQuery = async(req, res, next) => {
             })
         })
     } else {
-        // specific session to be delete
+        // specific session to be deleted
         if (!sessionId) {
             throw new BadRequestError('Missing session Id!')
         }
 
-        query = SessionModel.findOneAndDelete({_id: sessionId, createdByUserId}, {session: newSession})
+        req.queries.push(['session', SessionModel.findOneAndDelete({_id: sessionId, createdByUserId}, {session: newSession})])
 
         const response = await SessionModel.findOne({_id: sessionId, createdByUserId})
         if (response && response.exercises !== undefined) {
@@ -44,11 +48,6 @@ const sessionDeleteQuery = async(req, res, next) => {
         }
 
     }
-
-    if (!req.queries) {
-        req.queries = []
-    }
-    req.queries.push(['session', query])
 
     req.exerciseIds = exerciseIds
     req.session = newSession

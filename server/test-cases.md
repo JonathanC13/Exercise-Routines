@@ -853,6 +853,9 @@
 
     *Status*: todo
 
+*Internal test* TODO
+    To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
+
 --- HERE
 
 # ./routes/sessions
@@ -1358,7 +1361,7 @@
         2. response: N/A.
         3. The session document is deleted from the collection 'sessions'.
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 5: Delete a session with exercises but the exercises have comments.
     *Description*:
@@ -1382,7 +1385,10 @@
         3. The session document is deleted from the collection 'sessions'.
         4. The comment document is deleted from the collection 'comments'.
 
-    *Status*: todo
+    *Status*: Pass
+
+*Internal test*
+    To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
 
 ---
 
@@ -1471,7 +1477,7 @@
             }
         3. The response array should have the exercises sorted by order in ascending order, if the order is the same then it is updatedAt in descending order.
 
-    *Status*: todo
+    *Status*: Pass
 
 ## POST : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/
 *Prerequisites*:
@@ -1906,7 +1912,7 @@
 
     *Status*: Pass
 
-- Test 4: Delete exercise with comments. Will delete comments with the exercise id in the collection 'comments'. --HERE
+- Test 4: Delete exercise with comments. Will delete comments with the exercise id in the collection 'comments'.
     *Description*:
         In the request URL, provide an :exerciseId that does exist in the session's exercises sub document array. That document should have an non-empty comments sub document array.
 
@@ -1933,6 +1939,10 @@
         Before:
             Exercise id = 67a16059416c3846e3bb145c
             Comment Ids = [67a1664ce6f51a0420d4aa45, 67a16653e6f51a0420d4aa4f, 67a16677e6f51a0420d4aa5a, 67a16696e6f51a0420d4aa65]
+
+*Internal test*
+    To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
+
 ---
 
 # ./routes/comments
@@ -2103,14 +2113,14 @@
 
 - Test 5: Create more than 3 comments for a single exercise.
     *Description*:
-        The exercise's comment sub document array will only hold maximum 3 most recently added comments. Therefore, add more than 3 comments for a single exercise to validate that in the exercise's comments sub document array only hold the 3 most recently created ordered from most recent to last and that the collection 'comments' holds all the comments.
+        The exercise's comment sub document array will only hold maximum 3 most recently added comments. Therefore, add more than 3 comments for a single exercise to validate that in the exercise's comments sub document array only hold the 3 most recently created ordered desc createdAt and that the collection 'comments' holds all the comments.
 
     *Steps*:
         1. Add 3 comments, record the comment Ids.
         2. Add the 4th comment.
         
     *Expected results*:
-        1. The exercise's comment sub document array will only contain the 3 most recently created comments ordered from most recent to last.
+        1. The exercise's comment sub document array will only contain the 3 most recently created comments ordered desc createdAt.
         2. The collection 'comments' will have all 4 comments.
 
     *Status*: Pass
@@ -2255,7 +2265,7 @@
 - Test 3: Update comment that does exist, but not in an exercise's comments sub document array.
     *Description*:
         In the request URL, provide a :commentId that is a valid length and does exist in the collection 'comments', but does not exist in an exercise's comments sub document array.
-        Since an exercise's comments sub document only holds the 3 most recently created comments, at least 4 comments for an exercise must be created.
+        Since an exercise's comments sub document only holds the 3 most recently created comments ordered desc createdAt, at least 4 comments for an exercise must be created.
 
     *Prerequisites*:
         1. For an exerciseId create 4 comments and then get the commentId that is no longer included in the exercise's comments sub document array but does exist in the collection 'comments' that has the exerciseId as a reference.
@@ -2309,18 +2319,48 @@
         4. The comment is updated in the collection 'sessions' session document -> exercise sub document -> comments sub document.
 
     *Status*: Pass
--- HERE. delete cascading middleware with the session could be a problem. At each step, simulate abort by making a valid request buy manually put a throw error at the point you want to test it reverts.
+
+*Internal test*
+    To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
+
+--
+
 ## DELETE : http://localhost:5000/api/v1/routines/:routineId/sessions/:sessionId/exercises/:exerciseId/comments/:commentId
 *Prerequisites*:
     1. Successful login that returned a valid JWT.
     2. Valid route params: routineId, sessionId, and exerciseId.
 
-- Test X: Delete comment that does not exist.
+- Test 1: Delete commentId that is invalid.
+    *Description*:
+        In the request URL, provide a :commentId that is an invalid length.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e1
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27d87e2c6979e183ed5c
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Id not found: 67a27d87e2c6979e183ed5c!
+            }
+
+    *Status*: Pass
+
+- Test 2: Delete comment that does not exist.
+    *Description*:
+        In the request URL, provide a :commentId that does not exist in the collection 'comments'.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27d87e2c6979e183ed5c3
 
     *Body*:
         N/A
@@ -2329,15 +2369,23 @@
         1. status code: 400
         2. response: **JSON**
             {
-                message: Something has gone wrong!
+                message: Cascade delete error: comment.
             }
 
-- Test X: Delete comment that does exist.
+    *Status*: Pass
+
+- Test 3: Delete comment that does exist in the collection 'comments', but does not in an exercise's comments sub document array.
+    *Description*:
+        Delete comment that does exist in the collection 'comments', but does not in an exercise's comments sub document array.
+
+    *Prerequisites*:
+        1. An exercise must have at least 1 comment that exists in the collection 'comments' that does not exist in the exercise's comments sub document array.
+
     *Route params*:
-        :routineId = 67969cbe4163742abfe4d7d5   // your valid routine _id
-        :sessionId = 6796a5413cddc61acf7be05f   // your valid session _id
-        :exerciseId = 6796a9b30a23b77a579881e6  // your valid exercise _id
-        :commentId = 6796a9b30a23b77a579881e9   // your valid comment _id
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a27636efc925fa402a2b0c   // your valid comment _id
 
     *Body*:
         N/A
@@ -2345,6 +2393,36 @@
     *Expected results*:
         1. status code: 200
         2. response: N/A
+        3. document deleted from the collection 'comments'.
+
+    *Status*: Pass
+
+- Test 3: Delete comment that does exist in the collection 'comments' and also in the exercise's comments sub document array.
+    *Description*:
+        Delete comment that does exist in the collection 'comments' and also in the exercise's comments sub document array.
+
+    *Prerequisites*:
+        1. An exercise must have at least 4 comments, so that in its comments sub document array has 3 and the duplicates in the collection 'comments'.
+
+    *Route params*:
+        :routineId = 679fd498dca2129f77c3f997   // your valid routine _id
+        :sessionId = 67a12912cefe2281138f3e67   // your valid session _id
+        :exerciseId = 67a27615efc925fa402a2b02  // your valid exercise _id
+        :commentId = 67a52c21d442e50a5187f887   // your valid comment _id
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: N/A
+        3. document deleted from the collection 'comments'.
+        4. document deleted from the exercise's comments sub document array and maintains 3 comments deleting the target and replacing with the 4th.
+
+    *Status*: Pass
+
+*Internal test*
+    To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
 
 **TODO**
 Back end:
