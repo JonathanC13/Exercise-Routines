@@ -780,7 +780,7 @@
 - Test 5: Delete a routine that has related session documents in the collection 'sessions'.
     *Description*:
         To test the cascading delete when routine is deleted.
-        With a routine document that has a session document in collection 'sessions' that has a reference to the routine _id. session document field routineId.
+        Create a routine document that has a session document in collection 'sessions' that has a reference to the routine _id through session document's field routineId.
 
     *Prerequisites*:
         1. Created a routine document.
@@ -798,12 +798,12 @@
         3. The routine document is deleted from the collection 'routines'.
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 6: Delete a routine that has related session documents and those sessions have sub documents in the array exercises.
     *Description*:
         To test the cascading delete when routine is deleted.
-        With a routine document that has 2 session documents in collection 'sessions' that has a reference to the routine _id. session document field routineId.
+        Create a routine document that has 2 session documents in collection 'sessions' that has a reference to the routine _id through session document's field routineId.
         Within each session document's exercises sub document array, there are 2 exercises.
 
     *Prerequisites*:
@@ -823,12 +823,12 @@
         3. The routine document is deleted from the collection 'routines'.
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 7: Delete a routine that has related session documents and those sessions have sub documents of exercises and some of the exercises have comments in a subset pattern.
     *Description*:
         To test the cascading delete when routine is deleted.
-        With a routine document that has 2 session documents in collection 'sessions' that has a reference to the routine _id. session document field routineId.
+        Create a routine document that has 2 session documents in collection 'sessions' that has a reference to the routine _id through session document's field routineId.
         Within each session document's exercises sub document array, there are 2 exercises.
         For at least 2 exercises, add 2 or more comments each.
 
@@ -851,12 +851,12 @@
         4. The session documents with the routineId referenced are deleted from the collection 'sessions'.
         5. The comment documents with the exerciseId referenced are deleted from the the collection 'comments'.
 
-    *Status*: todo
+    *Status*: Pass
 
-*Internal test* TODO
+*Internal test*
     To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
 
---- HERE
+---
 
 # ./routes/sessions
 ## GET : http://localhost:5000/api/v1/routines/:routineId/sessions/
@@ -1274,7 +1274,7 @@
         3. The session document is updated in the collection 'sessions'.
         4. The exercises sub document array is unchanged.
 
-    *Status*: todo
+    *Status*: Pass
 
 ## DELETE : http://localhost:5000/api/v1/routines/67969cbe4163742abfe4d7d5/sessions/:sessionId
 *Prerequisites*:
@@ -2423,32 +2423,3 @@
 
 *Internal test*
     To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
-
-**TODO**
-Back end:
-    * TO TEST
-    2. controllers comments
-        redo with CommentSchema
-        get:
-            1. get from collection 'comments' *should be ok
-
-        create:
-            1. createdComment = create comment document for collection 'comments' with the exerciseId. After get the _id that was assigned
-            2. find session
-            3. with session find the exercise sub doc
-            4. with the exercise sub doc, push created comment doc into the comments subdoc, sort by desc created time, while > 3 pop
-                session.exercises.id(_id).comments.push(createdComment)
-                sort and pop
-                session.save()
-
-            * ensure when reordered, the ids, created, and updated time stay the same as before request
-
-        update comment
-            1. with the commentID, update in collection comments
-            2. find the session -> exercise -> comment id and update then save()
-        
-        delete comment
-            1. with the commentID, delete in collection comments
-            2. find the session -> exercise -> comment id and delete then save()
-
-        * or revert to use CommentSubSchema. where you get the createdId from comments and then put into CommentSubSchema

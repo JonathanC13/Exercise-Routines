@@ -1,89 +1,21 @@
-* revise
-* should not be calling other controllers. move to middleware? yes and have the differenct controllers use the common middleware. add what data each middleware needs to use and pass.
+add jwt expire to 1h and check for error, it will send back session expired message or something so that the front end will kick the user back to the login page with the message.
 
-Run queries in group
-// https://stackoverflow.com/questions/74913957/if-one-of-the-multiple-queries-running-one-after-another-fails-in-mongoose
+in middleware/authorization.js
 
-For a route that requires multiple DB calls:
-    1. In the middleware, add the queries to like req.queries = []
-    2. in the controller, start a mongoose session and try to commit them all or nothing.
+jwt.verify(token, 'shhhhh', function(err, decoded) {
+  if (err) {
+    /*
+      err = {
+        name: 'TokenExpiredError',
+        message: 'jwt expired',
+        expiredAt: 1408621000
+      }
+    */
+  }
+});
 
-1. Routine router
-    - get all   (user_id comes from prev middleware that decodes the JWT for the user_id and puts into req.userId)  * Done
-        - for list
-    - get one (route param :id)
-        - for edit page
-    - post one (get user Id from req.userId)
-
-    - update one (route param :id)
-    - delete one (route param :id)
-        - Need middleware
-        - also delete all sessions, exercises, comments 
-        middleware steps:
-        1. delete Routine in routine controller
-            req.routineId = the deleted routine id
-            next()
-        2. delete session in session controller that match the req.routineId
-            Since exercises are a subdoc of session, exercies will be deleted here. But need the exercise Ids
-            req.exerciseIds = [array of all the exercise IDs that belonged to this session]
-            next()
-        3. delete comments in the comment controller that match the req.exerciseIds 
-            res.status(OK) success
-        4. In controller run session
-
-
-        **TODO TEST AGAIN when session, exercise, and comment routes are done **
-        They also use the same middleware. 
-
-2. Session router
-    - get all
-    - get one
-        - for edit
-    - post one
-    - update one
-    - delete many: can have many since if a routine is deleted, then the many sessions will be deleted. if only one session needs to be deleted, all _ids are unique
-        1. delete session in session controller that match the req.routineId
-            Since exercises are a subdoc of session, exercies will be deleted here. But need the exercise Ids
-            req.exerciseIds = [array of all the exercise IDs that belonged to this session]
-            next()
-        2. delete comments in the comment controller that match the req.exerciseIds
-            res.status(OK) success
-
-    ** Done
-    ** TODO
-    Test all session api
-
-3. Exercise router
-    - get all
-        1. get all exercises for the session
-    - get one
-        - edit page
-    - post one
-    - update one
-        1. update session in session controller with new exercise list. Array map
-    - delete (no db query)
-        1. update session in session controller with new exercise list. Array map
-        2. delete comments in the comment controller that match the req.exerciseIds
-            res.status(OK) success
-
-    ** TODO
-    Test all session api
-
-4. Comments 
-    - get all
-    - get one
-    - post one
-    - update one
-    - delete many: if exercise is deleted, the many comments that have that exercise _id are deleted. if only one comment needs to be deleted, it will only match one.
-
-    ** TODO
-    Test all session api
-
-
-*1. Review all routes and controllers
-2. create test plan with route, value, expected  test from Routine -> Session -> Exercise -> Comments
-3. run tests manaully in postman
-
-* watch for on create Comment, in the exercise subdoc, make sure the existing comments createdAt and UpdatedAt times remain the same. It should but compare all values
-
-https://forum.freecodecamp.org/t/pushing-mongoose-documents-to-another-document-as-array-elements/400067/4
+Front end
+1. Draw front end layout
+2. partition into React components and determine nesting.
+3. Use redux as the store and RTK query for backend calls.
+4. save the JWT into cookies

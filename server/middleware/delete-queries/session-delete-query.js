@@ -27,11 +27,15 @@ const sessionDeleteQuery = async(req, res, next) => {
         req.queries.push(['session', SessionModel.deleteMany({routineId, createdByUserId}, {session: newSession})])
         // get all exercise ids
         const response = await SessionModel.find({routineId, createdByUserId})
-        response.forEach((obj) => {
-            response['exercises'].forEach((obj) => {
-                exerciseIds.push(obj._id)
+        if (response) {
+            response.forEach((obj) => {
+                if (obj.exercises !== undefined) {
+                    obj.exercises.forEach((exer) => {
+                        exerciseIds.push(exer.id)
+                    })
+                }
             })
-        })
+        }
     } else {
         // specific session to be deleted
         if (!sessionId) {
@@ -43,12 +47,12 @@ const sessionDeleteQuery = async(req, res, next) => {
         const response = await SessionModel.findOne({_id: sessionId, createdByUserId})
         if (response && response.exercises !== undefined) {
             response.exercises.forEach((obj) => {
-                exerciseIds.push(obj._id)
+                exerciseIds.push(obj.id)
             })
         }
 
     }
-
+    
     req.exerciseIds = exerciseIds
     req.session = newSession
 
