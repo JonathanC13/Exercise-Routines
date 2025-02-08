@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const ExerciseSchema = require('./Exercise')
+const {ExerciseSchema} = require('./Exercise')
 
 const SessionSchema = new mongoose.Schema({
     routineId: {

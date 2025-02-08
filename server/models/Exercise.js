@@ -1,7 +1,13 @@
 const mongoose = require('mongoose')
 const {CommentSchema, CommentModel} = require('./Comment')
+const SetSchema = require('./Sets')
 
 const ExerciseSchema = new mongoose.Schema({
+    createdByUserId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'User',
+        required: [true, 'Please provide a user!']
+    },
     order: {
         type: Number,
         default: 0
@@ -18,17 +24,12 @@ const ExerciseSchema = new mongoose.Schema({
         maxLength: [500, 'Please provide a name that is 500 or less characters!']
     }, 
     sets: {
-        type: Number,
-        default: 1
+        type: [SetSchema],
+        default: []
     },
-    repsOrDuration: {
+    muscleType: {
         type: String,
-        maxLength: 20,
-        default: 0
-    },
-    restTimeSeconds: {
-        type: Number,
-        default: 0
+        default: "Uncategorized"
     },
     comments: {
         type: [CommentSchema],
@@ -38,4 +39,6 @@ const ExerciseSchema = new mongoose.Schema({
     
 }, {timestamps: true})
 
-module.exports = ExerciseSchema
+const AccountExerciseModel = mongoose.model('AccountExercise', ExerciseSchema)
+
+module.exports = { ExerciseSchema, AccountExerciseModel}

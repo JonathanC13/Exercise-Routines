@@ -27,7 +27,7 @@ const getComment = async(req, res) => {
         exerciseDoc: exerciseDoc
     } = req
 
-    const response = await CommentModel.find({_id: commentId, createdByUserId})
+    const response = await CommentModel.findOne({_id: commentId, createdByUserId})
 
     if (!response || response.length === 0) {
         throw new NotFoundError('Comment not found!')

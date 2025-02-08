@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router({mergeParams: true})
-const { getAllSessions, createSession, getSession, updateSession, deleteSession, deleteAllSessions } = require('../controllers/sessions')
+const { getAllSessions, createSession, getSession, updateSession, deleteSession } = require('../controllers/sessions')
 const { sessionDeleteQuery, commentDeleteQuery, runDeleteQueries } = require('../middleware/delete-queries')
 
 router.route('/').get(getAllSessions).post(createSession)

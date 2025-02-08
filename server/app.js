@@ -15,6 +15,7 @@ const routineRouter = require('./routes/routines')
 const sessionsRouter = require('./routes/sessions')
 const exercisesRouter = require('./routes/exercises')
 const commentsRouter = require('./routes/comments')
+const accountExercisesRouter = require('./routes/accountExercises')
 
 // middleware
 const authorizationMiddleware = require('./middleware/authorization')
@@ -52,6 +53,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
+app.use('/app/v1/accountExercises', authorizationMiddleware, accountExercisesRouter)
 app.use('/api/v1/routines', authorizationMiddleware, routineRouter)
 routineRouter.use('/:routineId/sessions', validateRoutineIdMiddleware, sessionsRouter)
 sessionsRouter.use('/:sessionId/exercises', validateSessionIdMiddleware, exercisesRouter)

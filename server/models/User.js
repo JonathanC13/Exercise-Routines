@@ -22,6 +22,11 @@ const UserSchema = new mongoose.Schema({
         trim: true,
         minLength: [6, 'Please provide a password that is 6 or more characters!']
     },
+    preferredTheme: {
+        type: String,
+        enum:['light', 'dark'],
+        default: 'light'
+    },
     lastRoutineAccessed: {
         type: mongoose.Types.ObjectId,
         ref: 'Routine',

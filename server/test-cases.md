@@ -1530,9 +1530,7 @@
             "order": 1,
             "name": "",
             "description": "DESCRIPTION", 
-            "sets": 3,
-            "repsOrDuration": "12",
-            "restTimeSeconds": 90
+            "sets": []
         }
         
     *Expected results*:
@@ -1592,9 +1590,7 @@
             "order": 1,
             "name": "exercise 1",
             "description": "DESCRIPTION", 
-            "sets": 3,
-            "repsOrDuration": "12",
-            "restTimeSeconds": 90
+            "sets": []
         }
         
     *Expected results*:
@@ -1738,9 +1734,7 @@
             "order": 5,
             "name": "EXERCISE1",
             "description": "YEESH", 
-            "sets": 5,
-            "repsOrDuration": "6",
-            "restTimeSeconds": 60
+            "sets": []
         }
 
     *Expected results*:
@@ -1756,9 +1750,7 @@
                     "order": 1,
                     "name": "exercise 1",
                     "description": "DESCRIPTION",
-                    "sets": 3,
-                    "repsOrDuration": "12",
-                    "restTimeSeconds": 90,
+                    "sets": [],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "createdAt": "2025-02-03T21:03:22.305Z",
@@ -1773,9 +1765,7 @@
                     "order": 5,
                     "name": "EXERCISE1",
                     "description": "YEESH",
-                    "sets": 5,
-                    "repsOrDuration": "6",
-                    "restTimeSeconds": 60,
+                    "sets": [],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "createdAt": "2025-02-03T21:03:22.305Z",
@@ -1801,9 +1791,7 @@
             "order": 2,
             "name": "EXERCISE 11",
             "description": "desc", 
-            "sets": 3,
-            "repsOrDuration": "8",
-            "restTimeSeconds": 100,
+            "sets": [],
             "comments": []
         }
 
@@ -1820,9 +1808,7 @@
                     "order": 5,
                     "name": "EXERCISE1",
                     "description": "YEESH",
-                    "sets": 5,
-                    "repsOrDuration": "6",
-                    "restTimeSeconds": 60,
+                    "sets": [],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "createdAt": "2025-02-03T21:03:22.305Z",
@@ -1837,9 +1823,7 @@
                     "order": 2,
                     "name": "EXERCISE 11",
                     "description": "desc",
-                    "sets": 3,
-                    "repsOrDuration": "8",
-                    "restTimeSeconds": 100,
+                    "sets": [],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "createdAt": "2025-02-03T21:03:22.305Z",
@@ -2423,3 +2407,315 @@
 
 *Internal test*
     To test transaction rollback, placed manually thrown errors inbetween mongoose calls to obsverse abortTransactions.
+
+---
+
+# ./routes/accountExercises
+## GET : http://localhost:5000/api/v1/accountExercises
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test 1: Account has no exercises, request to get all exercises created by this account.
+    *Description*:
+        Get all exercises created by this account, but since none have been created yet it should return an empty array.
+
+    *Prerequisites*:
+        N/A
+
+    *Route params*:
+        N/A
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: 
+            {
+                response: []
+                count: 0
+            }
+
+    *Status*: todo
+
+- Test 2: Account has some exercises, request to get all exercises created by this account.
+    *Description*:
+        Get all exercises created by this account, it should return them in an array.
+
+    *Prerequisites*:
+        N/A
+
+    *Route params*:
+        N/A
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: 
+            {
+                response: [account exercerise documents]
+                count: length
+            }
+
+    *Status*: todo
+
+## POST : http://localhost:5000/api/v1/accountExercises
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test 1: Test required field "name".
+    *Description*:
+        In the request body, exclude the "name" key.
+
+    *Prerequisites*:
+        N/A
+
+    *Route params*:
+        N/A
+
+    *Body*:
+        {
+            order: 1,
+            description: 'hello', 
+            muscleType: 'biceps'
+        }
+
+    *Expected results*:
+        1. status code: 400
+        2. response:
+            {
+                message:  Validation failed for the following fields: Please provide an exercise name!
+            }
+        3. No document created in the collection 'accountExercises'.
+
+    *Status*: todo
+
+- Test 2: Successfully create an account exercise document.
+    *Description*:
+        In the request body, include the "name" key and the other fields.
+        The fields sets and comments will be ignored in the controller, so they do not throw validation errors.
+
+    *Prerequisites*:
+        N/A
+
+    *Route params*:
+        N/A
+
+    *Body*:
+        {
+            order: 1,
+            description: "hello",
+            sets: ["testsets"]
+            muscleType: "biceps",
+            comments: ["testcoms"]
+
+        }
+
+    *Expected results*:
+        1. status code: 200
+        2. response: the created document.
+        3. Document created in the collection 'accountExercises'.
+
+    *Status*: todo
+
+## GET : http://localhost:5000/api/v1/accountExercises/:accountExerciseId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test 1: Invalid accountExerciseId.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is an invalid length.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f99
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Id not found: 679fd498dca2129f77c3f99!
+            }
+
+    *Status*: todo
+
+- Test 2: accountExerciseId that does not exist.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountExercises'.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f992
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Account exercise not found!
+            }
+
+    *Status*: todo
+
+- Test 3: accountExerciseId that does exist.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountExercises'.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f99A
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: **JSON**
+            document of the account exercise
+
+    *Status*: todo
+
+## PATCH : http://localhost:5000/api/v1/accountExercises/:accountExerciseId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test 1: Invalid accountExerciseId.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is an invalid length.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f99
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Id not found: 679fd498dca2129f77c3f99!
+            }
+
+    *Status*: todo
+
+- Test 2: accountExerciseId that does not exist.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountExercises'.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f992
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Account exercise not found!
+            }
+
+    *Status*: todo
+
+- Test 3: accountExerciseId that does exist.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountExercises'.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f99A
+
+    *Body*:
+        {
+            order: 2,
+            description: "hello2",
+            sets: ["testsets"]
+            muscleType: "triceps",
+            comments: ["testcoms"]
+        }
+
+    *Expected results*:
+        1. status code: 200
+        2. response: **JSON**
+            updated document of the account exercise
+        3. The document is updated in the collection 'accountExercises'.
+
+    *Status*: todo
+
+## DELETE : http://localhost:5000/api/v1/accountExercises/:accountExerciseId
+*Prerequisites*:
+    1. Successful login that returned a valid JWT.
+
+- Test 1: Invalid accountExerciseId.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is an invalid length.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f99
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Id not found: 679fd498dca2129f77c3f99!
+            }
+
+    *Status*: todo
+
+- Test 2: accountExerciseId that does not exist.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountExercises'.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f992
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 404
+        2. response: **JSON**
+            {
+                message: Account exercise not found!
+            }
+
+    *Status*: todo
+
+- Test 3: accountExerciseId that does exist.
+    *Description*:
+        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountExercises'.
+
+    *Route params*:
+        :accountExerciseId = 679fd498dca2129f77c3f99A
+
+    *Body*:
+        N/A
+
+    *Expected results*:
+        1. status code: 200
+        2. response: N/A
+        3. The document is deleted from the collection 'accountExercises'.
+
+    *Status*: todo
+
+
+
+
+
+TODO
+- Retest routine/session/exercise   POST, added createdBy
+
+- Sets
+    - POST to exercises that will add a set to the exercise's sets sub document array. * should never happen, since creation of exercise will not include the Set Field, but test anyways.
+    - Patch, primary method to add/update/Delete the info of a set. FE will send the desired modified in the req body. e.g. it a set is removed, a patch with the modified sets array comes in the req body.
+
+- New tests for api/v1/accountExercises    // for the user's created exercises, they are not linked at all with a session's exercise sub documents. It is just to pull basic info to quickly create a doc. Object IDs will be different.
+
+    Get, POST
+    /:exercideId    Get, patch, delete
