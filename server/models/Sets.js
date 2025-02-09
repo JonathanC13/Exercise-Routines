@@ -16,6 +16,10 @@ const SetSchema = new mongoose.Schema({
     restTimeSeconds: {
         type: Number,
         default: 0
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 

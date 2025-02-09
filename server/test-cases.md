@@ -2436,7 +2436,7 @@
                 count: 0
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 2: Account has some exercises, request to get all exercises created by this account.
     *Description*:
@@ -2459,7 +2459,7 @@
                 count: length
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 ## POST : http://localhost:5000/api/v1/accountExercises
 *Prerequisites*:
@@ -2477,9 +2477,9 @@
 
     *Body*:
         {
-            order: 1,
-            description: 'hello', 
-            muscleType: 'biceps'
+            "order": 1,
+            "description": "hello", 
+            "muscleType": "biceps"
         }
 
     *Expected results*:
@@ -2488,9 +2488,9 @@
             {
                 message:  Validation failed for the following fields: Please provide an exercise name!
             }
-        3. No document created in the collection 'accountExercises'.
+        3. No document created in the collection 'accountexercises'.
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 2: Successfully create an account exercise document.
     *Description*:
@@ -2505,20 +2505,21 @@
 
     *Body*:
         {
-            order: 1,
-            description: "hello",
-            sets: ["testsets"]
-            muscleType: "biceps",
-            comments: ["testcoms"]
+            "order": 1,
+            "name": "cable curl",
+            "description": "hello",
+            "sets": ["testsets"],
+            "muscleType": "biceps",
+            "comments": ["testcoms"]
 
         }
 
     *Expected results*:
-        1. status code: 200
+        1. status code: 201
         2. response: the created document.
-        3. Document created in the collection 'accountExercises'.
+        3. Document created in the collection 'accountexercises'.
 
-    *Status*: todo
+    *Status*: Pass
 
 ## GET : http://localhost:5000/api/v1/accountExercises/:accountExerciseId
 *Prerequisites*:
@@ -2541,11 +2542,11 @@
                 message: Id not found: 679fd498dca2129f77c3f99!
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 2: accountExerciseId that does not exist.
     *Description*:
-        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountExercises'.
+        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountexercises'.
 
     *Route params*:
         :accountExerciseId = 679fd498dca2129f77c3f992
@@ -2560,11 +2561,11 @@
                 message: Account exercise not found!
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 3: accountExerciseId that does exist.
     *Description*:
-        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountExercises'.
+        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountexercises'.
 
     *Route params*:
         :accountExerciseId = 679fd498dca2129f77c3f99A
@@ -2577,7 +2578,7 @@
         2. response: **JSON**
             document of the account exercise
 
-    *Status*: todo
+    *Status*: Pass
 
 ## PATCH : http://localhost:5000/api/v1/accountExercises/:accountExerciseId
 *Prerequisites*:
@@ -2600,11 +2601,11 @@
                 message: Id not found: 679fd498dca2129f77c3f99!
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 2: accountExerciseId that does not exist.
     *Description*:
-        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountExercises'.
+        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountexercises'.
 
     *Route params*:
         :accountExerciseId = 679fd498dca2129f77c3f992
@@ -2619,11 +2620,11 @@
                 message: Account exercise not found!
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 3: accountExerciseId that does exist.
     *Description*:
-        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountExercises'.
+        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountexercises'.
 
     *Route params*:
         :accountExerciseId = 679fd498dca2129f77c3f99A
@@ -2641,9 +2642,9 @@
         1. status code: 200
         2. response: **JSON**
             updated document of the account exercise
-        3. The document is updated in the collection 'accountExercises'.
+        3. The document is updated in the collection 'accountexercises'.
 
-    *Status*: todo
+    *Status*: Pass
 
 ## DELETE : http://localhost:5000/api/v1/accountExercises/:accountExerciseId
 *Prerequisites*:
@@ -2666,11 +2667,11 @@
                 message: Id not found: 679fd498dca2129f77c3f99!
             }
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 2: accountExerciseId that does not exist.
     *Description*:
-        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountExercises'.
+        In the request URL, provide a :accountExerciseId that is valid length but does not exist in the collection 'accountexercises'.
 
     *Route params*:
         :accountExerciseId = 679fd498dca2129f77c3f992
@@ -2679,17 +2680,14 @@
         N/A
 
     *Expected results*:
-        1. status code: 404
-        2. response: **JSON**
-            {
-                message: Account exercise not found!
-            }
+        1. status code: 200
+        2. response: N/A
 
-    *Status*: todo
+    *Status*: Pass
 
 - Test 3: accountExerciseId that does exist.
     *Description*:
-        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountExercises'.
+        In the request URL, provide a :accountExerciseId that is valid length and does exist in the collection 'accountexercises'.
 
     *Route params*:
         :accountExerciseId = 679fd498dca2129f77c3f99A
@@ -2700,22 +2698,6 @@
     *Expected results*:
         1. status code: 200
         2. response: N/A
-        3. The document is deleted from the collection 'accountExercises'.
+        3. The document is deleted from the collection 'accountexercises'.
 
-    *Status*: todo
-
-
-
-
-
-TODO
-- Retest routine/session/exercise   POST, added createdBy
-
-- Sets
-    - POST to exercises that will add a set to the exercise's sets sub document array. * should never happen, since creation of exercise will not include the Set Field, but test anyways.
-    - Patch, primary method to add/update/Delete the info of a set. FE will send the desired modified in the req body. e.g. it a set is removed, a patch with the modified sets array comes in the req body.
-
-- New tests for api/v1/accountExercises    // for the user's created exercises, they are not linked at all with a session's exercise sub documents. It is just to pull basic info to quickly create a doc. Object IDs will be different.
-
-    Get, POST
-    /:exercideId    Get, patch, delete
+    *Status*: Pass

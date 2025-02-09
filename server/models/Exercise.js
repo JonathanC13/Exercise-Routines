@@ -35,6 +35,10 @@ const ExerciseSchema = new mongoose.Schema({
         type: [CommentSchema],
         // type: [{ type: Schema.Types.ObjectId, ref: 'Comment' }],
         default: []
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
     
 }, {timestamps: true})

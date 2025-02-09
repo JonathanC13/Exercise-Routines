@@ -55,11 +55,19 @@ const createExercise = async(req, res) => {
         throw new BadRequestError('Please provide an exercise name!')
     }
 
+    // for now it doesn't save the sub document array of sets or comments
+    const requestBody = {}
+    for (let [key, val] of Object.entries(req.body)) {
+        if (key !== 'comments') {
+            requestBody[key] = val
+        }
+    }
+
     // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     if (parent.exercises !== undefined) {
-        parent.exercises.push({createdByUserId, ...req.body})
+        parent.exercises.push({createdByUserId, ...requestBody})
     } else {
-        parent.exercises = [{createdByUserId, ...req.body}]
+        parent.exercises = [{createdByUserId, ...requestBody}]
     }
     
     const response = await parent.save()

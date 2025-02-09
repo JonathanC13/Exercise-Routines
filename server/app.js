@@ -53,7 +53,7 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/v1/auth', authRouter)
-app.use('/app/v1/accountExercises', authorizationMiddleware, accountExercisesRouter)
+app.use('/api/v1/accountExercises', authorizationMiddleware, accountExercisesRouter)
 app.use('/api/v1/routines', authorizationMiddleware, routineRouter)
 routineRouter.use('/:routineId/sessions', validateRoutineIdMiddleware, sessionsRouter)
 sessionsRouter.use('/:sessionId/exercises', validateSessionIdMiddleware, exercisesRouter)

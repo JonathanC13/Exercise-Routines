@@ -30,6 +30,10 @@ const SessionSchema = new mongoose.Schema({
     exercises: {
         type: [ExerciseSchema],
         default: []
+    },
+    completed: {
+        type: Boolean,
+        default: false
     }
     
 }, {timestamps: true})

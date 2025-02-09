@@ -61,7 +61,7 @@ const createAccountExercise = async(req, res) => {
 const updateAccountExercise = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: accountExerciseId
+        params: {accountExerciseId}
     } = req
 
     if (!accountExerciseId) {
@@ -93,7 +93,7 @@ const updateAccountExercise = async(req, res) => {
 const deleteAccountExercise = async(req, res) => {
     const {
         user: {userId: createdByUserId},
-        params: accountExerciseId
+        params: {accountExerciseId}
     } = req
 
     if (!accountExerciseId) {
