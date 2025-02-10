@@ -1,6 +1,7 @@
 import React from 'react'
 import {FaBars, FaCaretDown} from 'react-icons/fa'
-import navLogo from '../../public/images/logoipsum-335.svg'
+import navLogo from '../assets/logoipsum-335.svg'
+
 
 const createNavItems = (navData) => {
   // create the li -> buttons
@@ -31,7 +32,34 @@ const sendTest = async() => {
   }
 }
 
+
+
 const NavBar = () => {
+
+  const tempAcc = useSelector((state) => state.auth.loggedInAccount)
+  
+  // login form
+  // controllered inputs, for now hardcode into obj
+  const credentials = {
+    "email": "Apple@Billy.com",
+    "password": "123456"
+  }
+
+  const [login, { isLoading }] = useLoginMutation()
+
+  const loginHandler = async (e) => {
+    e.preventDefault()
+
+    try {
+      const response = await login({...credentials}).unwrap()
+      console.log(response)
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  //--
+
 
   const navData = null
   const username = 'Bob'
@@ -54,7 +82,7 @@ const NavBar = () => {
         <span className="account-opts__span">{username} <FaCaretDown></FaCaretDown></span>
       </nav>
       <nav className="navbar_side-nav side-nav">
-          <button className="side-nav_btn cursor_pointer" onClick={() => sendTest('open')}>
+          <button className="side-nav_btn cursor_pointer" onClick={(e) => {loginHandler(e)}}>
               <FaBars></FaBars>
           </button>
       </nav>
