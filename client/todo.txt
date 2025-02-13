@@ -1,0 +1,4 @@
+login and regsiter
+1. handle all responses from server
+2. look up standard way to store JWT in cookies, is the setter and getter in the authSlice?
+3. Once authenticated, just show message

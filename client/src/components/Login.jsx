@@ -13,12 +13,15 @@ const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
+    const [msg, setMsg] = useState('')
+    const [showSpinner, setShowSpinner] = useState(false)
 
     const loginHandler = async() => {
         try {
             const response = await login({email: email, password: password}).unwrap()
             console.log(response)
         } catch (err) {
+            setMsg(err)
             console.log(err)
         }
     }
@@ -26,29 +29,41 @@ const Login = () => {
   return (
     <section className="login__section">
         <form className="login__form" action={loginHandler}>
-            <div className="email__div">
-                <label htmlFor="login__input-email" className="login__label-email">Email:</label>
-                <input type="text" className="login__input-email" id="login__input-email" 
+            <div className="login__form__div">
+                <label htmlFor="login-email__input" className="login-email__label">Email</label>
+                <input required type="text" className="login-email__input" id="login-email__input" 
                     value={email}
                     onChange={(e) => {setEmail(e.target.value)}}
                 />
             </div>
-            <div className="password__div">
-                <label htmlFor="login__input-password" className="login__label-email">Password:</label>
-                <input className="login__input-password" id="login__input-password" 
+            <div className="login__form__div">
+                <label htmlFor="login-password__input" className="login-password__label">Password</label>
+                <input required className="login-password__input" id="login-password__input" 
                     type= {
                         showPassword ? "text" : "password"
                     }
                     value={password}
                     onChange={(e) => {setPassword(e.target.value)}}
                 />
-                <button type="button" className="toggleShowPassword" onClick={() => {setShowPassword(!showPassword)}}>
+                <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
                     {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
                 </button>
             </div>
-            <button className="login__button" type="submit">
-                Login
-            </button>
+            <div className="login__form__div">
+                <button className="login__button" type="submit" disabled={isLoading}>
+                    Login
+                </button>
+            </div>
+            <div className="login__form__div">
+                <p className="login__p">{msg}</p>
+            </div>
+            <div className="login__form__div">
+                {
+                    isLoading ? 
+                    <div className="loader"></div> :
+                    <></>
+                }
+            </div>
         </form>
     </section>
   )
