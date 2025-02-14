@@ -8,7 +8,7 @@ export const apiSlice = createApi({
     reducerPath: 'api',
     // All of our requests will have URLs starting with
     baseQuery: fetchBaseQuery({baseUrl: url}),
-    tagTypes: ['User', 'Routine'],
+    tagTypes: ['User', 'Routine', 'Session', 'Exercise', 'Comment'],
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({})
 })
