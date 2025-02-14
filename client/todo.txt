@@ -1,4 +1,28 @@
+1. create dashboard components
+
+2. understand createSelector and createEntityAdapters? create slices for Routines, Sessions, Comments
+watch this https://www.youtube.com/watch?v=TPAAQnVxc-I&list=PL0Zuz27SZ-6P4dQUsoDatjEGpmBpcOW8V&index=6&t=190s
+
+continue with videos 
+
+
+
+
 login and regsiter
 1. handle all responses from server
+    register
+        400: message: Please provide the required fields!
+        created: 201: {user: {name: response.getName()}, token: token}
+    
+    login
+        400: message: Please provide the required fields!
+        401: Invalid credentials!
+        success: 200: {user: {name: response.getName()}, token: token}
+
+
 2. look up standard way to store JWT in cookies, is the setter and getter in the authSlice?
 3. Once authenticated, just show message
+
+
+
+

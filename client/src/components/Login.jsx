@@ -19,7 +19,13 @@ const Login = () => {
     const loginHandler = async() => {
         try {
             const response = await login({email: email, password: password}).unwrap()
-            console.log(response)
+            
+            if (response && response.status === 200) {
+                useNavigate('/')
+            } else {
+                setMsg(err)
+            }
+
         } catch (err) {
             setMsg(err)
             console.log(err)
