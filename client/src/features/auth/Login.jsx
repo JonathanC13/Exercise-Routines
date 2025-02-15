@@ -2,7 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
-import { useLoginMutation } from '../store/slices/api/authApiSlice'
+import { useLoginMutation } from './authApiSlice'
 
 const Login = () => {
 

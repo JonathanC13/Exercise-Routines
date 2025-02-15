@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authReducer from './slices/auth/authSlice'
-import { apiSlice } from './slices/api/apiSlice'
-import { authApiSlice } from './slices/api/authApiSlice'
+import authReducer from '../features/auth/authSlice'
+import { apiSlice } from './api/apiSlice'
+import { authApiSlice } from '../features/auth/authApiSlice'
 
 
 export default configureStore({
@@ -12,6 +12,7 @@ export default configureStore({
   },
   middleware: getDefaultMiddleware => 
     getDefaultMiddleware()
-      .prepend(apiSlice.middleware)
-      .concat(authApiSlice.middleware)
+      .concat(apiSlice.middleware)
+      .concat(authApiSlice.middleware),
+  devTools: true
 })

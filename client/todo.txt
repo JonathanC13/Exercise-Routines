@@ -1,11 +1,29 @@
-1. create dashboard components
+1. create dashboard components *on hold.
 
-2. understand createSelector and createEntityAdapters? create slices for Routines, Sessions, Comments
+2. understand createSelector and createEntityAdapters? create api to grab the Routines and then put into adapter. When a Routine is selected, it will grab the sessions with the routine id and populate the session, exercise, and comment adapters. Each endpoint will need to handle the respond by adjusting the current data in the adapters.
 watch this https://www.youtube.com/watch?v=TPAAQnVxc-I&list=PL0Zuz27SZ-6P4dQUsoDatjEGpmBpcOW8V&index=6&t=190s
+at 14:35
+
 
 continue with videos 
 
+- Get data and then parse to Normalize data into shape
+user's Routines: {
+    byId : {
+        "Routine1id" : {
+            id : "post1",
+            author : "user1",
+            body : "......",
+            sessions : ["session1", "session2"]
+        },
+},
+sessions: {
+    ...
+},
+exercises: {
 
+},
+comments
 
 
 login and regsiter

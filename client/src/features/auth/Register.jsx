@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { FaEyeSlash, FaEye } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
-import { useRegisterMutation } from '../store/slices/api/authApiSlice'
+import { useRegisterMutation } from '/authApiSlice'
 
 const Register = () => {
 
