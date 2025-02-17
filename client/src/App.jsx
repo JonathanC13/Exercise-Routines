@@ -9,10 +9,9 @@ import Login from './features/auth/Login'
 import Register from './features/auth/Register'
 import Dashboard from './components/Dashboard'
 import DashboardHome from './components/DashboardHome'
-import AddRoutine from './features/routines/AddRoutine'
-import RoutineHome from './features/routines/RoutineHome'
+import Routines from './features/routines/Routines'
 import Routine from './features/routines/Routine'
-import store from './store/store'
+import store from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
 
@@ -22,25 +21,22 @@ function App() {
     <Provider store={store}>
       <BrowserRouter>
           <Routes>
-            <Route index element={<Layout />}> 
+            <Route index element={<h1>hello</h1>}></Route>
+            <Route element={<Layout />}> 
               {/* Public */}
               <Route element={<AuthLayout />}>
                 <Route path="login" element={<Login />} />
                 <Route path="register" element={<Register />} />
               </Route>
 
-              {/* later protected routes, fo valid logged in users. */}
-              <Route path="dashboard" element={<Dashboard />}>
-                <Route index element={<DashboardHome />}></Route>
-                <Route path="/addRoutine" element={<AddRoutine />}></Route>
-                <Route path="Routines">
-                  <Route index element={<RoutineHome />}></Route>
-                  <Route path=":routineId" element={<Routine />}></Route>
-                  {/* Route for Sessions within the Routine */}
-                    {/* Route for exercises within the session */}
-                </Route>
-                
+              {/* later protected routes, for valid logged in users. */}
+              <Route path="routines">
+                <Route index element={<Routines />}></Route>
+                <Route path=":routineId" element={<Routine />}></Route>
+                {/* Route for Sessions within the Routine */}
+                  {/* Route for exercises within the session */}
               </Route>
+                
             </Route>
           </Routes>
       </BrowserRouter>

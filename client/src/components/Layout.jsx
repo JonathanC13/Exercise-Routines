@@ -5,13 +5,13 @@ import { Outlet, useNavigate } from 'react-router'
 const Layout = () => {
     let navigate = useNavigate();
 
-    useEffect(() => {
-        if (false) {
-            navigate('/login')
-        } else {
-            navigate('/register')
-        }
-    }, [])
+    // useEffect(() => {
+    //     if (false) {
+    //         navigate('/login')
+    //     } else {
+    //         navigate('/register')
+    //     }
+    // }, [])
     
 
   return (
@@ -21,4 +21,4 @@ const Layout = () => {
   )
 }
 
-export default Home
+export default Layout

@@ -4,7 +4,16 @@ import {
 } from "@reduxjs/toolkit"
 import { apiSlice } from "../../app/api/apiSlice"
 
-const routinesAdapter = createEntityAdapter({})
+const routinesAdapter = createEntityAdapter({
+    // Sort in ascending order, if same then descending updatedAt order
+    sortComparer: (a, b) => {
+        const ord = a - b
+        if (ord === 0) {
+            return b.updatedAt.localeCompare(a.updatedAt)
+        }
+        return ord
+    }
+})
 
 const initialState = routinesAdapter.getInitialState()
 
@@ -31,13 +40,18 @@ routine : {
 export const routinesApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getRoutines: builder.query({
-            query: () => '/routines',
+            query: () => ({
+                url: '/routines',
+                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                method: 'GET'
+            }),
             validateStatus: (response, result) => {
                 return response.status === 200 && !result.isError
             },
             // keepUnusedDataFor: 5,
             transformResponse: responseData => {
-                const loadedRoutines = responseData.map((routine) => {
+                const data = responseData.response
+                const loadedRoutines = data.map((routine) => {
                     routine.id = routine._id    // normalized data uses .id, so add in a .id prop and assign the mongoDB _id value.
                     return routine
                 })
@@ -55,6 +69,7 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
                 }
             }
         })
+        // to add, get single, update (invalidates routine, session), delete (invalidates routine, session).
     })
 })
 

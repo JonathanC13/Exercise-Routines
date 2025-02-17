@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from "react-router";
-import Session from '../features/sessions/Session';
+import Session from '../sessions/Session';
 
 const createSessionComps = (routineId) => {
     const comps = []

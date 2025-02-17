@@ -1,12 +1,12 @@
 import { apiSlice } from "../../app/api/apiSlice"
-import { logOut } from "./authSlice"
+import { loggedOut } from "./authSlice"
 
 // Define our single API slice object
 export const authApiSlice = apiSlice.injectEndpoints({
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
         // The `login` endpoint is a "query" operation that returns data in the result object
-        login: builder.mutation({
+        userSendLogin: builder.mutation({
             
             query: (credentials) => ({
                 method: 'POST',
@@ -15,7 +15,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
             })
             
         }),
-        sendLogout: builder.mutation({
+        userSendLogOut: builder.mutation({
             query: () => ({
                 method: 'POST',
                 url: '/auth/logout',
@@ -25,14 +25,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 try {
                     const {data} = await queryFulfilled
 
-                    dispatch(logOut())
+                    dispatch(loggedOut())
                     dispatch(apiSlice.util.resetApiState()) // clear the cache of this request
                 } catch (err) {
                     console.log(err)
                 }
             }
         }),
-        register: builder.mutation({
+        userSendRegister: builder.mutation({
             query: (registerInfo) => ({
                 method: 'POST',
                 url: '/auth/register',
@@ -43,4 +43,4 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useLoginMutation, useSendLogoutMutation, useRegisterMutation } = authApiSlice
+export const { useUserSendLoginMutation, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice

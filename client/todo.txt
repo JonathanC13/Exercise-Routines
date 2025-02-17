@@ -2,29 +2,56 @@
 
 2. understand createSelector and createEntityAdapters? create api to grab the Routines and then put into adapter. When a Routine is selected, it will grab the sessions with the routine id and populate the session, exercise, and comment adapters. Each endpoint will need to handle the respond by adjusting the current data in the adapters.
 watch this https://www.youtube.com/watch?v=TPAAQnVxc-I&list=PL0Zuz27SZ-6P4dQUsoDatjEGpmBpcOW8V&index=6&t=190s
-at 14:35
+at 17:22
 
 
 continue with videos 
 
-- Get data and then parse to Normalize data into shape
-user's Routines: {
-    byId : {
-        "Routine1id" : {
-            id : "post1",
-            author : "user1",
-            body : "......",
-            sessions : ["session1", "session2"]
-        },
-},
-sessions: {
-    ...
-},
-exercises: {
+RTK Query uses a "document cache" approach:
+    Therefore:
+        For Routines:
+            1. Retrieve all routines from server
+            2. Use RTK createEntityAdapter to cache the document  {ids: [], entities}
+            3. Provide Tags so that if triggered by another reducer it assumes data is invalidated so fetch again
 
-},
-comments
+        For Sessions:
+            just do all session and exercise tags
+            https://stackoverflow.com/questions/76396659/how-to-avoid-re-render-in-rtk-query
+                if modifying one exercise, like toggling a checkbox, re-renders entire sesssion (add console log to each exercise if they print when a different exercise is modified) then add memo to each exercise. else NICE! React sees that the specific components with the exercises did not have any state changes so it does not re-render.
 
+        hmmmmm
+            - createApi for sessions
+                GET allsessions provides tags [type: sessions, ids: []], provides tags [type: exercises, ids: []]
+                get single session, e.g. providesTags: (result, error, arg) => [{ type: 'Session', id: arg }]
+                add new session. Invalidates [sessions], which is encompasses [type: sessions, ids: []] so refetch will occur
+                update, invalidates specific session. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg.id }],
+                delete, invalidates sessions, which will also invalidate [type: sessions, ids: []] so refetch
+
+            - createApi for exercises 
+                GET exercises (multi)   provides no tags. Session is the one that will pull.
+                GET exercise (single) providesTags for specific. e.g. providesTags: (result, error, arg) => [{ type: 'Exercise', id: arg }]
+                add one, invalidates exercises. Trigger Sessions Api
+                    api call
+                update invalidates for specific. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Exercise', id: arg }]
+                    api call
+                delete 
+                    api call
+
+            - exercises of all the sessions slice with Entity adapter
+                reducers:
+                    
+                extraReducers
+                    GET sessions fulfilled. 
+                        get all exercises from payload
+                        setAll exercises into Adapter
+
+                    update exercise fulfilled:
+                        bookUpdated: booksAdapter.updateOne // will trigger the update for the specific exercise that uses selector for it.
+                    delete exercise fulfilled
+                        delete
+                    
+                - has selector for all exercises with specific sessionID
+                - has selector for specific exercise, so now that component that changes has a specific selector hook and will only rerender itself.
 
 login and regsiter
 1. handle all responses from server

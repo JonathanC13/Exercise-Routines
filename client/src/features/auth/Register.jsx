@@ -3,11 +3,11 @@ import { useState } from 'react'
 import { FaEyeSlash, FaEye } from 'react-icons/fa'
 import { useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
-import { useRegisterMutation } from '/authApiSlice'
+import { useUserSendRegisterMutation } from './authApiSlice'
 
 const Register = () => {
 
-    const [register, {isLoading}] = useRegisterMutation()
+    const [register, {isLoading}] = useUserSendRegisterMutation()
 
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')

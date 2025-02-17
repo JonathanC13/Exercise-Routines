@@ -2,12 +2,12 @@ import React from 'react'
 import { useState } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useSelector, useDispatch } from 'react-redux'
-import { useLoginMutation } from './authApiSlice'
+import { useUserSendLoginMutation } from './authApiSlice'
 
 const Login = () => {
 
     // authApiSlice mutations
-    const [login, {isLoading}] = useLoginMutation()
+    const [login, {isLoading}] = useUserSendLoginMutation()
 
     // controlled inputs
     const [email, setEmail] = useState('')
