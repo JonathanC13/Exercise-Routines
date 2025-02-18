@@ -1,13 +1,26 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import { useGetRoutinesQuery, selectAllRoutines, selectRoutineById, selectRoutineIds } from './routinesApiSlice'
+import { useGetRoutinesQuery } from './routinesApiSlice'
 import AddRoutine from './AddRoutine'
+import RoutineBrief from './RoutineBrief'
+
+const createRoutineComps = (routineIds) => {
+  
+  const comps = routineIds.map((routineId) => {
+    return <RoutineBrief
+        routineId={routineId}
+      >
+      </RoutineBrief>
+  })
+
+  return comps
+} 
 
 const Routines = () => {
 
   //Calling the `useGetRoutinesQuery()` hook automatically fetches data!
   const {
-    data: routines = [],  // data has been transformed and returned to routines
+    data: routines,
     isLoading,
     isSuccess,
     isError,
@@ -18,17 +31,21 @@ const Routines = () => {
 
   if (isLoading) {
     content = <h2>Is loading...</h2>
-  } else if (routines) {
+  } 
+  
+  if (isError) {
+      content = <p className="errmsg">{error?.data?.message}</p>
+  }
+
+  if (isSuccess) {
     console.log('raw: ')
     console.log(routines)
     console.log('selector: ')
-    const all = useSelector(selectAllRoutines)
+    const { ids, entities } = routines
     content = 
       <section>
-        <h2>Raw data</h2>
-        {all.map((routine) => {return <p key={routine.id}>{routine.name}</p>})}
-        {/* <h2>Transformed data</h2>
-        <p>{ transformedData }</p> */}
+        <h2>Routines</h2>
+        {createRoutineComps(ids)}
       </section>
   } else {
     content = <h2>Something has gone wrong!</h2>

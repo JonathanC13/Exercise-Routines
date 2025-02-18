@@ -7,6 +7,8 @@ at 17:22
 
 continue with videos 
 
+** on to testing getting all sessions that belong to the routineID and then all exercises that belong to the sessionId
+
 RTK Query uses a "document cache" approach:
     Therefore:
         For Routines:
@@ -19,24 +21,49 @@ RTK Query uses a "document cache" approach:
             https://stackoverflow.com/questions/76396659/how-to-avoid-re-render-in-rtk-query
                 if modifying one exercise, like toggling a checkbox, re-renders entire sesssion (add console log to each exercise if they print when a different exercise is modified) then add memo to each exercise. else NICE! React sees that the specific components with the exercises did not have any state changes so it does not re-render.
 
+
+        May need to memo sessions and exercise, but check re-render without
+        * Essentially boils down to:
+            Do I make more DB API calls or intensive ones with lookup to join documents in the Server to return normalized or seperate collections.
+            OR 
+            parse the response in the Front end into entities and sync with api calls to server or re-fetch on every nested property change.
+
+            In this case. Less server calls to DB. Front end gets nested documents so it parses into entity adapters, then on changes it needs to api call to server apply change and then locally update the adapter.
+
+            Next Project just seperate everything into different collections, therefore multpile DB calls but don't do a lookup (join). The associations will be conducted in the Front end.
         hmmmmm
             - createApi for sessions
-                GET allsessions provides tags [type: sessions, ids: []], provides tags [type: exercises, ids: []]
-                get single session, e.g. providesTags: (result, error, arg) => [{ type: 'Session', id: arg }]
-                add new session. Invalidates [sessions], which is encompasses [type: sessions, ids: []] so refetch will occur
-                update, invalidates specific session. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg.id }],
-                delete, invalidates sessions, which will also invalidate [type: sessions, ids: []] so refetch
+                Has session entity adapter
+                Has exercise entity adapter (export)
+
+                GET allsessions provides tags [type: sessions, ids: []], // provides tags [type: exercises, ids: []]    * cannot provide 2 tags in an endpoint
+                    transform and put into session entity adapter
+                    transform and put into exercise entity adapter
+                //*dont need, GET single session, e.g. providesTags: (result, error, arg) => [{ type: 'Session', id: arg }], update data cache for this specific
+                ADD new session. Invalidates [sessions, id: LIST], which is encompasses [type: sessions, ids: []] so refetch will occur
+                Update, invalidates specific session. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg.id }],
+                Delete, invalidates specific session. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg.id }],
+
+                - Has selectors
 
             - createApi for exercises 
-                GET exercises (multi)   provides no tags. Session is the one that will pull.
-                GET exercise (single) providesTags for specific. e.g. providesTags: (result, error, arg) => [{ type: 'Exercise', id: arg }]
-                add one, invalidates exercises. Trigger Sessions Api
-                    api call
-                update invalidates for specific. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Exercise', id: arg }]
-                    api call
-                delete 
-                    api call
+                import exercise entity adapter
 
+                // GET exercises (multi)   provides tags [type: exercises, ids: []]
+                // GET exercise (single) providesTags for specific. e.g. providesTags: (result, error, arg) => [{ type: 'Exercise', id: arg }]
+                add one, invalidates [sessions]. Trigger Sessions Api   //[exercises]
+                    api call
+                    //adapter.addOne
+                update invalidates for specific. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg }]
+                    api call
+                    //adapter.updateone
+                delete invalidates for specific. e.g. invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg }]
+                    api call
+                    //adapter.deleteone
+
+                - selectors
+
+            // don't need
             - exercises of all the sessions slice with Entity adapter
                 reducers:
                     
@@ -47,8 +74,6 @@ RTK Query uses a "document cache" approach:
 
                     update exercise fulfilled:
                         bookUpdated: booksAdapter.updateOne // will trigger the update for the specific exercise that uses selector for it.
-                    delete exercise fulfilled
-                        delete
                     
                 - has selector for all exercises with specific sessionID
                 - has selector for specific exercise, so now that component that changes has a specific selector hook and will only rerender itself.

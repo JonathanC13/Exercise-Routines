@@ -65,9 +65,9 @@ const createExercise = async(req, res) => {
 
     // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     if (parent.exercises !== undefined) {
-        parent.exercises.push({createdByUserId, ...requestBody})
+        parent.exercises.push({createdByUserId, sessionId, ...requestBody})
     } else {
-        parent.exercises = [{createdByUserId, ...requestBody}]
+        parent.exercises = [{createdByUserId, sessionId, ...requestBody}]
     }
     
     const response = await parent.save()

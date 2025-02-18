@@ -1,16 +1,16 @@
 import React from 'react'
 import { useParams } from "react-router";
-import Session from '../sessions/Session';
+// import Session from '../sessions/Sessions';
 
-const createSessionComps = (routineId) => {
-    const comps = []
+// const createSessionComps = (routineId) => {
+//     const comps = []
 
-    // iterate the Routine with the routineId entity adapter and send the session Ids to the component that will render each session
-    const sessionId = 13213114
-    comps.push(<Session routineId={ sessionId }></Session>)
+//     // iterate the Routine with the routineId entity adapter and send the session Ids to the component that will render each session
+//     const sessionId = 13213114
+//     comps.push(<Session routineId={ sessionId }></Session>)
 
-    return comps
-}
+//     return comps
+// }
 
 const Routine = () => {
     // For specific Routine. Displays all the sessions.

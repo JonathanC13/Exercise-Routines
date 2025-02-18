@@ -8,6 +8,11 @@ const ExerciseSchema = new mongoose.Schema({
         ref: 'User',
         required: [true, 'Please provide a user!']
     },
+    sessionId: {
+        type: mongoose.Types.ObjectId,
+        ref: 'Session',
+        required: [true, 'Please provide a session id!']
+    },
     order: {
         type: Number,
         default: 0

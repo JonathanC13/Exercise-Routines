@@ -14,6 +14,8 @@ jwt.verify(token, 'shhhhh', function(err, decoded) {
   }
 });
 
+- on auth route need logout to invalidate the JWT token!
+
 Front end
 1. Draw front end layout
 2. partition into React components and determine nesting.
