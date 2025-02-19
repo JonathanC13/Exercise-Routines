@@ -1,39 +1,64 @@
-// import React from 'react'
-// import { useGetSessionsQuery, selectSessionIds } from './sessionsApiSlice'
-// import { useSelector } from 'react-redux'
+import React from 'react'
+import { useGetSessionsQuery } from './sessionsApiSlice'
+import { useParams } from 'react-router'
+import Session from './Session'
 
-// const createSessionComps = (sessionIds) => {
-//     return
-// }
+const createSessionComps = (routineId, sessionIds) => {
+    const comps = sessionIds.map((sessionId) => {
+        return <Session
+            key={ sessionId }
+            routineId={ routineId }
+            sessionId={ sessionId }
+        ></Session>
+    })
 
-// const Sessions = () => {
-//     const {
-//         data: sessions,  // data has been transformed and returned to routines
-//         isLoading,
-//         isSuccess,
-//         isError,
-//         error
-//     } = useGetSessionsQuery()
+    return comps
+}
 
-//     let content = ''
+const Sessions = () => {
 
-//     if (isLoading) {
-//         content = <p>loading...</p>//<PulseLoader color={"#FFF"} />
-//     }
+    const { routineId } = useParams()
+    console.log(routineId)
 
-//     if (isError) {
-//         content = <p className="errmsg">{error?.data?.message}</p>
-//     }
+    const {
+        data: sessions,  // data has been transformed
+        isLoading,
+        isSuccess,
+        isError,
+        error
+    } = useGetSessionsQuery( {routineId: routineId},
+        {
+            pollingInterval: 30000,
+            refetchOnFocus: true,
+            refetchOnMountOrArgChange: true
+        }
+    )
 
-//     if (isSuccess) {
-//         const { ids, entities } = sessions
-//     }
+    let content = ''
 
-//   return (
-//     <section>
-//         {content}
-//     </section>
-//   )
-// }
+    if (isLoading) {
+        content = <p>loading...</p>//<PulseLoader color={"#FFF"} />
+    }
 
-// export default Sessions
+    if (isError) {
+        content = <p className="errmsg">hello {error?.data?.message}</p>
+    }
+
+    if (isSuccess) {
+        const { ids, entities } = sessions
+        content = <>
+            {createSessionComps(routineId, ids)}
+        </>
+    } else {
+        content = <h2>Something has gone wrong!</h2>
+    }
+
+  return (
+    <section>
+        <h1>Sessions</h1>
+        {content}
+    </section>
+  )
+}
+
+export default Sessions

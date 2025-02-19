@@ -1,33 +1,43 @@
 import React from 'react'
-import { useParams } from "react-router";
-// import Session from '../sessions/Sessions';
+// import { useSelector } from 'react-redux'
+// import { selectRoutineById } from './routinesApiSlice'
+import { memo } from 'react'
+import { useGetRoutinesQuery } from './routinesApiSlice'
+import { useNavigate } from 'react-router'
 
-// const createSessionComps = (routineId) => {
-//     const comps = []
+const Routine = ( {routineId = null} ) => {
 
-//     // iterate the Routine with the routineId entity adapter and send the session Ids to the component that will render each session
-//     const sessionId = 13213114
-//     comps.push(<Session routineId={ sessionId }></Session>)
+  let navigate = useNavigate()
 
-//     return comps
-// }
+  const handleRoutineClick = (routineIdParam) => {
+    navigate(`/routines/${routineIdParam}/sessions/`)
+  }
 
-const Routine = () => {
-    // For specific Routine. Displays all the sessions.
+  // const routine = useSelector(state => selectRoutineById(state, routineId))
 
-    const params = useParams()
-    const { routineId } = params
+  const { routine } = useGetRoutinesQuery('routinesList',
+    {
+      selectFromResult: ({ data }) => ({
+        routine: data?.entities[routineId]
+    }),
+  })
+
+  let content = ''
+
+  if (!routine) {
+      content = <p>Error</p>
+  } else {
+      // const routine = useSelector(selectRoutineById(routineId))
+      content = <div onClick={() => {handleRoutineClick(routine.id)}}>{routine.id}, {routine.name}</div>
+  }
 
   return (
     <section>
-        <h1>The routine's name</h1>
-        <h2>The order</h2>
-        <p>The description</p>
-        <button>To navigate to edit Routine page</button>
-
-
+        { content }
     </section>
   )
 }
 
-export default Routine
+const memoizedRoutine = memo(Routine)
+
+export default memoizedRoutine

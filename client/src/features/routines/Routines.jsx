@@ -2,15 +2,16 @@ import React from 'react'
 import { useSelector } from 'react-redux'
 import { useGetRoutinesQuery } from './routinesApiSlice'
 import AddRoutine from './AddRoutine'
-import RoutineBrief from './RoutineBrief'
+import Routine from './Routine'
 
 const createRoutineComps = (routineIds) => {
   
   const comps = routineIds.map((routineId) => {
-    return <RoutineBrief
-        routineId={routineId}
+    return <Routine
+        key={ routineId }
+        routineId={ routineId }
       >
-      </RoutineBrief>
+      </Routine>
   })
 
   return comps
@@ -25,7 +26,13 @@ const Routines = () => {
     isSuccess,
     isError,
     error
-  } = useGetRoutinesQuery()
+  } = useGetRoutinesQuery('routinesList',
+      {
+        pollingInterval: 60000,
+        refetchOnFocus: true,
+        refetchOnMountOrArgChange: true
+      }
+    )
 
   let content = null
 
@@ -38,9 +45,6 @@ const Routines = () => {
   }
 
   if (isSuccess) {
-    console.log('raw: ')
-    console.log(routines)
-    console.log('selector: ')
     const { ids, entities } = routines
     content = 
       <section>
