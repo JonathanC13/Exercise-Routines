@@ -1,14 +1,33 @@
-// import React from 'react'
-// import { useSelector } from 'react-redux'
-// import { selectAllExercises } from './exerciseApiSlice'
+import React from 'react'
+// import { useGetSessionsQuery } from '../sessions/sessionsApiSlice'
+import Exercise from './Exercise'
 
-// const Exercises = ( {sessionId} ) => {
-//   return (
-//     <section>
-//         <h1>Exercises</h1>
+const createExerciseComps = (exercises) => {
 
-//     </section>
-//   )
-// }
+    const comps = exercises.map((ex) => {
+        return <Exercise
+                key={ex.id}
+                exercise={ex}
+            ></Exercise>
+    })
 
-// export default Exercises
+    return comps
+}
+
+const Exercises = ( {exercises = null} ) => {
+
+    let content = ''
+    
+    if (exercises) {
+        content = <>{createExerciseComps(exercises)}</>
+    }
+
+  return (
+    <section>
+        <h1>Exercises</h1>
+        { content }
+    </section>
+  )
+}
+
+export default Exercises

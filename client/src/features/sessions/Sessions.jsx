@@ -18,7 +18,6 @@ const createSessionComps = (routineId, sessionIds) => {
 const Sessions = () => {
 
     const { routineId } = useParams()
-    console.log(routineId)
 
     const {
         data: sessions,  // data has been transformed

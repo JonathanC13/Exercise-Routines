@@ -2,14 +2,7 @@ import React from 'react'
 import { memo } from 'react'
 import { useGetSessionsQuery } from './sessionsApiSlice'
 import { useParams } from 'react-router'
-
-const createExerciseComps = (sessionId) => {
-    const comps = []
-
-    // iterate the session entity adapter for the exercise IDs and then send each exercise Id to the Exercise component.
-
-    return comps
-}
+import Exercises from '../exercises/Exercises'
 
 const Session = ( { sessionId = null }) => {
 
@@ -33,12 +26,15 @@ const Session = ( { sessionId = null }) => {
                 <label htmlFor="session__chkbx"></label>
                 <input type="checkbox" className="session__chkbx" id="session__chkbx"/>
                 <button>Edit icon for session</button>
-                {/* {sessionAlone ? <></> : <button>enlarge icon for session into own page</button>} */}
+                {/* {sessionAlone ? <></> : <button>enlarge icon for session into own page</button>} navigate to sessionPage */}
+                {/* delete button */}
                 
-                {/* exercises -> exercise */}
+                <Exercises
+                    exercises={session.exercises}
+                ></Exercises>
             </>
     } else {
-        <p>Something has gone wrong!</p>
+        <p>Loading...</p>
     }
 
   return (

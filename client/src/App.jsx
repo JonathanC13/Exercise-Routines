@@ -33,9 +33,11 @@ function App() {
               {/* later protected routes, for valid logged in users. */}
               <Route path="routines">
                 <Route index element={<Routines />}></Route>
-                <Route path=":routineId" element={<Routine />}></Route>
+                {/* <Route path=":routineId" element={<Routine />}></Route> */}
                 <Route path=":routineId/sessions">
-                  <Route index element={<Sessions />}></Route>
+                  <Route index element={<Sessions />}>
+                    {/* <Route path=":sessionId" element={<SessionPage />}></Route> */}
+                  </Route>
                   {/* Route for exercises within the session */}
                 </Route>
                 

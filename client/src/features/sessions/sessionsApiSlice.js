@@ -58,6 +58,9 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
                 // parent session
                 const loadedSessions = data.map((session) => {
                     session.id = session._id    // normalized data uses .id, so add in a .id prop and assign the mongoDB _id value.
+                    session.exercises.map((exercise) => {
+                        exercise.id = exercise._id
+                    })
                     return session
                 })
                 return sessionsAdapter.setAll(initialSessionsState, loadedSessions)
