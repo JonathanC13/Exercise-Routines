@@ -7,7 +7,19 @@ at 17:22
 
 continue with videos 
 
-** on to testing getting all sessions that belong to the routineID and then all exercises that belong to the sessionId
+** on to testing getting all sessions that belong to the routineID and then all exercises that belong to the sessionId ** OK
+** Routes
+/routines
+    /    // show all routines
+    /:routineID    // TODO, routine Edit page
+        /sessions    
+            /   // shows all the sessions within the routineId          *A
+            /:sessionId // TODO, session single page. within click to go to edit page   *A      ..For *A, see if not too messy to create common component for both. Like both navigate to their control starting point and then call the common session component. SHould be OK. TEST**
+                /exercises
+                    /   // Nothing
+                    /:exerciseId    // TODO, exercise single page. within click to go to edit page
+
+
 
 RTK Query uses a "document cache" approach:
     Therefore:

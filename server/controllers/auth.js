@@ -14,7 +14,7 @@ const register = async(req, res) => {
 
     const token = response.generateJWT()
 
-    res.status(StatusCodes.CREATED).json({user: {name: response.getName()}, token: token})
+    res.status(StatusCodes.CREATED).json({user: {name: response.getName(), id: response.getId()}, token: token})
 }
 
 const login = async(req, res) => {
@@ -38,7 +38,7 @@ const login = async(req, res) => {
     }
 
     const token = response.generateJWT()
-    res.status(StatusCodes.OK).json({user: {name: response.getName()}, token: token})
+    res.status(StatusCodes.OK).json({user: {name: response.getName(), id: response.getId()}, token: token})
 }
 
 

@@ -11,12 +11,12 @@ const Exercise = ( { exercise = null } ) => {
 
     console.log('re-render: ', exercise.id)
 
-    const handleUpdateExercise = async(e) => {
+    const updateExerciseHandler = async(e) => {
         e.preventDefault()
         const form = e.currentTarget
 
         const { elements } = e.currentTarget
-        const name = elements['update-name__input'].value
+        const name = elements['update-ex-name__input'].value
 
         const body = {
             name
@@ -39,9 +39,9 @@ const Exercise = ( { exercise = null } ) => {
             <p>{exercise.order}</p>
             <p>{exercise.description}</p>
 
-            <form onSubmit={(e) => {handleUpdateExercise(e)}}>
-                <label htmlFor="update-name__input">Name:</label>
-                <input type="text" id="update-name__input" defaultValue="" required />
+            <form onSubmit={(e) => {updateExerciseHandler(e)}}>
+                <label htmlFor="update-ex-name__input">Name:</label>
+                <input type="text" id="update-ex-name__input" defaultValue="" required />
                 <button type='submit'>UPDATE</button>
             </form>
             

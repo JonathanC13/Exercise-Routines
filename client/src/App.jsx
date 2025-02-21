@@ -12,6 +12,7 @@ import DashboardHome from './components/DashboardHome'
 import Routines from './features/routines/Routines'
 import Routine from './features/routines/Routine'
 import Sessions from './features/sessions/Sessions'
+import SessionPage from './features/sessions/SessionPage'
 import store from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -36,7 +37,7 @@ function App() {
                 {/* <Route path=":routineId" element={<Routine />}></Route> */}
                 <Route path=":routineId/sessions">
                   <Route index element={<Sessions />}>
-                    {/* <Route path=":sessionId" element={<SessionPage />}></Route> */}
+                    <Route path=":sessionId" element={<SessionPage />}></Route>
                   </Route>
                   {/* Route for exercises within the session */}
                 </Route>

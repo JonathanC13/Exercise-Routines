@@ -27,6 +27,8 @@ const Session = ( { sessionId = null }) => {
                 <input type="checkbox" className="session__chkbx" id="session__chkbx"/>
                 <button>Edit icon for session</button>
                 {/* {sessionAlone ? <></> : <button>enlarge icon for session into own page</button>} navigate to sessionPage */}
+                {/* below buttons presence controlled by if user id matched createdBy */}
+                {/* Edit button */}
                 {/* delete button */}
                 
                 <Exercises

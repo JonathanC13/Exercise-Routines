@@ -1,22 +1,17 @@
 import React from 'react'
 import { useGetSessionsQuery } from './sessionsApiSlice'
+import { Session } from './Session'
 
 const SessionPage = () => {
 
-    const { routineId, sessionId } = useParams()
+    const { sessionId } = useParams()
 
-    const { session } = useGetSessionsQuery( {routineId: routineId},
-        {
-            selectFromResult: ({ data }) => ({
-            session: data?.entities[sessionId]
-        }),
-    })
-
-    // page to show single session, if user owned then show edit button -> redirects to editSessionForm
-
+    let content = <Session
+        sessionId={sessionId}
+    ></Session>
 
   return (
-    <div>SessionPage</div>
+    <div>{content}</div>
   )
 }
 
