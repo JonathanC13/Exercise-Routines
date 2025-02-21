@@ -5,31 +5,31 @@ import { memo } from 'react'
 import { useGetRoutinesQuery } from './routinesApiSlice'
 import { useNavigate } from 'react-router'
 
-const Routine = ( {routineId = null} ) => {
+const Routine = ( { routineId = null } ) => {
 
-  let navigate = useNavigate()
+    let navigate = useNavigate()
 
-  const handleRoutineClick = (routineIdParam) => {
-    navigate(`/routines/${routineIdParam}/sessions/`)
-  }
+    const handleRoutineClick = (routineIdParam) => {
+      navigate(`/routines/${routineIdParam}/sessions/`)
+    }
 
-  // const routine = useSelector(state => selectRoutineById(state, routineId))
+    // const routine = useSelector(state => selectRoutineById(state, routineId))
 
-  const { routine } = useGetRoutinesQuery('routinesList',
-    {
-      selectFromResult: ({ data }) => ({
-        routine: data?.entities[routineId]
-    }),
-  })
+    const { routine } = useGetRoutinesQuery('routinesList',
+      {
+        selectFromResult: ({ data }) => ({
+          routine: data?.entities[routineId]
+      }),
+    })
 
-  let content = ''
+    let content = ''
 
-  if (!routine) {
-      content = <p>Error</p>
-  } else {
+    if (routine) {
       // const routine = useSelector(selectRoutineById(routineId))
-      content = <div onClick={() => {handleRoutineClick(routine.id)}}>{routine.id}, {routine.name}</div>
-  }
+      content = <div onClick={() => {handleRoutineClick(routine.id)}}>{routine.id}, {routine.name}</div> 
+    } else {
+      content = <p>Not found</p>
+    }
 
   return (
     <section>

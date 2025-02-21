@@ -36,7 +36,7 @@ const Session = ( { sessionId = null }) => {
                 ></Exercises>
             </>
     } else {
-        <p>Loading...</p>
+        <p>Not found</p>
     }
 
   return (

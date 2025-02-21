@@ -83,7 +83,7 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: args.body
             }),
-            invalidatesTags: (result, error, arg) => [{type: 'Session', id: arg.sessionId}]
+            invalidatesTags: (result, error, arg) => [{type: 'Session', id: 'LIST'}]
         }),
         updateSession: builder.query({
             query:  (args) => ({
@@ -93,6 +93,14 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
                 body: args.body
             }),
             invalidatesTags: (result, error, arg) => [{type: 'Session', id: arg.sessionId}]
+        }),
+        deleteSession: builder.query({
+            query:  (args) => ({
+                url: `/routines/${args.routineId}/sessions/${args.sessionId}`,
+                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                method: 'DELETE'
+            }),
+            invalidatesTags: (result, error, arg) => [{type: 'Session', id: arg.sessionId}]
         })
     })
 })
@@ -100,7 +108,8 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetSessionsQuery,
     useAddSessionQuery,
-    useUpdateSessionQuery
+    useUpdateSessionQuery,
+    useDeleteSessionQuery
 } = sessionsApiSlice
 
 export const selectSessionsResult = sessionsApiSlice.endpoints.getSessions.select()
