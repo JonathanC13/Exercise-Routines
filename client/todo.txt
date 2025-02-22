@@ -7,6 +7,26 @@ at 17:22
 
 continue with videos 
 
+
+** RIGHT NOW< CSS for Routines THEN:
+1. CSS for Routine container
+2. Think about Navbar. widescreen = side navbar, mobile = bottom navbar. 
+    Logo -> Home (Routines)
+    Routines onclick/hover opens container that has a list of the current Routines + Add routine option.
+    theme toggle.
+    Account onclick/hover opens container for settings, log out
+
+color pallette
+https://coolors.co/0d0630-18314f-384e77-8bbeb2-e6f9af   * probably this one
+https://www.color-hex.com/color-palette/23730   * BG
+https://coolors.co/2e294e-efbcd5-be97c6-8661c1-4b5267
+
+https://redux.js.org/tutorials/essentials/part-7-rtk-query-basics
+https://redux.js.org/tutorials/essentials/part-8-rtk-query-advanced
+https://codesandbox.io/p/sandbox/github/reduxjs/redux-essentials-example-app/tree/ts-checkpoint-6-rtkqConversion/?file=%2Fsrc%2Ffeatures%2Fposts%2FPostsList.tsx%3A51%2C7&from-embed
+https://github.com/gitdagray/mern_stack_course/blob/main/lesson_13-frontend/src/features/notes/Note.js
+
+
 ** on to testing getting all sessions that belong to the routineID and then all exercises that belong to the sessionId ** OK
 ** Routes
 /routines

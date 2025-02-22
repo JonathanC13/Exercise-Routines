@@ -5,12 +5,13 @@ import { useGetRoutinesQuery } from './routinesApiSlice'
 import AddRoutine from './AddRoutine'
 import Routine from './Routine'
 
-const createRoutineComps = (routineIds) => {
+const createRoutineComps = (routineIds, isFetching) => {
   
   const comps = routineIds.map((routineId) => {
     return <Routine
         key={ routineId }
         routineId={ routineId }
+        isFetching={ isFetching }
       >
       </Routine>
   })
@@ -54,18 +55,19 @@ const Routines = () => {
     let content = null
 
     if (isLoading) {
-      content = <h1>Is loading...</h1>
+      content = <h2 className='routines-loading__h2'>Is loading...</h2>
     } else if (isSuccess) {
       const { ids, entities } = sortedRoutines
-      const routineComps = createRoutineComps(ids)
+      const routineComps = createRoutineComps(ids, isFetching)
 
       const containerClassname = classnames('routines__div', {
         disabled: isFetching,
+        cursor_pointer: !isFetching
       })
 
       content = <div className={containerClassname}>{ routineComps }</div>
     } else if (isError) {
-      content = <p className="errmsg">{error.toString()}</p>
+      content = <h2 className="routines-error__h2">{error.toString()}</h2>
     }
 
   return (

@@ -13,3 +13,6 @@ Additional modules
 
 2. react-router (https://reactrouter.com/)
     > npm install react-router-dom -save
+
+3. classnames
+    > npm install classnames -save

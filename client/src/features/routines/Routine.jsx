@@ -3,13 +3,13 @@ import React from 'react'
 // import { selectRoutineById } from './routinesApiSlice'
 import { memo } from 'react'
 import { useGetRoutinesQuery } from './routinesApiSlice'
-import { useNavigate } from 'react-router'
+import { useNavigate, navLink } from 'react-router'
 
 const Routine = ( { routineId = null } ) => {
 
     let navigate = useNavigate()
 
-    const handleRoutineClick = (routineIdParam) => {
+    const routineClickHandler = (routineIdParam) => {
       navigate(`/routines/${routineIdParam}/sessions/`)
     }
 
@@ -26,13 +26,16 @@ const Routine = ( { routineId = null } ) => {
 
     if (routine) {
       // const routine = useSelector(selectRoutineById(routineId))
-      content = <div onClick={() => {handleRoutineClick(routine.id)}}>{routine.id}, {routine.name}</div> 
+      content = <div className='routine__div' onClick={() => {routineClickHandler(routine.id)}}>
+          <h1 className='routine__h1'>{routine.name}</h1>
+          <p>{routine.id}</p>
+        </div> 
     } else {
       content = <p>Not found</p>
     }
 
   return (
-    <section>
+    <section className='routine__section'>
         { content }
     </section>
   )
