@@ -37,9 +37,8 @@ function App() {
                   <Route index element={<Routines />}></Route>
                   {/* <Route path=":routineId" element={<Routine />}></Route> */}
                   <Route path=":routineId/sessions">
-                    <Route index element={<Sessions />}>
-                      <Route path=":sessionId" element={<SessionPage />}></Route>
-                    </Route>
+                    <Route index element={<Sessions />}></Route>
+                    <Route path=":sessionId" element={<SessionPage />}></Route>
                     {/* Route for exercises within the session */}
                   </Route>
                   

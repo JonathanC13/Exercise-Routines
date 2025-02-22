@@ -20,7 +20,7 @@ const Sessions = () => {
     const { routineId } = useParams()
 
     const {
-        data: sessions,  // data has been transformed
+        data: sessions = {id:[], entities:{}},  // data has been transformed
         isLoading,
         isSuccess,
         isError,

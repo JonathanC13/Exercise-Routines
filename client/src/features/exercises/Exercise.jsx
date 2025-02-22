@@ -9,7 +9,7 @@ const Exercise = ( { exercise = null } ) => {
 
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
 
-    console.log('re-render: ', exercise.id)
+    // console.log('re-render: ', exercise.id)
 
     const updateExerciseHandler = async(e) => {
         e.preventDefault()

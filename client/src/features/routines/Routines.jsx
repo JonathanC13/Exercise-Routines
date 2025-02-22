@@ -1,16 +1,16 @@
 import React from 'react'
-import { memo } from 'react'
+import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useGetRoutinesQuery } from './routinesApiSlice'
 import AddRoutine from './AddRoutine'
 import Routine from './Routine'
+import classnames from 'classnames'
 
-const createRoutineComps = (routineIds, isFetching) => {
-  
-  const comps = routineIds.map((routineId) => {
+const createRoutineComps = (sortedRoutines, isFetching) => {
+  const comps = sortedRoutines.map((routine) => {
     return <Routine
-        key={ routineId }
-        routineId={ routineId }
+        key={ routine.id }
+        routineId={ routine.id }
         isFetching={ isFetching }
       >
       </Routine>
@@ -23,7 +23,8 @@ const Routines = () => {
 
     //Calling the `useGetRoutinesQuery()` hook automatically fetches data!
     const {
-      data: routines,
+      data: routines = {ids:[], entities:{}},
+      refetch,
       isLoading,
       isFetching,
       isSuccess,
@@ -38,7 +39,10 @@ const Routines = () => {
     )
     
     const sortedRoutines = useMemo(() => {
-      const sortedRoutines = routines.slice()
+      const sortedRoutines = []
+      for (let [key, val] of Object.entries(routines.entities)) {
+        sortedRoutines.push(val)
+      } 
       // Sort in ascending 'order', if same then descending updatedAt order
       sortedRoutines.sort((a, b) => 
         {
@@ -57,15 +61,18 @@ const Routines = () => {
     if (isLoading) {
       content = <h2 className='routines-loading__h2'>Is loading...</h2>
     } else if (isSuccess) {
-      const { ids, entities } = sortedRoutines
-      const routineComps = createRoutineComps(ids, isFetching)
+      // const { ids, entities } = sortedRoutines
+      const routineComps = createRoutineComps(sortedRoutines, isFetching) // isFetching will cause re-render
 
       const containerClassname = classnames('routines__div', {
-        disabled: isFetching,
-        cursor_pointer: !isFetching
+        disabled: isFetching
       })
 
-      content = <div className={containerClassname}>{ routineComps }</div>
+      content = <div className={containerClassname}>
+          { routineComps }
+          <button onClick={refetch}>manual refetch</button>
+        </div>
+      // console.log(content)
     } else if (isError) {
       content = <h2 className="routines-error__h2">{error.toString()}</h2>
     }

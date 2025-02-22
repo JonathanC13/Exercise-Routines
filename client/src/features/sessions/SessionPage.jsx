@@ -1,6 +1,6 @@
 import React from 'react'
 import { useGetSessionsQuery } from './sessionsApiSlice'
-import { Session } from './Session'
+import Session from './Session'
 
 const SessionPage = () => {
 
