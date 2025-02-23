@@ -9,7 +9,8 @@ continue with videos
 
 
 ** RIGHT NOW< CSS for Routines THEN:
-1. CSS for Routine container
+1. CSS for Routine container Edit button
+1.1. Edit button to Routine form. then fire edit to server. useNavigate back to routines page.
 2. Think about Navbar. widescreen = side navbar, mobile = bottom navbar. 
     Logo -> Home (Routines)
     Routines onclick/hover opens container that has a list of the current Routines + Add routine option.
@@ -17,7 +18,7 @@ continue with videos
     Account onclick/hover opens container for settings, log out
 
 color pallette
-https://coolors.co/0d0630-18314f-384e77-8bbeb2-e6f9af   * probably this one
+https://coolors.co/0d0630-18314f-384e77-8bbeb2-1a936f   * probably this one with https://coolors.co/visualizer/e1aa7d-be8a60-6a2e35-8bbeb2-2e2836
 https://www.color-hex.com/color-palette/23730   * BG
 https://coolors.co/2e294e-efbcd5-be97c6-8661c1-4b5267
 
