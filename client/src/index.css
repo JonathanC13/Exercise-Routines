@@ -23,11 +23,10 @@ img {
   /* FONT*/
   --ROUTINE-H1-SIZE: 1.5rem;
   --ROUTINE-FOOTER-FONT-SIZE: 0.66rem;
+  --SESSION-H1-SIZE: 1.5rem;
 
   /* COLOUR */
-  --ROUTINE-TITLE-FONT-COLOR: #222222;
   --ROUTINE-TITLE-BG-COLOR: #BE8A60;
-  --LABEL-FONT-COLOR: #222222;
   --BG-COLOR: #efefef;
   --ROUTINES-BG-COLOR: #ffffff;
   --ROUTINES-BORDER-COLOR: #384E77;
@@ -35,27 +34,40 @@ img {
   --ROUTINE-INFO-DESC-BG-COLOR: #efefef;
   --READMORE-BORD-COLOR: #BE8A60;
   --EDIT-BUTTON-COLOR: #1a936f;
+  --SESSION-TITLE-FONT-COLOR: #FFF;
+  --SESSION-TITLE-BG-COLOR: #6A2E35;
 
   /* OPACITY */
   --ROUTINE-FOOTER-FONT-OPA: 0.5;
 
   /* MARGIN */
   --ROUTINES-MARGIN: 0.5rem;
+  --SESSIONS-MARGIN: 0.5rem;
 
   /* PADDING */
-  --ROUTINES-SEC-PADDING: 1rem 0rem;
-  --ROUTINE-INFO-DIV-PADDING: 0.75rem;
-  --ROUTINE-INFO-PADDING: 0.25rem;
+  --ROUTINES-SEC-TB-PADDING: 1rem 0rem;
+  --SESSIONS-SEC-TB-PADDING: 1rem 0rem;
+  --EXERCISES-SEC-TB-PADDING: 1rem 0rem;
+  --ROUTINE-INFO-DIV-PADDING: 0.75rem 1.5rem;
+  --ROUTINE-INFO-PADDING: 0.25rem 0.5rem;
   --READMORE-PADDING: 0.125rem 0.25rem;
   --EDIT-BTN-PADDING: 0.125rem 0.25rem;
+  --SESSIONS-INFO-PADDING: 0.25rem 0.5rem;
+  --SESSION-INFO-DIV-PADDING: 0.75rem 1.5rem;
+  --EXERCISES-INFO-PADDING: 0.25rem 0.5rem;
 
   /* GAP */
   --ROUTINES-SEC-GAP: 1rem;
+  --SESSIONS-SEC-GAP: 1rem;
+  --EXERCISES-SEC-GAP: 1rem;
   --ROUTINE-DIV-GAP: 0.5rem;
+  --SESSION-DIV-GAP: 0.5rem;
+  --EXERCISE-DIV-GAP: 0.5rem;
 
   /* BORDER RADIUS */
   --ROUTINE-SEC-BORDER-RAD: 1rem;
   --ROUTINE-DIV-BORDER-RAD: 0.25rem;
+  --SESSION-SEC-BORDER-RAD: 1rem;
 
   /* BORDER */
   --ROUTINE-SEC-BORDER: 2px solid var(--ROUTINE-TITLE-BG-COLOR);
@@ -103,7 +115,12 @@ body {
   align-items: center;
   justify-content: center;
   gap: var(--ROUTINES-SEC-GAP);
-  padding: var(--ROUTINES-SEC-PADDING);
+  padding: var(--ROUTINES-SEC-TB-PADDING);
+}
+
+.routines_title__div {
+  width: min-content;
+  height: 100%;
 }
 
 .routines__h1 {
@@ -112,6 +129,13 @@ body {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.routines_title_underline {
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--ROUTINE-TITLE-BG-COLOR);
 }
 
 .routines-loading__h2 {
@@ -154,7 +178,6 @@ body {
 }
 
 .routine__h1 {
-  color: var(--ROUTINE-TITLE-FONT-COLOR);
   font-size: var(--ROUTINE-H1-SIZE);
   border-radius: var(--ROUTINE-SEC-BORDER-RAD) var(--ROUTINE-SEC-BORDER-RAD) 0 0;
   background-color: var(--ROUTINE-TITLE-BG-COLOR);
@@ -187,7 +210,6 @@ body {
 
 .routine_info_title__span {
   font-weight: bold;
-  color: var(--LABEL-FONT-COLOR);
   background-color: var(--ROUTINE-INFO-TITLE-BG-COLOR);
   border-radius: var(--ROUTINE-DIV-BORDER-RAD);
   margin-right: 0.25rem;
@@ -238,3 +260,89 @@ body {
   opacity: var(--ROUTINE-FOOTER-FONT-OPA);
 }
 /* /ROUTINE */
+
+/* SESSIONS */
+.sessions__section {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: var(--SESSIONS-SEC-GAP);
+  padding: var(--SESSIONS-SEC-TB-PADDING);
+}
+
+.sessions_routine_title__div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+  padding: var(--SESSIONS-INFO-PADDING);
+}
+
+.sessions_routine_name__h1 {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  background-color: var(--ROUTINE-TITLE-BG-COLOR);
+  border-radius: var(--ROUTINE-DIV-BORDER-RAD);
+  padding: var(--SESSIONS-INFO-PADDING);
+}
+
+.sessions_title__div {
+  width: min-content;
+  height: 100%;
+}
+
+.sessions_title__h1 {
+  font-size: 1.5rem;
+  font-weight: bolder;
+  display: flex;
+  justify-content: center;
+}
+
+.sessions_title_underline {
+  height: 2px;
+  border-radius: 2px;
+  background-color: var(--SESSION-TITLE-BG-COLOR);
+}
+
+
+.sessions__div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--SESSIONS-SEC-GAP);
+}
+/* /SESSIONS */
+
+/* SESSION */
+.session__div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.session_name__h1 {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  color: var(--SESSION-TITLE-FONT-COLOR);
+  font-size: var(--SESSION-H1-SIZE);
+  background-color: var(--SESSION-TITLE-BG-COLOR);
+  padding: var(--SESSION-INFO-DIV-PADDING);
+}
+
+
+.session_info__div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--SESSION-DIV-GAP);
+  padding: var(--SESSION-INFO-DIV-PADDING);
+}
+/* /SESSION */

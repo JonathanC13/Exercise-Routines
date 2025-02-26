@@ -79,9 +79,12 @@ const Routines = () => {
 
   return (
     <section className='routines__section'>
+      <div className='routines_title__div'>
         <h1 className='routines__h1'>Routines</h1>
-        { content }
-        {/* todo, add Routines button */}
+        <div className="routines_title_underline"></div>
+      </div>
+      { content }
+      {/* todo, add Routines button */}
     </section>
   )
 }

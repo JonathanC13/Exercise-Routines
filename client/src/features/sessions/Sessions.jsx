@@ -1,4 +1,5 @@
 import React from 'react'
+import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
 import { useGetSessionsQuery } from './sessionsApiSlice'
 import { useParams } from 'react-router'
 import Session from './Session'
@@ -18,6 +19,13 @@ const createSessionComps = (routineId, sessionIds) => {
 const Sessions = () => {
 
     const { routineId } = useParams()
+
+    const { routine } = useGetRoutinesQuery('routinesList',
+        {
+        selectFromResult: ({ data }) => ({
+            routine: data?.entities[routineId]
+        }),
+    })
 
     const {
         data: sessions = {id:[], entities:{}},  // data has been transformed
@@ -43,18 +51,26 @@ const Sessions = () => {
         content = <p className="errmsg">hello {error?.data?.message}</p>
     }
 
-    if (isSuccess) {
+    if (isSuccess && routine) {
         const { ids, entities } = sessions
         content = <>
-            {createSessionComps(routineId, ids)}
+            <div className="sessions_routine_title__div">
+                <h1 className='sessions_routine_name__h1'>{routine.name}</h1>
+            </div>
+            <div className="sessions_title__div">
+                <h1 className='sessions_title__h1'>Sessions</h1>
+                <div className='sessions_title_underline'></div>
+            </div>
+            <div className='sessions__div'>
+                {createSessionComps(routineId, ids)}
+            </div>
         </>
     } else {
         content = <h2>Something has gone wrong!</h2>
     }
 
   return (
-    <section>
-        <h1>Sessions</h1>
+    <section className='sessions__section'>
         {content}
     </section>
   )
