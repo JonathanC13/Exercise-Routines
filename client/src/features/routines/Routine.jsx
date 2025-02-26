@@ -73,12 +73,12 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           <h1 className='routine__h1'>{routine.name}</h1>
           <section className="routine_info__div">
             <div className='routine__div_info'>
-              <span className='routine_info_title__span routine_info'>Order:</span>
-              <span className='routine_info'>{routine.order}</span>
+              <span className='info_label info_text_padding'>Order:</span>
+              <span className='info_text_padding'>{routine.order}</span>
             </div>
             <div className='routine__div_info'>
-              <span className='routine_info_title__span routine_info'>Description:</span>
-              <div className='routine_info_desc__div routine_info'>
+              <span className='info_label info_text_padding'>Description:</span>
+              <div className='routine_info_desc__div info_text_padding'>
                 { description }
                 { descOverLimit && 
                   <div className="desc_footer__div">

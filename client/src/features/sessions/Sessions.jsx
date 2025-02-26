@@ -45,17 +45,12 @@ const Sessions = () => {
 
     if (isLoading) {
         content = <p>loading...</p>//<PulseLoader color={"#FFF"} />
-    }
-
-    if (isError) {
-        content = <p className="errmsg">hello {error?.data?.message}</p>
-    }
-
-    if (isSuccess && routine) {
+    } else if (isSuccess) {
         const { ids, entities } = sessions
         content = <>
-            <div className="sessions_routine_title__div">
-                <h1 className='sessions_routine_name__h1'>{routine.name}</h1>
+            <div className='sessions_routine_title__div'>
+              <h1 className='info_label info_text_padding'>Routine:</h1>
+              <h1 className='info_text_padding'>{routine.name}</h1>
             </div>
             <div className="sessions_title__div">
                 <h1 className='sessions_title__h1'>Sessions</h1>
@@ -65,8 +60,8 @@ const Sessions = () => {
                 {createSessionComps(routineId, ids)}
             </div>
         </>
-    } else {
-        content = <h2>Something has gone wrong!</h2>
+    } else if (isError) {
+        content = <p className="errmsg">hello {error?.data?.message}</p>
     }
 
   return (
