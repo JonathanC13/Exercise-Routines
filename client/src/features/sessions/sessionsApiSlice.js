@@ -60,6 +60,9 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
                     session.id = session._id    // normalized data uses .id, so add in a .id prop and assign the mongoDB _id value.
                     session.exercises.map((exercise) => {
                         exercise.id = exercise._id
+                        exercise.sets.map((set) => {
+                            set.id = set._id
+                        })
                     })
                     return session
                 })

@@ -45,11 +45,11 @@ const Sessions = () => {
 
     if (isLoading) {
         content = <p>loading...</p>//<PulseLoader color={"#FFF"} />
-    } else if (isSuccess) {
+    } else if (isSuccess && routine) {
         const { ids, entities } = sessions
         content = <>
             <div className='sessions_routine_title__div'>
-              <h1 className='info_label info_text_padding'>Routine:</h1>
+              <h1 className='info_label_routine info_text_padding'>Routine:</h1>
               <h1 className='info_text_padding'>{routine.name}</h1>
             </div>
             <div className="sessions_title__div">

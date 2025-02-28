@@ -14,17 +14,23 @@ const createExerciseComps = (exercises) => {
     return comps
 }
 
-const Exercises = ( {exercises = null} ) => {
+const Exercises = ( {exercises = []} ) => {
 
     let content = ''
     
     if (exercises) {
-        content = <>{createExerciseComps(exercises)}</>
+        content = 
+        <>
+            <div className="exercises_title__div">
+                <h1 className='exercises_title__h1'>Exercises</h1>
+                <div className='exercises_title_underline'></div>
+            </div>
+            {createExerciseComps(exercises)}
+        </>
     }
 
   return (
-    <section>
-        <h1>Exercises</h1>
+    <section className='exercises__section'>
         { content }
     </section>
   )

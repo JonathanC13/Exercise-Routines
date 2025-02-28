@@ -2,6 +2,7 @@ import React from 'react'
 import { memo } from 'react'
 import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
+import Sets from './sets/Sets.jsx'
 
 const Exercise = ( { exercise = null } ) => {
 
@@ -34,23 +35,29 @@ const Exercise = ( { exercise = null } ) => {
     let content = ''
     
     if (exercise) {
-        content = <>
-            <h2>{exercise.name}</h2>
-            <p>{exercise.order}</p>
-            <p>{exercise.description}</p>
+        content = <div className='exercise__div'>
+            <div className="exercise_info__div">
+                {/* <h1 className='exercise_title__h1'>Exercise</h1> */}
+                <h1 className='exercise_name__h1'>{ exercise.name }</h1>
+                <div className='info__div'>
+                    <span className='info_label info_text_padding'>Order:</span>
+                    <span className='info_text_padding'>{exercise.order}</span>
+                </div>
+                { Sets(exercise.sets) }
+                
 
-            <form onSubmit={(e) => {updateExerciseHandler(e)}}>
-                <label htmlFor="update-ex-name__input">Name:</label>
-                <input type="text" id="update-ex-name__input" defaultValue="" required />
-                <button type='submit'>UPDATE</button>
-            </form>
-            
-        </>
+                {/* Edit moved to Exercise Page */}
+                {/* <form onSubmit={(e) => {updateExerciseHandler(e)}}>
+                    <label htmlFor="update-ex-name__input">Name:</label>
+                    <input type="text" id="update-ex-name__input" defaultValue="" required />
+                    <button type='submit'>UPDATE</button>
+                </form> */}
+            </div>
+        </div>
     }
 
   return (
-    <section>
-        <h1>Exercise</h1>
+    <section className='exercise__section'>
         {content}
     </section>
   )

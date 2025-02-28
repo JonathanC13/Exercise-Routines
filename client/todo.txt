@@ -35,6 +35,7 @@ https://github.com/gitdagray/mern_stack_course/blob/main/lesson_13-frontend/src/
     /:routineID    // TODO, routine Edit page
         /sessions    
             /   // shows all the sessions within the routineId          *A
+            ~ clicked on session in the /sessions/ page
             /:sessionId // TODO, session single page. within click to go to edit page   *A      ..For *A, see if not too messy to create common component for both. Like both navigate to their control starting point and then call the common session component. SHould be OK. TEST**
                 /exercises
                     /   // Nothing
