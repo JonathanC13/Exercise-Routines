@@ -1,20 +1,18 @@
 import React from 'react'
-// import Set from './Set'
+import Set from './Set'
 
-// const createSetComps = (sets) => {
+const createSetComps = (sets) => {
+    const comps = sets.map((set) => {
+        return <Set
+            key={set.id}
+            set={set}
+        ></Set>
+    })
 
-//     const comps = sets.map((set) => {
-//         return <Set
-//             key={set.id}
-//             set={set}
-//         ></Set>
-//     })
-
-//     return comps
-// }
+    return comps
+}
 
 const Sets = ( { sets = [] } ) => {
-
     let content = ''
 
     if (sets) {
@@ -24,7 +22,7 @@ const Sets = ( { sets = [] } ) => {
                 <span className='info_label info_text_padding'>Sets:</span>
             </div>
             <section className="set_items__section">
-                {/* { createSetComps(sets) } */}
+                { createSetComps(sets) }
             </section>
         </div>
     }

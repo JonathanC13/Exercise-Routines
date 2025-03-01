@@ -35,6 +35,7 @@ const Exercise = ( { exercise = null } ) => {
     let content = ''
     
     if (exercise) {
+        
         content = <div className='exercise__div'>
             <div className="exercise_info__div">
                 {/* <h1 className='exercise_title__h1'>Exercise</h1> */}
@@ -43,7 +44,9 @@ const Exercise = ( { exercise = null } ) => {
                     <span className='info_label info_text_padding'>Order:</span>
                     <span className='info_text_padding'>{exercise.order}</span>
                 </div>
-                { Sets(exercise.sets) }
+                <Sets
+                    sets={exercise.sets}
+                ></Sets>
                 
 
                 {/* Edit moved to Exercise Page */}
