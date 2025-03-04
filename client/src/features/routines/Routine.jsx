@@ -93,7 +93,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                 <span className='routine_footer__span'>Updated on: {formatDisplayDate(routine.updatedAt)}</span>
                 <span className='routine_footer__span'>Created on: {formatDisplayDate(routine.createdAt)}</span>
               </div>
-              <button className='routine_footer__editbtn cursor_pointer'>Edit</button>
+              <button className='routine_edit__button cursor_pointer'>Edit</button>
             </div>
           </section>
         </div> 
