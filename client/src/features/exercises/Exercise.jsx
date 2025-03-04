@@ -12,23 +12,32 @@ const Exercise = ( { exercise = null } ) => {
 
     // console.log('re-render: ', exercise.id)
 
-    const updateExerciseHandler = async(e) => {
-        e.preventDefault()
-        const form = e.currentTarget
-
-        const { elements } = e.currentTarget
-        const name = elements['update-ex-name__input'].value
-
+    const updateExerciseRequestHandler = async(payload) => {
+        console.log(payload)
         const body = {
-            name
+            ...payload
         }
 
         try {
-            await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body }).unwrap()
-            
+            const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body }).unwrap()
+            return response
+        } catch (err) {
+            console.error('Failed to save the exercise: ', err)
+        }
+        return null
+    }
+
+    const updateExerciseHandler = async(e, payload) => {
+        e.preventDefault()
+        const form = e.currentTarget
+
+        // const { elements } = e.currentTarget
+        // const name = elements['update-ex-name__input'].value
+        try {
+            const response = await updateExerciseRequestHandler(payload)
             form.reset()
         } catch (err) {
-            console.error('Failed to save the post: ', err)
+            console.error('Failed to save the exercise: ', err)
         }
     }
 
@@ -46,6 +55,7 @@ const Exercise = ( { exercise = null } ) => {
                 </div>
                 <Sets
                     sets={exercise.sets}
+                    updateExerciseRequestHandler={updateExerciseRequestHandler}
                 ></Sets>
                 
 

@@ -46,6 +46,8 @@ img {
   --SET-VAL-BG-COLOR: #BE8A60;
   --SET-DIVIDE-COLOR: #6A2E35;
   --EDIT-ENABLE-COLOR: #ffffff;
+  --CANCEL-BUTTON-COLOR: #BE8A60;
+  --DELETE-ICON-COLOR: #ff0000b0;
 
   /* OPACITY */
   --ROUTINE-FOOTER-FONT-OPA: 0.5;
@@ -153,17 +155,37 @@ body {
 }
 
 .routine_edit__button,
-.set_edit__button {
+.set_edit__button,
+.set_save__button
+{
   border-radius: var(--EDIT-BTN-BORDER-RAD);
   padding: var(--EDIT-BTN-PADDING);
   background-color: var(--EDIT-BUTTON-COLOR);
   color:var(--BG-COLOR);
 }
 
+.set_cancel__button {
+  border-radius: var(--EDIT-BTN-BORDER-RAD);
+  padding: var(--EDIT-BTN-PADDING);
+  background-color: var(--CANCEL-BUTTON-COLOR);
+  color:var(--BG-COLOR);
+}
+
+.set_delete__button {
+  border-radius: var(--EDIT-BTN-BORDER-RAD);
+  padding: var(--EDIT-BTN-PADDING);
+  background-color: var(--BG-COLOR);
+  color:var(--DELETE-ICON-COLOR);
+}
+
 .center_text_vert {
   height: 100%;
   display: flex;
   align-items: center;
+}
+
+.disabled {
+  opacity: 0.5;
 }
 /* /GENERAL */
 
@@ -580,5 +602,19 @@ body {
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-end;
+  gap: var(--SET-INFO-GAP);
+}
+
+.editing__div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.modifyOpts__div {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  gap: var(--SET-INFO-GAP);
 }
 /* /SET */

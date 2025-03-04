@@ -16,3 +16,6 @@ Additional modules
 
 3. classnames
     > npm install classnames -save
+
+4. React-icons
+    > npm i react-icons -save

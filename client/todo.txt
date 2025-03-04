@@ -8,7 +8,9 @@ at 17:22
 continue with videos 
 
 
-** RIGHT NOW< CSS for Routines THEN:
+** RIGHT NOW< CSS for Routines THEN: 
+0. edit for sets seems good, now delete. ***
+
 1. CSS for Routine container Edit button
 1.1. Edit button to Routine form. then fire edit to server. useNavigate back to routines page.
 2. Think about Navbar. widescreen = side navbar, mobile = bottom navbar. 

@@ -1,24 +1,108 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
+import { FaTrashCan } from 'react-icons/fa6'
+import { useUpdateExerciseMutation } from '../exerciseApiSlice'
 
-const Set = ( { set = null } ) => {
-
+const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {} } ) => {
+    
+    const set = sets.find((set) => {
+        return set.id === setId
+    })
+    
     const [edit, setEdit] = useState(false)
     const [exSetOrder, setExSetOrder] = useState(set ? set.order : '')
     const [exSetWeight, setExSetWeight] = useState(set ? set.weight : '')
     const [exSetReps, setExSetReps] = useState(set ? set.repsOrDuration : '')
     const [exSetRest, setExSetRest] = useState(set ? set.restTimeSeconds : '')
 
-    const setFormHandler = (e) => {
+    // useEffect(() => {
+    //     setExSetOrder(set.order)
+    //     setExSetWeight(set.weight)
+    //     setExSetReps(set.repsOrDuration)
+    //     setExSetRest(set.restTimeSeconds)
+    // }, [])
+
+    useEffect(() => {
+        if (set) {
+            const form = document.getElementById(`set_form_${setId}`)
+            const exSetOrderInput = form.querySelector('#set_order');
+            const exSetWeightInput = form.querySelector('#set_weight');
+            const exSetRepsInput = form.querySelector('#set_reps');
+            const exSetRestInput = form.querySelector('#set_rest');
+
+            if (edit) {
+                exSetOrderInput.removeAttribute('disabled')
+                exSetWeightInput.removeAttribute('disabled')
+                exSetRepsInput.removeAttribute('disabled')
+                exSetRestInput.removeAttribute('disabled')
+            } else {
+                exSetOrderInput.setAttribute('disabled', '')
+                exSetWeightInput.setAttribute('disabled', '')
+                exSetRepsInput.setAttribute('disabled', '')
+                exSetRestInput.setAttribute('disabled', '')
+            }
+        }
+    }, [edit])
+
+    const exSetFormHandler = async(e) => {
         e.preventDefault();
         const action = e.nativeEvent.submitter.value;
+        const form = e.currentTarget
         switch (action) {
             case 'edit':
                 setEdit(true)
                 break
-            case 'save':
-                console.log('sent save')
+            case 'cancel':
+                form.reset()
+                if (set) {
+                    setExSetOrder(set.order)
+                    setExSetWeight(set.weight)
+                    setExSetReps(set.repsOrDuration)
+                    setExSetRest(set.restTimeSeconds)
+                }
                 setEdit(false)
+                break
+            case 'save':
+                setEdit(false)
+                form.classList.add('disabled')
+
+                try {
+                    const payload = { 
+                        'sets': sets.map((set) => {
+                            if (set.id === setId) {
+                                const newObj = {}
+                                for (let [key, val] of Object.entries(set)) {
+                                    switch(key) {
+                                        case ('order'):
+                                            newObj.order = exSetOrder
+                                            break
+                                        case ('weight'):
+                                            newObj.weight = exSetWeight
+                                            break
+                                        case ('repsOrDuration'):
+                                            newObj.repsOrDuration = exSetReps
+                                            break
+                                        case ('restTimeSeconds'):
+                                            newObj.restTimeSeconds = exSetRest
+                                            break
+                                        default:
+                                            newObj.key = val
+                                            break
+                                    }
+                                }
+                                return newObj
+                            }
+                            return set
+                        })
+                    }
+                    // console.log(payload)
+                    const response = await updateExerciseRequestHandler(payload)
+                    console.log(response)
+                    form.classList.remove('disabled')
+                } catch (err) {
+                    console.log('error: ', err.toString())
+                }
+                
                 break
             case 'delete':
                 console.log('send delete')
@@ -29,33 +113,35 @@ const Set = ( { set = null } ) => {
         }
     }
 
-    useEffect(() => {
-        const exSetOrderInput = document.getElementById('set_order');
-        const exSetWeightInput = document.getElementById('set_weight');
-        const exSetRepsInput = document.getElementById('set_reps');
-        const exSetRestInput = document.getElementById('set_rest');
-
-        if (edit) {
-            exSetOrderInput.removeAttribute('disabled')
-            exSetWeightInput.removeAttribute('disabled')
-            exSetRepsInput.removeAttribute('disabled')
-            exSetRestInput.removeAttribute('disabled')
-        } else {
-            exSetOrderInput.setAttribute('disabled', '')
-            exSetWeightInput.setAttribute('disabled', '')
-            exSetRepsInput.setAttribute('disabled', '')
-            exSetRestInput.setAttribute('disabled', '')
-        }
-    }, [edit])
-
     let content = ''
 
     if (set) {
-        content = <form className='set__form' onSubmit={setFormHandler}>
+        const setOptionButtons = 
+            edit ?
+                <div className='editing__div'>
+                    <button className="set_delete__button cursor_pointer" name='delete' value='delete'>
+                        <FaTrashCan></FaTrashCan>
+                    </button>
+                    <div className="modifyOpts__div">
+                        <button className="set_cancel__button cursor_pointer" name='cancel' value='cancel'>
+                            Cancel
+                        </button>
+                        <button className="set_save__button cursor_pointer" name='save' value='save'>
+                            Save
+                        </button>
+                    </div>
+                </div> :
+                <div className="edit__div">
+                    <button className="set_edit__button cursor_pointer" name='edit' value='edit'>
+                        Edit
+                    </button>
+                </div>
+
+        content = <form id={`set_form_${setId}`} className='set__form' onSubmit={exSetFormHandler}>
             <div className="set_header__div">
                 <div className="order_info">
                     <label className='set_desc_order__label' htmlFor='set_order'><span className='center_text_vert'>Order:</span></label>
-                    <input className='set_order_value__input' id="set_order" name="set_order" 
+                    <input className='set_order_value__input' id="set_order" name="set_order" disabled
                         value={exSetOrder}
                         onChange={e => setExSetOrder(e.target.value)}
                     ></input>
@@ -70,38 +156,28 @@ const Set = ( { set = null } ) => {
                 <div className="set_desc__div">
                     <div className="set_desc_itm__div">
                         <label className='set_desc_title__label' htmlFor='set_weight'>Weight</label>
-                        <input className='set_desc_value__input' id="set_weight" name="set_weight"
+                        <input className='set_desc_value__input' id="set_weight" name="set_weight" disabled
                             value={exSetWeight}
                             onChange={e => setExSetWeight(e.target.value)}
                         ></input>
                     </div>
                     <div className="set_desc_itm__div">
                         <label className='set_desc_title__label' htmlFor='set_reps'>Reps/Dur</label>
-                        <input className='set_desc_value__input' id="set_reps" name="set_reps"
+                        <input className='set_desc_value__input' id="set_reps" name="set_reps" disabled
                             value={exSetReps}
                             onChange={e => setExSetReps(e.target.value)}
                         ></input>
                     </div>
                     <div className="set_desc_itm__div">
                         <label className='set_desc_title__label' htmlFor='set_rest'>Rest (sec)</label>
-                        <input className='set_desc_value__input' id="set_rest" name="set_rest"
+                        <input className='set_desc_value__input' id="set_rest" name="set_rest" disabled
                             value={exSetRest}
                             onChange={e => setExSetRest(e.target.value)}
                         ></input>
                     </div>
                 </div>
             </div>
-            <div className="edit__div">
-                <button className="set_edit__button cursor_pointer" name='edit' value='edit'>
-                    Edit
-                </button>
-                <button className="set_edit__button cursor_pointer" name='delete' value='delete'>
-                    Delete
-                </button>
-                <button className="set_edit__button cursor_pointer" name='save' value='save'>
-                    Save
-                </button>
-            </div>
+            { setOptionButtons }
         </form>
     }
 
