@@ -54,7 +54,7 @@ const Exercise = ( { exercise = null } ) => {
                     <span className='info_text_padding'>{exercise.order}</span>
                 </div>
                 <Sets
-                    sets={exercise.sets}
+                    exercise={exercise}
                     updateExerciseRequestHandler={updateExerciseRequestHandler}
                 ></Sets>
                 

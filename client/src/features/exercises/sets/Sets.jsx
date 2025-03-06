@@ -17,8 +17,9 @@ const createSetComps = (sets, updateExerciseRequestHandler) => {
     return comps
 }
 
-const Sets = ( { sets = [], updateExerciseRequestHandler = () => {} } ) => {
+const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
     const dispatch = useDispatch()
+    const sets = exercise.sets || []
 
     const openSetAddFormHandler = (e) => {
         const rootDoc = document.getElementById('root')
@@ -46,6 +47,7 @@ const Sets = ( { sets = [], updateExerciseRequestHandler = () => {} } ) => {
                 
             </div>
             <AddSetForm
+                exerciseName={exercise.name}
                 sets={sets}
                 updateExerciseRequestHandler={updateExerciseRequestHandler}
             ></AddSetForm>

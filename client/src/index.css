@@ -49,6 +49,9 @@ img {
   --CANCEL-BUTTON-COLOR: #BE8A60;
   --DELETE-ICON-COLOR: #ff0000b0;
   --ADD-BUTTON-COLOR: #1a936f;
+  --MODAL-CONTAINER-COLOR: #ffffff;
+  --MODAL-BG-COLOR: rgba(239, 239, 239, 0.25);
+  --MODAL-SHADOW-COLOR: gray;
 
   /* OPACITY */
   --ROUTINE-FOOTER-FONT-OPA: 0.5;
@@ -72,6 +75,7 @@ img {
   --EXERCISE-INFO-DIV-PADDING: 0.5rem 1rem;
   --SET-DIV-PADDING: 0.25rem;
   --ADD-BTN-PADDING: 0.125rem 0.25rem;
+  --ADD-SET-MODAL-PADDING: 0.75rem 1.5rem;
 
   /* GAP */
   --ROUTINES-SEC-GAP: 1rem;
@@ -81,6 +85,7 @@ img {
   --SESSION-DIV-GAP: 0.5rem;
   --EXERCISE-DIV-GAP: 0.5rem;
   --SET-INFO-GAP: 0.25rem;
+  --ADD-SET-GAP: 0.5rem;
 
   /* BORDER RADIUS */
   --ROUTINE-SEC-BORDER-RAD: 1rem;
@@ -90,6 +95,7 @@ img {
   --SESSION-DIV-BORDER-RAD: 0.25rem;
   --EXERCISE-SEC-BORDER-RAD: 0.5rem;
   --EXERCISE-DIV-BORDER-RAD: 0.25rem;
+  --ADD-SET-FORM-BORDER-RAD: 0.5rem;
   --EDIT-BTN-BORDER-RAD: 0.25rem;
   --ADD-BTN-BORDER-RAD: 0.25rem;
 
@@ -100,6 +106,7 @@ img {
   /* BOX SHADOW */
   --ROUTINE-SEC-SHADOW: 0px 5px 5px 0px var(--ROUTINE-TITLE-BG-COLOR);
   --SESSION-SEC-SHADOW: 0px 5px 5px 0px var(--SESSION-TITLE-BG-COLOR);
+  --MODAL-SHADOW: 0px 0px 5px 0px var(--MODAL-SHADOW-COLOR);
 
   /* LETTERS */
   --LETTER-SPACING: 0.1rem;
@@ -638,12 +645,76 @@ body {
 /* /SET */
 
 /* SET ADD FORM */
-.add_set__form {
-  height: 0px;
-  border: 1px solid black;
+.add_set_bg__div {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--MODAL-BG-COLOR);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.height_100 {
+.add_set__form {
+  background-color: var(--MODAL-CONTAINER-COLOR);
+  border-radius: var(--ADD-SET-FORM-BORDER-RAD);
+  padding: var(--ADD-SET-MODAL-PADDING);
+  box-shadow: var(--MODAL-SHADOW);
+  display: flex;
+  flex-flow: column nowrap;
+  gap: var(--ADD-SET-GAP);
+}
+
+.add_set_ex__div > h1,
+.add_set__h1 {
+  font-size: 1.5rem;
+}
+
+.add_set_input__div {
+  width: 100%;
   height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: var(--SET-INFO-GAP);
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.add_set_ex__div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+.add_set__h1 {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.add_set_order__label,
+.add_set_weight__label,
+.add_set_reps__label,
+.add_set_rest__label {
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid var(--SET-UNDERLINE-COLOR);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.add_set_order__input,
+.add_set_weight__input,
+.add_set_reps__input,
+.add_set_rest__input {
+  width: 100%;
+  height: 100%;
+  text-align: center;
 }
 /* /SET ADD FORM */
