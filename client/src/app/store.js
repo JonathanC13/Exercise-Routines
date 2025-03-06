@@ -4,6 +4,7 @@ import authReducer from '../features/auth/authSlice'
 import { apiSlice } from './api/apiSlice'
 import { authApiSlice } from '../features/auth/authApiSlice'
 import { routinesApiSlice } from '../features/routines/routinesApiSlice'
+import exSetAddFormReducer from '../features/exercises/sets/exSetAddFormSlice'
 
 const composedEnhancer = composeWithDevTools({
 })
@@ -11,6 +12,7 @@ const composedEnhancer = composeWithDevTools({
 export default configureStore({
   reducer: {
     auth: authReducer,
+    exSetAddForm: exSetAddFormReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [authApiSlice.reducerPath]: authApiSlice.reducer,
     [routinesApiSlice]: routinesApiSlice.reducer

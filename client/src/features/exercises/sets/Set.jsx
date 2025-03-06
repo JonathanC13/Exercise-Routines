@@ -1,5 +1,5 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo } from 'react'
 import { FaTrashCan } from 'react-icons/fa6'
 import { useUpdateExerciseMutation } from '../exerciseApiSlice'
 
@@ -188,4 +188,6 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
   )
 }
 
-export default Set
+const memoizedSet = memo(Set)
+
+export default memoizedSet

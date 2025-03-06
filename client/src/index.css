@@ -48,6 +48,7 @@ img {
   --EDIT-ENABLE-COLOR: #ffffff;
   --CANCEL-BUTTON-COLOR: #BE8A60;
   --DELETE-ICON-COLOR: #ff0000b0;
+  --ADD-BUTTON-COLOR: #1a936f;
 
   /* OPACITY */
   --ROUTINE-FOOTER-FONT-OPA: 0.5;
@@ -70,6 +71,7 @@ img {
   --EXERCISES-INFO-PADDING: 0.25rem 0.5rem;
   --EXERCISE-INFO-DIV-PADDING: 0.5rem 1rem;
   --SET-DIV-PADDING: 0.25rem;
+  --ADD-BTN-PADDING: 0.125rem 0.25rem;
 
   /* GAP */
   --ROUTINES-SEC-GAP: 1rem;
@@ -89,6 +91,7 @@ img {
   --EXERCISE-SEC-BORDER-RAD: 0.5rem;
   --EXERCISE-DIV-BORDER-RAD: 0.25rem;
   --EDIT-BTN-BORDER-RAD: 0.25rem;
+  --ADD-BTN-BORDER-RAD: 0.25rem;
 
   /* BORDER */
   --ROUTINE-SEC-BORDER: 2px solid var(--ROUTINE-TITLE-BG-COLOR);
@@ -497,6 +500,21 @@ body {
   flex-flow: column nowrap;
   /* gap: var(--SET-INFO-GAP); */
 }
+
+.sets_add__section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: var(--SET-DIV-PADDING);
+  background-color: var(--SET-BG-COLOR);
+}
+
+.sets_add__button {
+  padding: var(--ADD-BTN-PADDING);
+  background-color: var(--ADD-BUTTON-COLOR);
+  color:var(--BG-COLOR);
+  border-radius: var(--ADD-BTN-BORDER-RAD);
+}
 /* /SETS */
 
 /* SET */
@@ -618,3 +636,14 @@ body {
   gap: var(--SET-INFO-GAP);
 }
 /* /SET */
+
+/* SET ADD FORM */
+.add_set__form {
+  height: 0px;
+  border: 1px solid black;
+}
+
+.height_100 {
+  height: 100%;
+}
+/* /SET ADD FORM */
