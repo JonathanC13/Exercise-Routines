@@ -29,7 +29,7 @@ const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
         const buttonDimensions = e.target.getBoundingClientRect()
         const center = buttonDimensions.left + (buttonDimensions.right - buttonDimensions.left) / 2;
         const bottom = buttonDimensions.bottom - 3 + rootDoc.scrollTop
-        dispatch(exSetAddFormOpenChanged({ exSetAddFormOpen: true, location: {center:center, bottom:bottom }, routineId: routineId, sessionId: exercise.sessionId, exercise: exercise}))
+        dispatch(exSetAddFormOpenChanged({ addFormOpen: true, addFormType: 'addSetForm', routineId: routineId, sessionId: exercise.sessionId, exercise: exercise}))
     }
 
     let content = ''

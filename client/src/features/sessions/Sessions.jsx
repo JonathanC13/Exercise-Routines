@@ -3,7 +3,6 @@ import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
 import { useGetSessionsQuery } from './sessionsApiSlice'
 import { useParams } from 'react-router'
 import Session from './Session'
-import AddSetForm from '../exercises/sets/AddSetForm'
 
 const createSessionComps = (routineId, sessionIds) => {
     const comps = sessionIds.map((sessionId) => {
@@ -60,7 +59,6 @@ const Sessions = () => {
             <div className='sessions__div'>
                 {createSessionComps(routineId, ids)}
             </div>
-            <AddSetForm></AddSetForm>
         </>
     } else if (isError) {
         content = <p className="errmsg">hello {error?.data?.message}</p>

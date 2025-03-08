@@ -18,7 +18,7 @@ const createExerciseComps = (exercises) => {
 
 const Exercises = ( {session = {}} ) => {
 
-    const exercises = session ? session.exercises ?? [] : [] 
+    const exercises = session ? session.exercises ?? [] : []
     const dispatch = useDispatch()
 
     const openExercisesAddFormHandler = (e) => {
@@ -26,7 +26,7 @@ const Exercises = ( {session = {}} ) => {
         const buttonDimensions = e.target.getBoundingClientRect()
         const center = buttonDimensions.left + (buttonDimensions.right - buttonDimensions.left) / 2;
         const bottom = buttonDimensions.bottom - 3 + rootDoc.scrollTop
-        dispatch(exerciseAddFormOpenChanged({ exerciseAddFormOpen: true, location: {center:center, bottom:bottom }, routineId: routineId, session: session}))
+        dispatch(exerciseAddFormOpenChanged({ addFormOpen: true, addFormType: 'addExerciseForm', routineId: routineId, session: session}))
     }
 
     let content = ''
