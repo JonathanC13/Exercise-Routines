@@ -2,6 +2,13 @@ const SessionModel = require('../models/Session')
 const {StatusCodes} = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 
+const applyOrder = (a, b) => {
+    if (a.order - b.order === 0) {
+        return new Date(b.updatedAt) - new Date(a.updatedAt)
+    }
+    return a.order - b.order
+}
+
 const getAllSessions = async(req, res) => {
     const {
         user: {userId: createdByUserId},
@@ -13,6 +20,24 @@ const getAllSessions = async(req, res) => {
     if (!response) {
         throw new NotFoundError('No sessions found!')
     }
+
+    response.sort((a, b) => {
+        return applyOrder(a, b)
+    })
+
+    response.map((sess) => {
+        sess.exercises.sort((a, b) => {
+            return applyOrder(a, b)
+        })
+    })
+
+    response.map((sess) => {
+        sess.exercises.map((ex) => {
+            ex.sets.sort((a, b) => {
+                return applyOrder(a, b)
+            })
+        })
+    })
 
     res.status(StatusCodes.OK).json({response, count: response.length})
 }
@@ -32,6 +57,18 @@ const getSession = async(req, res) => {
     if (!response) {
         throw new NotFoundError('Session not found!')
     }
+
+    response.exercises.sort((a, b) => {
+        return applyOrder(a, b)
+    })
+
+    response.map((sess) => {
+        sess.exercises.map((ex) => {
+            ex.sets.sort((a, b) => {
+                return applyOrder(a, b)
+            })
+        })
+    })
 
     res.status(StatusCodes.OK).json({response})
 }

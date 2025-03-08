@@ -16,14 +16,18 @@ img {
 .cursor_pointer {
   cursor: pointer;
 }
+
+.offscreen {
+  position: absolute !important;
+  left: -9000px !important;
+}
 /* /UTILTIY */
 
 /* VARIABLES */
 :root {
   /* FONT*/
-  --ROUTINE-H1-SIZE: 1.5rem;
+  --H1-SIZE: 1.5rem;
   --ROUTINE-FOOTER-FONT-SIZE: 0.66rem;
-  --SESSION-H1-SIZE: 1.5rem;
 
   /* COLOUR */
   --ROUTINE-TITLE-BG-COLOR: #E1AA7D;
@@ -75,7 +79,7 @@ img {
   --EXERCISE-INFO-DIV-PADDING: 0.5rem 1rem;
   --SET-DIV-PADDING: 0.25rem;
   --ADD-BTN-PADDING: 0.125rem 0.25rem;
-  --ADD-SET-MODAL-PADDING: 0.75rem 1.5rem;
+  --ADD-SET-MODAL-PADDING: 1rem 1rem;
 
   /* GAP */
   --ROUTINES-SEC-GAP: 1rem;
@@ -142,6 +146,10 @@ body {
   background-color: var(--INFO-TITLE-BG-COLOR);
   border-radius: var(--INFO-DIV-BORDER-RAD);
   margin-right: 0.25rem;
+}
+
+.info_value {
+  font-size: 1rem;
 }
 
 .info_text_padding {
@@ -271,7 +279,7 @@ body {
 }
 
 .routine__h1 {
-  font-size: var(--ROUTINE-H1-SIZE);
+  font-size: var(--H1-SIZE);
   border-radius: var(--ROUTINE-SEC-BORDER-RAD) var(--ROUTINE-SEC-BORDER-RAD) 0 0;
   background-color: var(--ROUTINE-TITLE-BG-COLOR);
   padding: var(--ROUTINE-INFO-DIV-PADDING);
@@ -348,6 +356,7 @@ body {
 }
 
 .info_label_routine {
+  font-size: 1rem;
   font-weight: bold;
   background-color: var(--ROUTINE-TITLE-BG-COLOR);
   border-radius: var(--INFO-DIV-BORDER-RAD);
@@ -421,7 +430,7 @@ body {
   display: flex;
   justify-content: center;
   color: var(--SESSION-TITLE-FONT-COLOR);
-  font-size: var(--SESSION-H1-SIZE);
+  font-size: var(--H1-SIZE);
   background-color: var(--SESSION-TITLE-BG-COLOR);
   padding: var(--SESSION-INFO-DIV-PADDING);
   border-radius: var(--SESSION-SEC-BORDER-RAD) var(--SESSION-SEC-BORDER-RAD) 0 0;
@@ -691,6 +700,21 @@ body {
   justify-content: flex-start;
 }
 
+.add_set_x__div {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.add_set_x__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--MODAL-BG-COLOR);
+  border-radius: 50%;
+  border: 1px solid var(--BG-COLOR);
+  padding: 0.5rem;
+}
+
 .add_set__h1 {
   width: 100%;
   display: flex;
@@ -716,5 +740,12 @@ body {
   width: 100%;
   height: 100%;
   text-align: center;
+}
+
+.add_set__button {
+  padding: var(--ADD-BTN-PADDING);
+  background-color: var(--ADD-BUTTON-COLOR);
+  color:var(--BG-COLOR);
+  border-radius: var(--ADD-BTN-BORDER-RAD);
 }
 /* /SET ADD FORM */

@@ -1,19 +1,34 @@
 import React from 'react'
-import { memo } from 'react'
+import { memo, useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
 import Sets from './sets/Sets.jsx'
 
 const Exercise = ( { exercise = null } ) => {
-
     const { routineId } = useParams()
 
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
 
+    // Read more
+    const [readMore, setReadMore] = useState(false)
+    const descMaxLength = 100
+
+    const toggleReadMoreHandler = (event) => {
+        event.stopPropagation()
+        setReadMore(!readMore)
+    }
+
+    const descOverLimit = exercise.description.length > descMaxLength
+    // initial state of readMore
+    useEffect(() => {
+        setReadMore(!descOverLimit)
+    }, [])
+
+    const description = readMore ? exercise.description : `${exercise.description.slice(0, descMaxLength)}...`
+
     // console.log('re-render: ', exercise.id)
 
     const updateExerciseRequestHandler = async(payload) => {
-        console.log(payload)
         const body = {
             ...payload
         }
@@ -53,6 +68,17 @@ const Exercise = ( { exercise = null } ) => {
                     <span className='info_label info_text_padding'>Order:</span>
                     <span className='info_text_padding'>{exercise.order}</span>
                 </div>
+                <div className='info__div'>
+                        <span className='info_label info_text_padding'>Description:</span>
+                        <div className='routine_info_desc__div info_text_padding'>
+                            { description }
+                            { descOverLimit && 
+                                <div className="desc_footer__div">
+                                    <div className='readMore' onClick={toggleReadMoreHandler}>{readMore ? 'Show less' : 'Read more'}</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 <Sets
                     exercise={exercise}
                     updateExerciseRequestHandler={updateExerciseRequestHandler}

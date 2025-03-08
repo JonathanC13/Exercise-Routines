@@ -2,6 +2,13 @@ const {StatusCodes} = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 const SessionModel = require('../models/Session')
 
+const applyOrder = (a, b) => {
+    if (a.order - b.order === 0) {
+        return new Date(b.updatedAt) - new Date(a.updatedAt)
+    }
+    return a.order - b.order
+}
+
 const getAllExercises = async(req, res) => {
     const {
         user: {userId: createdByUserId},
@@ -11,13 +18,20 @@ const getAllExercises = async(req, res) => {
 
     // const response = await SessionModel.findOne({_id: sessionId, createdByUserId}).select('exercises').sort('order updatedAt')
     const exArr = response.exercises
-    // sort order asc, if same then sort updatedAt desc.
-    exArr.sort((a, b) => {
-        if (a.order - b.order === 0) {
-            return new Date(b.updatedAt) - new Date(a.updatedAt)
-        }
-        return a.order - b.order
-    })
+    if (exArr) {
+        // sort order asc, if same then sort updatedAt desc.
+        exArr.sort((a, b) => {
+            return applyOrder(a, b)
+        })
+
+        exArr.map((ex) => {
+            ex.sets = ex.sets.sort((a, b) => {
+                return applyOrder(a, b)
+            })
+
+            return ex
+        })
+    }
     
     res.status(StatusCodes.OK).json({response: exArr, count: exArr.length})
 }
@@ -35,6 +49,11 @@ const getExercise = async(req, res) => {
     
     // const parent = await SessionModel.findOne({_id: sessionId, createdByUserId})
     const response = parent.exercises.id(exerciseId)
+    if (response) {
+        response.sets = parent.exercises.id(exerciseId).sets.sort((a, b) => {
+            return applyOrder(a, b)
+        })
+    }
     
     if (!response) {
         throw new BadRequestError('Exercise not found!')

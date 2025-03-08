@@ -7,7 +7,7 @@ import { apiSlice } from "../../app/api/apiSlice"
 const sessionsAdapter = createEntityAdapter({
     // Sort in ascending order, if same then descending updatedAt order
     sortComparer: (a, b) => {
-        const ord = a - b
+        const ord = a.order - b.order
         if (ord === 0) {
             return b.updatedAt.localeCompare(a.updatedAt)
         }

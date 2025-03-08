@@ -1,8 +1,8 @@
 import React from 'react'
 import Set from './Set'
-import AddSetForm from './AddSetForm'
 import { useDispatch } from 'react-redux'
 import { exSetAddFormOpenChanged } from './exSetAddFormSlice'
+import { useParams } from 'react-router'
 
 const createSetComps = (sets, updateExerciseRequestHandler) => {
     const comps = sets.map((set) => {
@@ -18,6 +18,9 @@ const createSetComps = (sets, updateExerciseRequestHandler) => {
 }
 
 const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
+
+    const { routineId } = useParams()
+
     const dispatch = useDispatch()
     const sets = exercise.sets || []
 
@@ -26,7 +29,7 @@ const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
         const buttonDimensions = e.target.getBoundingClientRect()
         const center = buttonDimensions.left + (buttonDimensions.right - buttonDimensions.left) / 2;
         const bottom = buttonDimensions.bottom - 3 + rootDoc.scrollTop
-        dispatch(exSetAddFormOpenChanged({ exSetAddFormOpen: true, location: {center:center, bottom:bottom }}))
+        dispatch(exSetAddFormOpenChanged({ exSetAddFormOpen: true, location: {center:center, bottom:bottom }, routineId: routineId, sessionId: exercise.sessionId, exercise: exercise}))
     }
 
     let content = ''
@@ -46,11 +49,6 @@ const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
                 </section>
                 
             </div>
-            <AddSetForm
-                exerciseName={exercise.name}
-                sets={sets}
-                updateExerciseRequestHandler={updateExerciseRequestHandler}
-            ></AddSetForm>
         </>
     }
 
