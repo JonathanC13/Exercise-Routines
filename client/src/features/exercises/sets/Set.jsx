@@ -10,10 +10,10 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
     })
     
     const [edit, setEdit] = useState(false)
-    const [exSetOrder, setExSetOrder] = useState(set ? set.order : '')
-    const [exSetWeight, setExSetWeight] = useState(set ? set.weight : '')
-    const [exSetReps, setExSetReps] = useState(set ? set.repsOrDuration : '')
-    const [exSetRest, setExSetRest] = useState(set ? set.restTimeSeconds : '')
+    const [exSetOrder, setExSetOrder] = useState(set ? set.order ?? '' : '')
+    const [exSetWeight, setExSetWeight] = useState(set ? set.weight ?? '' : '')
+    const [exSetReps, setExSetReps] = useState(set ? set.repsOrDuration ?? '' : '')
+    const [exSetRest, setExSetRest] = useState(set ? set.restTimeSeconds !== null ?? '' : '')
 
     // useEffect(() => {
     //     setExSetOrder(set.order)
@@ -97,16 +97,32 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                     }
                     // console.log(payload)
                     const response = await updateExerciseRequestHandler(payload)
-                    console.log(response)
-                    form.classList.remove('disabled')
+                    // console.log(response)
+                    
                 } catch (err) {
-                    console.log('error: ', err.toString())
+                    console.log('edit error: ', err.toString())
+                } finally {
+                    form.classList.remove('disabled')
                 }
                 
                 break
             case 'delete':
-                console.log('send delete')
                 setEdit(false)
+                form.classList.add('disabled')
+
+                const payload = {
+                    'sets': sets.filter((set) => {return set.id !== setId})
+                }
+
+                try {
+                    const response = await updateExerciseRequestHandler(payload)
+                } catch (err) {
+                    console.log('delete error: ', err.toString())
+                } finally {
+                    form.classList.remove('disabled')
+                
+                }
+            
                 break
             default:
                 break

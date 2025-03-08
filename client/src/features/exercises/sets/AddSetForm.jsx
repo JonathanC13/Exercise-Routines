@@ -28,9 +28,19 @@ const AddSetForm = () => {
             }
         }
     }, [exSetAddFormOpen, location])
+    
+    const resetControlledInputs = () => {
+        setExSetOrder('')
+        setExSetWeight('')
+        setExSetReps('')
+        setExSetRest('')
+    }
 
     const updateExerciseRequestHandler = async(payload) => {
         try {
+            if (!routineId || !sessionId || !exercise || !exercise.id) {
+                throw new Error('Err: invalid route params.')
+            }
             const response = await updateExercise({ routineId, sessionId, exerciseId: exercise.id, body: payload }).unwrap()
             return response
         } catch (err) {
@@ -52,10 +62,10 @@ const AddSetForm = () => {
                 form.classList.add('disabled')
 
                 const addFormData = {
-                    'order': exSetOrder,
-                    'weight': exSetWeight,
-                    'repsOrDuration': exSetReps,
-                    'restTimeSeconds': exSetRest
+                    'order': exSetOrder ?? '',
+                    'weight': exSetWeight ?? '',
+                    'repsOrDuration': exSetReps ?? '',
+                    'restTimeSeconds': exSetRest ?? ''
                 }
         
                 const payload = {
@@ -67,13 +77,15 @@ const AddSetForm = () => {
                 try {
                     const response = updateExerciseRequestHandler(payload)
                     // console.log(response)
-                    form.reset()
+                    resetControlledInputs()
                     closeSetAddFormHandler()
                 } catch (err) {
-                    // console.log('err ', err)
+                    console.log('err ', err)
                     document.getElementById('add_set_msg__p').innerText = `Failed to save the exercise (set): ${err}`
+                } finally {
+                    form.classList.remove('disabled')
                 }
-                form.classList.remove('disabled')
+                
                 break;
             default:
                 break;
@@ -81,6 +93,7 @@ const AddSetForm = () => {
     }
 
     const closeSetAddFormHandler = () => {
+        resetControlledInputs()
         dispatch(exSetAddFormOpenChanged({exSetAddFormOpen: false, location: {center:-9000, bottom:0}}))
     }
 
@@ -91,15 +104,15 @@ const AddSetForm = () => {
     let content = ''
     if (exercise) {
         content = 
-            <div className="add_set_bg__div" ref={exSetAddDivRef}>
+            <div className="modal_bg__div" ref={exSetAddDivRef}>
                 <form className="add_set__form" onSubmit={addSetFormHandler}>
-                    <div className="add_set_x__div">
-                        <button className='add_set_x__button cursor_pointer' name='close_modal__button'>
+                    <div className="add_form_modal_x__div">
+                        <button type='button' className='add_form_modal_x__button cursor_pointer' name='close_modal__button' onClick={closeSetAddFormHandler}>
                             <FaXmark></FaXmark>
                         </button>
                     </div>
                     <h1 className="add_set__h1">Add Set</h1>
-                    <div className='add_set_ex__div'>
+                    <div className='add_form_assoc__div'>
                         <h1 className='info_label_routine info_text_padding'>Exercise:</h1>
                         <h1 className='info_text_padding'>{exercise.name}</h1>
                     </div>
@@ -113,7 +126,7 @@ const AddSetForm = () => {
                     </div>
 
                     <div className="add_set_input__div">
-                        <label id='add_set_weight__label' htmlFor="add_set_weight__input" className="add_set_order__label">Weight</label>
+                        <label id='add_set_weight__label' htmlFor="add_set_weight__input" className="add_set_weight__label">Weight</label>
                         <input type="text" id='add_set_weight__input' className='add_set_weight__input' name='add_set_weight__input'
                             value={exSetWeight}
                             onChange={(e) => {setExSetWeight(e.target.value)}}
@@ -121,7 +134,7 @@ const AddSetForm = () => {
                     </div>
 
                     <div className="add_set_input__div">
-                        <label id='add_set_reps__label' htmlFor="add_set_reps__input" className="add_set_order__label">Reps/Duration</label>
+                        <label id='add_set_reps__label' htmlFor="add_set_reps__input" className="add_set_reps__label">Reps/Duration</label>
                         <input type="text" id='add_set_reps__input' className='add_set_reps__input' name='add_set_reps__input'
                             value={exSetReps}
                             onChange={(e) => {setExSetReps(e.target.value)}}
@@ -129,7 +142,7 @@ const AddSetForm = () => {
                     </div>
 
                     <div className="add_set_input__div">
-                        <label id='add_set_rest__label' htmlFor="add_set_rest__input" className="add_set_order__label">Rest (seconds)</label>
+                        <label id='add_set_rest__label' htmlFor="add_set_rest__input" className="add_set_rest__label">Rest (seconds)</label>
                         <input type="number" id='add_set_rest__input' className='add_set_rest__input' name='add_set_rest__input'
                             value={exSetRest}
                             onChange={(e) => {setExSetRest(e.target.value)}}

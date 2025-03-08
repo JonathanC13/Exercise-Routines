@@ -67,7 +67,7 @@ const Session = ( { sessionId = null }) => {
                 </div>
                 <hr />
                 <Exercises
-                    exercises={session.exercises}
+                    session={session}
                 ></Exercises>
 
             </div>
