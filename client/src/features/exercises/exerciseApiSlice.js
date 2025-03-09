@@ -11,7 +11,7 @@ const exerciseApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: args.body
             }),
-            invalidatesTags: (result, error, arg) => [{ type: 'Session', id: 'LIST' }]
+            invalidatesTags: (result, error, arg) => [{ type: 'Session', id: arg.sessionId }]
         }),
         updateExercise: builder.mutation({
             query: (args) => ({

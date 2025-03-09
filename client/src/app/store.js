@@ -12,7 +12,7 @@ const composedEnhancer = composeWithDevTools({
 export default configureStore({
   reducer: {
     auth: authReducer,
-    addFormModalsReducer: addFormModalsReducer,
+    addFormModals: addFormModalsReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     [authApiSlice.reducerPath]: authApiSlice.reducer,
     [routinesApiSlice]: routinesApiSlice.reducer

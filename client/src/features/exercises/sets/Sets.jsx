@@ -1,7 +1,7 @@
 import React from 'react'
 import Set from './Set'
 import { useDispatch } from 'react-redux'
-import { exSetAddFormOpenChanged } from './exSetAddFormSlice'
+import { exSetAddFormOpenChanged } from '../../modals/addFormModals/addFormModalsSlice'
 import { useParams } from 'react-router'
 
 const createSetComps = (sets, updateExerciseRequestHandler) => {
@@ -29,7 +29,7 @@ const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
         const buttonDimensions = e.target.getBoundingClientRect()
         const center = buttonDimensions.left + (buttonDimensions.right - buttonDimensions.left) / 2;
         const bottom = buttonDimensions.bottom - 3 + rootDoc.scrollTop
-        dispatch(exSetAddFormOpenChanged({ addFormOpen: true, addFormType: 'addSetForm', routineId: routineId, sessionId: exercise.sessionId, exercise: exercise}))
+        dispatch(exSetAddFormOpenChanged({ addFormOpen: true, addFormType: 'setAddForm', routineId: routineId, sessionId: exercise.sessionId, exercise: exercise}))
     }
 
     let content = ''

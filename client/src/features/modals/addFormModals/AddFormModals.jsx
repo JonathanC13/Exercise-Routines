@@ -1,7 +1,7 @@
 import React from 'react'
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import SetAddForm from '../../exercises/sets/setAddForm'
 import ExerciseAddForm from '../../exercises/ExerciseAddForm'
 import { addFormClosed } from './addFormModalsSlice'
@@ -30,12 +30,12 @@ const AddFormModals = () => {
 
     let content = ''
     if (addFormType !== '') {
-        const formContent = ''
+        let formContent = ''
         switch (addFormType) {
-            case 'addSetForm':
+            case 'setAddForm':
                 formContent = <SetAddForm></SetAddForm>
                 break;
-            case 'addExerciseForm':
+            case 'exerciseAddForm':
                 formContent = <ExerciseAddForm></ExerciseAddForm>
                 break;
             default:
@@ -44,12 +44,14 @@ const AddFormModals = () => {
 
         content = 
             <div className="modal_bg__div" ref={modalBgDiv}>
-                <div className="add_form_modal_x__div">
-                    <button type='button' className='add_form_modal_x__button cursor_pointer' name='close_modal__button' onClick={closeAddFormHandler}>
-                        <FaXmark></FaXmark>
-                    </button>
-                </div>
-                { formContent }
+                <section className="add_form_modal__section">
+                    <div className="add_form_modal_x__div">
+                        <button type='button' className='add_form_modal_x__button cursor_pointer' name='close_modal__button' onClick={closeAddFormHandler}>
+                            <FaXmark></FaXmark>
+                        </button>
+                    </div>
+                    { formContent }
+                </section>
             </div>
     }
 

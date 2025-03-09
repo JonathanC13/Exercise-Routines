@@ -13,7 +13,7 @@ import Routines from './features/routines/Routines'
 import Routine from './features/routines/Routine'
 import Sessions from './features/sessions/Sessions'
 import SessionPage from './features/sessions/SessionPage'
-import AddFormModals from './features/modals/AddFormModals'
+import AddFormModals from './features/modals/addFormModals/AddFormModals'
 import store from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -44,11 +44,10 @@ function App() {
                   </Route>
                   
                 </Route>
-                <AddFormModals></AddFormModals>
-
               </Route>
             </Routes>
         </BrowserRouter>
+        <AddFormModals></AddFormModals>
       </Provider>
     </div>
   )

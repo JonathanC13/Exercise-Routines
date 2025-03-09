@@ -54,15 +54,15 @@ const SetAddForm = () => {
 
         switch (action) {
             case 'close_modal__button':
-                closeSetAddFormHandler()
+                closeAddFormHandler()
                 break;
             case 'add_set__button':
                 form.classList.add('disabled')
 
                 const addFormData = {
-                    'order': exSetOrder ?? '',
+                    'order': exSetOrder ?? 0,
                     'weight': exSetWeight ?? '',
-                    'repsOrDuration': exSetReps ?? '',
+                    'repsOrDuration': exSetReps ?? 0,
                     'restTimeSeconds': exSetRest ?? ''
                 }
         
@@ -72,17 +72,17 @@ const SetAddForm = () => {
                 // for (let i of payload.sets) {
                 //     console.log(i)
                 // }
-                try {
-                    const response = updateExerciseRequestHandler(payload)
-                    // console.log(response)
+                
+                const response = updateExerciseRequestHandler(payload)
+                
+                if (response.status === 201) {
                     closeAddFormHandler()
-                } catch (err) {
-                    console.log('err ', err)
-                    document.getElementById('add_set_msg__p').innerText = `Failed to save the exercise (set): ${err}`
-                } finally {
-                    form.classList.remove('disabled')
+                    return
                 }
                 
+                document.getElementById('add_set_msg__p').innerText = `Failed to save the exercise (set): ${response.data.message}`
+                form.classList.remove('disabled')
+             
                 break;
             default:
                 break;
@@ -104,8 +104,8 @@ const SetAddForm = () => {
             <form className="add_set__form" onSubmit={addSetFormHandler}>
                 <h1 className="add_set__h1">Add Set</h1>
                 <div className='add_form_assoc__div'>
-                    <h1 className='info_label_routine info_text_padding'>Exercise:</h1>
-                    <h1 className='info_text_padding'>{exercise.name}</h1>
+                    <p className='info_label_exercise info_text_padding'>Exercise:</p>
+                    <p className='info_value info_text_padding'>{exercise.name}</p>
                 </div>
 
                 <div className="add_set_input__div">
@@ -148,7 +148,9 @@ const SetAddForm = () => {
 
 
     // add_set__section for background opague onclick stops bubble down to below coponents = behaviour: closes this form, add_set__form for form container
-    return { content }
+    return  <>
+                { content }
+            </>
 }
 
 export default SetAddForm

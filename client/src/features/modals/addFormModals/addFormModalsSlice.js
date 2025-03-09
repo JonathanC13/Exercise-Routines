@@ -44,6 +44,6 @@ export const addFormModalsSlice = createSlice({
     }
 })
 
-export const { exSetAddFormOpenChanged, exerciseAddFormOpenChanged } = addFormModalsSlice.actions
+export const { addFormClosed, exSetAddFormOpenChanged, exerciseAddFormOpenChanged } = addFormModalsSlice.actions
 
 export default addFormModalsSlice.reducer

@@ -26,7 +26,7 @@ const ExerciseSchema = new mongoose.Schema({
     description: {
         type: String,
         trim: true,
-        maxLength: [500, 'Please provide a name that is 500 or less characters!']
+        maxLength: [500, 'Please provide a description that is 500 or less characters!']
     }, 
     sets: {
         type: [SetSchema],

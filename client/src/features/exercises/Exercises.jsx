@@ -1,8 +1,9 @@
 import React from 'react'
 // import { useGetSessionsQuery } from '../sessions/sessionsApiSlice'
+import { useParams } from 'react-router'
 import Exercise from './Exercise'
 import { useDispatch } from 'react-redux'
-import { exerciseAddFormOpenChanged } from './ExerciseAddFormSlice'
+import { exerciseAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 
 const createExerciseComps = (exercises) => {
 
@@ -18,6 +19,8 @@ const createExerciseComps = (exercises) => {
 
 const Exercises = ( {session = {}} ) => {
 
+    const { routineId } = useParams()
+
     const exercises = session ? session.exercises ?? [] : []
     const dispatch = useDispatch()
 
@@ -26,7 +29,7 @@ const Exercises = ( {session = {}} ) => {
         const buttonDimensions = e.target.getBoundingClientRect()
         const center = buttonDimensions.left + (buttonDimensions.right - buttonDimensions.left) / 2;
         const bottom = buttonDimensions.bottom - 3 + rootDoc.scrollTop
-        dispatch(exerciseAddFormOpenChanged({ addFormOpen: true, addFormType: 'addExerciseForm', routineId: routineId, session: session}))
+        dispatch(exerciseAddFormOpenChanged({ addFormOpen: true, addFormType: 'exerciseAddForm', routineId: routineId, session: session}))
     }
 
     let content = ''

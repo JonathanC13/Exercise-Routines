@@ -13,7 +13,7 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
     const [exSetOrder, setExSetOrder] = useState(set ? set.order ?? '' : '')
     const [exSetWeight, setExSetWeight] = useState(set ? set.weight ?? '' : '')
     const [exSetReps, setExSetReps] = useState(set ? set.repsOrDuration ?? '' : '')
-    const [exSetRest, setExSetRest] = useState(set ? set.restTimeSeconds !== null ?? '' : '')
+    const [exSetRest, setExSetRest] = useState(set ? set.restTimeSeconds ?? '' : '')
 
     // useEffect(() => {
     //     setExSetOrder(set.order)
