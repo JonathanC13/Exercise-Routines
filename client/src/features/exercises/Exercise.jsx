@@ -3,11 +3,20 @@ import { memo, useState, useEffect } from 'react'
 import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
 import Sets from './sets/Sets.jsx'
+import { FaTrashCan } from 'react-icons/fa6'
 
 const Exercise = ( { exercise = null } ) => {
     const { routineId } = useParams()
 
+    const [edit, setEdit] = useState(false)
+    const [exerciseName, setExerciseName] = useState(exercise ? exercise.name ?? '' : '')
+    const [exerciseOrder, setExerciseOrder] = useState(exercise ? exercise.order ?? '' : '')
+    const [exerciseDesc, setExerciseDesc] = useState(exercise ? exercise.description ?? '' : '')
+    const [exerciseMuscleType, setExerciseMuscleType] = useState(exercise ? exercise.muscleType ?? '' : '')
+    const [exerciseCompleted, setExerciseCompleted] = useState(exercise ? exercise.completed ?? '' : '')
+
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
+    const [deleteExercise, { isLoadingDelete }] = useDeleteExerciseMutation()
 
     // Read more
     const [readMore, setReadMore] = useState(false)
@@ -23,6 +32,27 @@ const Exercise = ( { exercise = null } ) => {
     useEffect(() => {
         setReadMore(!descOverLimit)
     }, [])
+
+    const exerciseFormId = `exercisee_form_${exercise.id}`
+
+    useEffect(() => {
+        if (exercise) {
+            const form = document.getElementById(exerciseFormId)
+            const exerciseNameInput = form.querySelector('#exercise_name__input');
+            const exerciseMuscleTypeInput = form.querySelector('#exercise_muscType__input');
+            const exerciseOrderInput = form.querySelector('#exercise_order__input');
+
+            if (edit) {
+                exerciseNameInput.removeAttribute('disabled')
+                exerciseMuscleTypeInput.removeAttribute('disabled')
+                exerciseOrderInput.removeAttribute('disabled')
+            } else {
+                exerciseNameInput.setAttribute('disabled', '')
+                exerciseMuscleTypeInput.setAttribute('disabled', '')
+                exerciseOrderInput.setAttribute('disabled', '')
+            }
+        }
+    }, [edit])
 
     const description = readMore ? exercise.description : `${exercise.description.slice(0, descMaxLength)}...`
 
@@ -42,43 +72,150 @@ const Exercise = ( { exercise = null } ) => {
         return null
     }
 
-    const updateExerciseHandler = async(e, payload) => {
-        e.preventDefault()
-        const form = e.currentTarget
-
-        // const { elements } = e.currentTarget
-        // const name = elements['update-ex-name__input'].value
+    const deleteExerciseRequestHandler = async(exercise) => {
         try {
-            const response = await updateExerciseRequestHandler(payload)
-            form.reset()
+            const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
+            return response
         } catch (err) {
-            console.error('Failed to save the exercise: ', err)
+            console.error('Failed to delete the exercise: ', err)
+        }
+        return null
+    }
+
+    const exerciseFormHandler = async(e) => {
+        e.preventDefault()
+
+        const action = e.nativeEvent.submitter.value;
+        const form = e.currentTarget
+        switch (action) {
+            case 'edit':
+                setEdit(true)
+                break
+            case 'cancel':
+                form.reset()
+                if (exercise) {
+                    setExerciseName(exercise.name)
+                    setExerciseMuscleType(exercise.muscleType)
+                    setExerciseOrder(exercise.order)
+                    setExerciseDesc(exercise.description)
+                }
+                setEdit(false)
+                break
+            case 'save':
+                setEdit(false)
+                form.classList.add('disabled')
+                
+                try {
+                    const payload = { 
+                        'name': exerciseName ?? '',
+                        'muscleType': exerciseMuscleType ?? '',
+                        'order': exerciseOrder ?? 0,
+                        'description': exerciseDesc ?? ''
+                    }
+                    // console.log(payload)
+                    const response = await updateExerciseRequestHandler(payload)
+                    // console.log(response)
+                    
+                } catch (err) {
+                    console.log('edit error: ', err.toString())
+                } finally {
+                    form.classList.remove('disabled')
+                }
+                
+                break
+            case 'delete':
+                setEdit(false)
+                form.classList.add('disabled')
+
+                try {
+                    const response = await deleteExerciseRequestHandler(exercise)
+                } catch (err) {
+                    console.log('delete error: ', err.toString())
+                } finally {
+                    form.classList.remove('disabled')
+                
+                }
+            
+                break
+            default:
+                break
         }
     }
 
     let content = ''
     
     if (exercise) {
-        
-        content = <div className='exercise__div'>
-            <div className="exercise_info__div">
-                {/* <h1 className='exercise_title__h1'>Exercise</h1> */}
-                <h1 className='exercise_name__h1'>{ exercise.name }</h1>
-                <div className='info__div'>
-                    <span className='info_label info_text_padding'>Order:</span>
-                    <span className='info_text_padding'>{exercise.order}</span>
-                </div>
-                <div className='info__div'>
-                        <span className='info_label info_text_padding'>Description:</span>
-                        <div className='routine_info_desc__div info_text_padding'>
-                            { description }
-                            { descOverLimit && 
-                                <div className="desc_footer__div">
-                                    <div className='readMore' onClick={toggleReadMoreHandler}>{readMore ? 'Show less' : 'Read more'}</div>
-                                </div>
-                            }
-                        </div>
+        let exerciseOptionButtons =
+            edit ?
+                <div className='editing__div'>
+                    <button className="set_delete__button cursor_pointer" name='delete' value='delete'>
+                        <FaTrashCan></FaTrashCan>
+                    </button>
+                    <div className="modifyOpts__div">
+                        <button className="set_cancel__button cursor_pointer" name='cancel' value='cancel'>
+                            Cancel
+                        </button>
+                        <button className="set_save__button cursor_pointer" name='save' value='save'>
+                            Save
+                        </button>
                     </div>
+                </div> :
+                <div className="edit__div">
+                    <button className="set_edit__button cursor_pointer" name='edit' value='edit'>
+                        Edit Exercise
+                    </button>
+                </div>
+        
+        content =
+            <div className="exercise_info__div">
+                <form id={exerciseFormId} onSubmit={(e) => exerciseFormHandler(e)} className='exercise_info__form'>
+                    <div className='ex_form_info__div'>
+                        <label htmlFor='exercise_name__input' className='info_label info_text_padding offscreen'>Name:</label>
+                        <input id='exercise_name__input' className='exercise_name__h1 exercise_form__inputs'
+                            value={ exerciseName }
+                            onChange={(e) => {return setExerciseName(e.target.value)}}
+                        ></input>
+                    </div>
+
+                    <div className='ex_form_info__div'>
+                        <label htmlFor='exercise_muscType__input' className='info_label info_text_padding'>Muscle Type:</label>
+                        <input id='exercise_muscType__input' className='exercise_form__inputs'
+                            value={ exerciseMuscleType }
+                            onChange={(e) => {return setExerciseMuscleType(e.target.value)}}
+                        ></input>
+                    </div>
+
+                    <div className='ex_form_info__div'>
+                        <label htmlFor='exercise_order__input' className='info_label info_text_padding'>Order:</label>
+                        <input id='exercise_order__input' className='exercise_form__inputs'
+                            value={ exerciseOrder }
+                            onChange={(e) => {return setExerciseOrder(e.target.value)}}
+                        ></input>
+                    </div>
+
+                    <div className='ex_form_desc_info__div'>
+                        <div className='ex_form_desc_label__div'>
+                            <label htmlFor='exercise_desc__ta' className='info_label info_text_padding'>Description:</label>
+                        </div>
+                        { edit ? 
+                            <textarea id='exercise_desc__ta' className='exercise_desc__ta' rows={4}
+                                value={ exerciseDesc }
+                                onChange={(e) => {return setExerciseDesc(e.target.value)}}
+                            ></textarea>
+                            :
+                            <div id='exercise_desc__div' className='routine_info_desc__div info_text_padding'>
+                                { description }
+                                { descOverLimit && 
+                                    <div className="desc_footer__div">
+                                        <div className='readMore' onClick={toggleReadMoreHandler}>{readMore ? 'Show less' : 'Read more'}</div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        
+                    </div>
+                    { exerciseOptionButtons }
+                </form>
                 <Sets
                     exercise={exercise}
                     updateExerciseRequestHandler={updateExerciseRequestHandler}
@@ -92,7 +229,6 @@ const Exercise = ( { exercise = null } ) => {
                     <button type='submit'>UPDATE</button>
                 </form> */}
             </div>
-        </div>
     }
 
   return (

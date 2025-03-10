@@ -22,9 +22,11 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
     //     setExSetRest(set.restTimeSeconds)
     // }, [])
 
+    const exSetFormId = `set_form_${setId}`
+
     useEffect(() => {
         if (set) {
-            const form = document.getElementById(`set_form_${setId}`)
+            const form = document.getElementById(exSetFormId)
             const exSetOrderInput = form.querySelector('#set_order');
             const exSetWeightInput = form.querySelector('#set_weight');
             const exSetRepsInput = form.querySelector('#set_reps');
@@ -149,11 +151,11 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                 </div> :
                 <div className="edit__div">
                     <button className="set_edit__button cursor_pointer" name='edit' value='edit'>
-                        Edit
+                        Edit Set
                     </button>
                 </div>
 
-        content = <form id={`set_form_${setId}`} className='set__form' onSubmit={exSetFormHandler}>
+        content = <form id={exSetFormId} className='set__form' onSubmit={exSetFormHandler}>
             <div className="set_header__div">
                 <div className="order_info">
                     <label className='set_desc_order__label' htmlFor='set_order'><span className='center_text_vert'>Order:</span></label>
