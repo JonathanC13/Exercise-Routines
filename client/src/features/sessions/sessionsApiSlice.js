@@ -79,7 +79,7 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
                 }
             }
         }),
-        addSession: builder.query({
+        addSession: builder.mutation({
             query:  (args) => ({
                 url: `/routines/${args.routineId}/sessions/${args.sessionId}`,
                 headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
@@ -88,7 +88,7 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [{type: 'Session', id: 'LIST'}]
         }),
-        updateSession: builder.query({
+        updateSession: builder.mutation({
             query:  (args) => ({
                 url: `/routines/${args.routineId}/sessions/${args.sessionId}`,
                 headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
@@ -97,7 +97,7 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: (result, error, arg) => [{type: 'Session', id: arg.sessionId}]
         }),
-        deleteSession: builder.query({
+        deleteSession: builder.mutation({
             query:  (args) => ({
                 url: `/routines/${args.routineId}/sessions/${args.sessionId}`,
                 headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
@@ -110,9 +110,9 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetSessionsQuery,
-    useAddSessionQuery,
-    useUpdateSessionQuery,
-    useDeleteSessionQuery
+    useAddSessionMutation,
+    useUpdateSessionMutation,
+    useDeleteSessionMutation
 } = sessionsApiSlice
 
 export const selectSessionsResult = sessionsApiSlice.endpoints.getSessions.select()

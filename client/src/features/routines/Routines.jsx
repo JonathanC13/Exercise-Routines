@@ -32,7 +32,7 @@ const Routines = () => {
       error
     } = useGetRoutinesQuery('routinesList',
       {
-        pollingInterval: 60000,
+        pollingInterval: 100000, //60000
         refetchOnFocus: true,
         refetchOnMountOrArgChange: true
       }
@@ -63,7 +63,6 @@ const Routines = () => {
     } else if (isSuccess) {
       // const { ids, entities } = sortedRoutines
       const routineComps = createRoutineComps(sortedRoutines, isFetching) // isFetching will cause re-render
-
       const containerClassname = classnames('routines__div', {
         disabled: isFetching
       })
@@ -74,7 +73,7 @@ const Routines = () => {
         </div>
       // console.log(content)
     } else if (isError) {
-      content = <h2 className="routines-error__h2">{error.toString()}</h2>
+      content = <h2 className="routines-error__h2">{error?.error ?? 'Error with server.'}</h2>
     }
 
   return (

@@ -14,6 +14,7 @@ const Exercise = ( { exercise = null } ) => {
     const [exerciseDesc, setExerciseDesc] = useState(exercise ? exercise.description ?? '' : '')
     const [exerciseMuscleType, setExerciseMuscleType] = useState(exercise ? exercise.muscleType ?? '' : '')
     const [exerciseCompleted, setExerciseCompleted] = useState(exercise ? exercise.completed ?? '' : '')
+    const [exerciseMessage, setExerciseMessage] = useState('')
 
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
     const [deleteExercise, { isLoadingDelete }] = useDeleteExerciseMutation()
@@ -33,7 +34,7 @@ const Exercise = ( { exercise = null } ) => {
         setReadMore(!descOverLimit)
     }, [])
 
-    const exerciseFormId = `exercisee_form_${exercise.id}`
+    const exerciseFormId = `exercise_form_${exercise.id}`
 
     useEffect(() => {
         if (exercise) {
@@ -65,9 +66,9 @@ const Exercise = ( { exercise = null } ) => {
 
         try {
             const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body }).unwrap()
-            return response
-        } catch (err) {
-            console.error('Failed to save the exercise: ', err)
+            return {'success': true, response}
+        } catch (error) {
+            return {'success': false, error}
         }
         return null
     }
@@ -75,14 +76,14 @@ const Exercise = ( { exercise = null } ) => {
     const deleteExerciseRequestHandler = async(exercise) => {
         try {
             const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
-            return response
-        } catch (err) {
-            console.error('Failed to delete the exercise: ', err)
+            return {'success': true, response}
+        } catch (error) {
+            return {'success': false, error}
         }
         return null
     }
 
-    const exerciseFormHandler = async(e) => {
+    const exerciseFormSubmitHandler = async(e) => {
         e.preventDefault()
 
         const action = e.nativeEvent.submitter.value;
@@ -115,9 +116,11 @@ const Exercise = ( { exercise = null } ) => {
                     // console.log(payload)
                     const response = await updateExerciseRequestHandler(payload)
                     // console.log(response)
-                    
-                } catch (err) {
-                    console.log('edit error: ', err.toString())
+                    if (!response?.success) {
+                        throw new Error(response)
+                    }
+                } catch (error) {
+                    setExerciseMessage(error?.data?.message ?? 'Error')
                 } finally {
                     form.classList.remove('disabled')
                 }
@@ -129,8 +132,11 @@ const Exercise = ( { exercise = null } ) => {
 
                 try {
                     const response = await deleteExerciseRequestHandler(exercise)
+                    if (!response?.success) {
+                        throw new Error(response)
+                    }
                 } catch (err) {
-                    console.log('delete error: ', err.toString())
+                    setExerciseMessage(error?.data?.message ?? 'Error')
                 } finally {
                     form.classList.remove('disabled')
                 
@@ -148,27 +154,27 @@ const Exercise = ( { exercise = null } ) => {
         let exerciseOptionButtons =
             edit ?
                 <div className='editing__div'>
-                    <button className="set_delete__button cursor_pointer" name='delete' value='delete'>
+                    <button className="exercise_delete__button cursor_pointer" name='delete' value='delete'>
                         <FaTrashCan></FaTrashCan>
                     </button>
                     <div className="modifyOpts__div">
-                        <button className="set_cancel__button cursor_pointer" name='cancel' value='cancel'>
+                        <button className="exercise_cancel__button cursor_pointer" name='cancel' value='cancel'>
                             Cancel
                         </button>
-                        <button className="set_save__button cursor_pointer" name='save' value='save'>
+                        <button className="exercise_save__button cursor_pointer" name='save' value='save'>
                             Save
                         </button>
                     </div>
                 </div> :
                 <div className="edit__div">
-                    <button className="set_edit__button cursor_pointer" name='edit' value='edit'>
+                    <button className="exercise_edit__button cursor_pointer" name='edit' value='edit'>
                         Edit Exercise
                     </button>
                 </div>
         
         content =
             <div className="exercise_info__div">
-                <form id={exerciseFormId} onSubmit={(e) => exerciseFormHandler(e)} className='exercise_info__form'>
+                <form id={exerciseFormId} onSubmit={(e) => exerciseFormSubmitHandler(e)} className='exercise_info__form'>
                     <div className='ex_form_info__div'>
                         <label htmlFor='exercise_name__input' className='info_label info_text_padding offscreen'>Name:</label>
                         <input id='exercise_name__input' className='exercise_name__h1 exercise_form__inputs'
@@ -215,6 +221,7 @@ const Exercise = ( { exercise = null } ) => {
                         
                     </div>
                     { exerciseOptionButtons }
+                    <p id='exercise_msg__p'>{exerciseMessage}</p>
                 </form>
                 <Sets
                     exercise={exercise}

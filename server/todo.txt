@@ -21,3 +21,7 @@ Front end
 2. partition into React components and determine nesting.
 3. Use redux as the store and RTK query for backend calls.
 4. save the JWT into cookies
+
+
+app.js
+app.use(limiter) // disabled for now *******

@@ -40,10 +40,10 @@ app.use(xss()) // make sure this comes before any routes
 app.set('trust proxy', 1 /* number of proxies between user and server */)
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-	limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+	limit: 1000, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
   standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
 })
-app.use(limiter)
+// app.use(limiter) // disabled for now *******
 // /extra security packages
 
 // routes

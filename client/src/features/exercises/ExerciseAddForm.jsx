@@ -39,9 +39,9 @@ const ExerciseAddForm = () => {
                 throw new Error('Err: invalid route params.')
             }
             const response = await addExercise({ routineId, sessionId: session.id, body: payload }).unwrap()
-            return response
-        } catch (err) {
-            return err
+            return { success: true, response }
+        } catch (error) {
+            return { success: false, error }
         }
     }
 
@@ -59,15 +59,17 @@ const ExerciseAddForm = () => {
         }
         // console.log(payload)
         const response = await addExerciseRequestHandler(payload)
-        
-        if (response.status === 201) {
+        form.classList.remove('disabled')
+
+        if (response?.success) {
             closeAddFormHandler()
             return
         }
-        const message = response.data.message ?? 'Error'
+        
+        const message = response?.error?.data?.message ?? 'Error'
         // console.error('Failed to add the exercise: ', err)
         document.getElementById('add_exercise_msg__p').innerText = `${message}`
-        form.classList.remove('disabled')
+        
         
     }
 

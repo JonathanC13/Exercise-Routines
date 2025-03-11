@@ -10,10 +10,11 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
     })
     
     const [edit, setEdit] = useState(false)
-    const [exSetOrder, setExSetOrder] = useState(set ? set.order ?? '' : '')
-    const [exSetWeight, setExSetWeight] = useState(set ? set.weight ?? '' : '')
-    const [exSetReps, setExSetReps] = useState(set ? set.repsOrDuration ?? '' : '')
-    const [exSetRest, setExSetRest] = useState(set ? set.restTimeSeconds ?? '' : '')
+    const [exSetOrder, setExSetOrder] = useState(set?.order ?? '')
+    const [exSetWeight, setExSetWeight] = useState(set?.weight ?? '')
+    const [exSetReps, setExSetReps] = useState(set?.repsOrDuration ?? '')
+    const [exSetRest, setExSetRest] = useState(set?.restTimeSeconds ?? '')
+    const [exSetMessage, setExSetMessage] = useState('')
 
     // useEffect(() => {
     //     setExSetOrder(set.order)
@@ -46,7 +47,7 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
         }
     }, [edit])
 
-    const exSetFormHandler = async(e) => {
+    const exSetFormSubmitHandler = async(e) => {
         e.preventDefault();
         const action = e.nativeEvent.submitter.value;
         const form = e.currentTarget
@@ -100,9 +101,11 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                     // console.log(payload)
                     const response = await updateExerciseRequestHandler(payload)
                     // console.log(response)
-                    
-                } catch (err) {
-                    console.log('edit error: ', err.toString())
+                    if (!response?.success) {
+                        throw new Error(response)
+                    }
+                } catch (error) {
+                    exSetMessage(error?.data?.message ?? 'Error')
                 } finally {
                     form.classList.remove('disabled')
                 }
@@ -118,8 +121,12 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
 
                 try {
                     const response = await updateExerciseRequestHandler(payload)
-                } catch (err) {
-                    console.log('delete error: ', err.toString())
+
+                    if (!response?.success) {
+                        throw new Error(response)
+                    }
+                } catch (error) {
+                    exSetMessage(error?.data?.message ?? 'Error')
                 } finally {
                     form.classList.remove('disabled')
                 
@@ -155,7 +162,7 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                     </button>
                 </div>
 
-        content = <form id={exSetFormId} className='set__form' onSubmit={exSetFormHandler}>
+        content = <form id={exSetFormId} className='set__form' onSubmit={exSetFormSubmitHandler}>
             <div className="set_header__div">
                 <div className="order_info">
                     <label className='set_desc_order__label' htmlFor='set_order'><span className='center_text_vert'>Order:</span></label>
@@ -196,6 +203,7 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                 </div>
             </div>
             { setOptionButtons }
+            <p id='set_msg__p'>{exSetMessage}</p>
         </form>
     }
 
