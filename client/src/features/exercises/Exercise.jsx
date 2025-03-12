@@ -85,6 +85,7 @@ const Exercise = ( { exercise = null } ) => {
 
     const exerciseFormSubmitHandler = async(e) => {
         e.preventDefault()
+        setExerciseMessage('')
 
         const action = e.nativeEvent.submitter.value;
         const form = e.currentTarget

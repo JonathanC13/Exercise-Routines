@@ -344,6 +344,7 @@ body {
 }
 
 .routine_name__input {
+  width: 100%;
   color: #ffffff;
   font-size: var(--H1-SIZE);
   background-color: var(--ROUTINE-TITLE-BG-COLOR);
@@ -367,6 +368,7 @@ body {
 }
 
 .routine__div_info {
+  display: flex;
   line-height: 1.5rem;
 }
 
@@ -411,6 +413,55 @@ body {
   background-color: var(--ROUTINE-TITLE-BG-COLOR);
   border-radius: var(--INFO-DIV-BORDER-RAD);
   margin-right: 0.25rem;
+}
+
+.routine__h1 {
+  color: #fff;
+  font-size: 1.5rem;
+  flex: 1 1 auto;
+}
+
+.routine_name__input {
+  flex: 1 1 auto;
+  background-color: #fff;
+  color: black;
+  padding: var(--ROUTINE-INFO-PADDING);
+}
+
+.routine_order__input {
+  color: black;
+  flex: 1 1 auto;
+  padding: var(--ROUTINE-INFO-PADDING);
+}
+
+.door_open_svg__div {
+  align-self: stretch;
+  color: #fff;
+  display: flex;
+  align-items: center;
+}
+
+.routine_desc__div {
+  color: black;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.routine_desc__ta {
+  color: black;
+  width: 100%;
+  resize: vertical;
+  padding: var(--ROUTINE-INFO-PADDING);
+}
+
+.routine_desc__label {
+  width: min-content;
+}
+
+.routine_name__input:disabled,
+.routine_order__input:disabled {
+  background-color: transparent;
+  border: none;
 }
 /* /ROUTINE */
 

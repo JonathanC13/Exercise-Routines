@@ -4,6 +4,7 @@ import { memo, useState, useEffect } from 'react'
 import { useGetRoutinesQuery, useUpdateRoutineMutation, useDeleteRoutineMutation } from './routinesApiSlice'
 import { useNavigate } from 'react-router'
 import classnames from 'classnames'
+import { FaTrashCan, FaDoorOpen } from 'react-icons/fa6'
 
 const months = {
   0: 'Jan',
@@ -36,6 +37,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     })
 
     const [updateRoutine, { isLoading }] = useUpdateRoutineMutation()
+    const [deleteRoutine, { isLoadingDelete }] = useDeleteRoutineMutation()
 
     const [edit, setEdit] = useState(false)    
     const [routineName, setRoutineName] = useState(routine?.name ?? '')
@@ -84,7 +86,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     // initial state of readMore
     useEffect(() => {
       setReadMore(!descOverLimit)
-    }, [])
+    }, [routine])
 
     const description = readMore ? routine.description : `${routine.description.slice(0, descMaxLength)}...`
 
@@ -94,7 +96,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
       }
 
       try {
-        const response = await updateRoutine({ routine: routine.id, body }).unwrap()
+        const response = await updateRoutine({ routineId: routine.id, body }).unwrap()
         return {'success': true, response}
       } catch (error) {
         return {'success': false, error}
@@ -103,7 +105,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
     const deleteRoutineRequestHandler = async(routine) => {
       try {
-        const response = await useDeleteRoutineMutation({routineId: routine.id})
+        const response = await deleteRoutine({routineId: routine.id})
         return {'success': true, response}
       } catch (error) {
         return {'success': false, error}
@@ -112,6 +114,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
     const routineFormSubmitHandler = async(e) => {
       e.preventDefault()
+      setRoutineMessage('')
       
       const action = e.nativeEvent.submitter.value;
       const form = e.currentTarget
@@ -122,53 +125,53 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           case 'cancel':
               form.reset()
               if (routine) {
-                  setExerciseName(routine.name)
+                  setRoutineName(routine.name)
                   setRoutineOrder(routine.order)
                   setRoutineDescription(routine.description)
               }
               setEdit(false)
               break
           case 'save':
-              setEdit(false)
-              form.classList.add('disabled')
-              
-              try {
-                  const payload = { 
-                      'name': routineName ?? '',
-                      'order': routineOrder ?? 0,
-                      'description': routineDescription ?? ''
-                  }
-                  // console.log(payload)
-                  const response = await updateRoutineRequestHandler(payload)
-                  // console.log(response)
-                  if (!response?.success) {
-                      throw new Error(response)
-                  }
-              } catch (error) {
-                  setRoutineMessage(error?.data?.message ?? 'Error')
-              } finally {
-                  form.classList.remove('disabled')
-              }
-              
-              break
-          case 'delete':
-              setEdit(false)
-              form.classList.add('disabled')
-
-              try {
-                  const response = await deleteRoutineRequestHandler(routine)
-                  if (!response?.success) {
-                      throw new Error(response)
-                  }
-              } catch (error) {
+            setEdit(false)
+            form.classList.add('disabled')
+            
+            try {
+                const payload = { 
+                    'name': routineName ?? '',
+                    'order': routineOrder ?? 0,
+                    'description': routineDescription ?? ''
+                }
+                // console.log(payload)
+                const response = await updateRoutineRequestHandler(payload)
+                // console.log(response)
+                if (!response?.success) {
+                    throw new Error(response)
+                }
+            } catch (error) {
                 setRoutineMessage(error?.data?.message ?? 'Error')
-              } finally {
-                  form.classList.remove('disabled')
-              }
-          
-              break
+            } finally {
+                form.classList.remove('disabled')
+            }
+            
+            break
+          case 'delete':
+            setEdit(false)
+            form.classList.add('disabled')
+
+            try {
+                const response = await deleteRoutineRequestHandler(routine)
+                if (!response?.success) {
+                    throw new Error(response)
+                }
+            } catch (error) {
+              setRoutineMessage(error?.data?.message ?? 'Error')
+            } finally {
+                form.classList.remove('disabled')
+            }
+        
+            break
           default:
-              break
+            break
       }
     }
     
@@ -192,31 +195,39 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           </div> :
           <div className="edit__div">
               <button className="routine_edit__button cursor_pointer" name='edit' value='edit'>
-                  Edit Exercise
+                  Edit Routine
               </button>
           </div>
 
       const containerClassname = classnames('routine__form', {
-        cursor_pointer: !isFetching
+        // cursor_pointer: !isFetching
       })
 
       content = 
-        <form id='routineFormId' className={containerClassname} onClick={() => {routineClickHandler(routine.id)}} onSubmit={routineFormSubmitHandler}>
+        <form id={routineFormId} className={containerClassname} onSubmit={routineFormSubmitHandler}>
           <div className='routine_name__div'>
             <label className='offscreen' htmlFor="routine_name__input">Name:</label>
-            <input type="text" id='routine_name__input' className='routine_name__input'
-              value={routineName}
-              onChange={(e) => setRoutineName(e.target.value)}
-            />
+            { edit ? 
+              <input type="text" id='routine_name__input' className='routine_name__input'
+                value={routineName}
+                onChange={(e) => setRoutineName(e.target.value)}
+              />
+              :
+              <h1 id='routine_name__input' className='routine__h1'>{routineName}</h1>
+              }
+            <div className="door_open_svg__div cursor_pointer" onClick={() => {routineClickHandler(routine.id)}}> <FaDoorOpen/></div>
           </div>
           
           <section className="routine_info__div">
             <div className='routine__div_info'>
               <label htmlFor='routine_order__input' className='info_label info_text_padding'>Order:</label>
-              <input id='routine_order__input' className='info_text_padding routine_order__input'>{routine.order}</input>
+              <input id='routine_order__input' className='info_text_padding routine_order__input'
+                value={routineOrder}
+                onChange={(e) => setRoutineOrder(e.target.value)}
+              />
             </div>
-            <div className='routine__div_info'>
-              <label htmlFor='routine_desc__ta' className='info_label info_text_padding'>Description:</label>
+            <div className='routine_desc__div'>
+              <label htmlFor='routine_desc__ta' className='routine_desc__label info_label info_text_padding'>Description:</label>
               {
                 edit ?
                   <textarea id='routine_desc__ta' className='routine_desc__ta' rows={4}
@@ -241,9 +252,10 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                 <span className='routine_footer__span'>Created on: {formatDisplayDate(routine.createdAt)}</span>
               </div>
             </div>
+
+            { routineOptionButtons }
+            <p id='routine_msg__p'>{routineMessage}</p>
           </section>
-          { routineOptionButtons }
-          <p id='routine_msg__p'>{routineMessage}</p>
         </form> 
     } else {
       content = <p>Not found</p>

@@ -49,6 +49,7 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
 
     const exSetFormSubmitHandler = async(e) => {
         e.preventDefault();
+        exSetMessage('')
         const action = e.nativeEvent.submitter.value;
         const form = e.currentTarget
         switch (action) {

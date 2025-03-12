@@ -46,7 +46,7 @@ const Routines = () => {
       // Sort in ascending 'order', if same then descending updatedAt order
       sortedRoutines.sort((a, b) => 
         {
-          const ord = a - b
+          const ord = a.order - b.order
           if (ord === 0) {
             return b.updatedAt.localeCompare(a.updatedAt)
           }
