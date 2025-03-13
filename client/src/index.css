@@ -31,6 +31,7 @@ img {
 
   /* COLOUR */
   --ROUTINE-TITLE-BG-COLOR: #2E2836;
+  --ROUTINE-UNDERLINE-COLOR: #2E2836;
   --BG-COLOR: #efefef;
   --ROUTINE-BG-COLOR: #ffffff;
   --SESSION-BG-COLOR: #ffffff;
@@ -323,7 +324,57 @@ body {
 .routines__div.disabled {
   opacity: 0.5;
 }
+
+.routines_add__button {
+  background-color: var(--ADD-BUTTON-COLOR);
+  padding: var(--ADD-BTN-PADDING);
+  color:var(--BG-COLOR);
+  border-radius: var(--ADD-BTN-BORDER-RAD);
+}
 /* /ROUTINES */
+
+/* ROUTINE ADD FORM */
+.add_routine__form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  padding: var(--ADD-SET-MODAL-PADDING);
+  gap: var(--ADD-FORM-GAP)
+}
+
+.add_routine__h1 {
+  font-size: 1.5rem;
+}
+
+.add_routine_input__div {
+  display: flex;
+  flex-flow: column nowrap;
+  width: 100%;
+  height: 100%;
+  gap: var(--ADD-FORM-GAP);
+  font-weight: bold;
+}
+
+.add_routine__label {
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid var(--ROUTINE-UNDERLINE-COLOR);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+
+.add_routine_desc__ta {
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.add_routine_order__input,
+.add_routine_name__input {
+  width: 100%;
+  text-align: center;
+}
+/* /ROUTINE ADD FORM */
 
 /* ROUTINE */
 .routine__section {
@@ -341,6 +392,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: var(--ADD-FORM-GAP)
 }
 
 .routine_name__input {
@@ -702,17 +754,11 @@ body {
 
 .add_exercise_input__div {
   display: flex;
-  justify-content: flex-start;
-  font-size: 1rem;
-  font-weight: bold;
-}
-
-.add_exercise_input__div {
-  display: flex;
   flex-flow: column nowrap;
   width: 100%;
   height: 100%;
   gap: var(--ADD-FORM-GAP);
+  font-weight: bold;
 }
 
 .add_exercise__label {

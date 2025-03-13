@@ -2,8 +2,9 @@ import React from 'react'
 import { useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import SetAddForm from '../../exercises/sets/SetAddForm'
+import RoutineAddForm from '../../routines/RoutineAddForm'
 import ExerciseAddForm from '../../exercises/ExerciseAddForm'
+import SetAddForm from '../../exercises/sets/SetAddForm'
 import { addFormClosed } from './addFormModalsSlice'
 import { FaXmark } from 'react-icons/fa6'
 
@@ -32,6 +33,9 @@ const AddFormModals = () => {
     if (addFormType !== '') {
         let formContent = ''
         switch (addFormType) {
+            case 'routineAddForm':
+                formContent = <RoutineAddForm></RoutineAddForm>
+                break;
             case 'setAddForm':
                 formContent = <SetAddForm></SetAddForm>
                 break;

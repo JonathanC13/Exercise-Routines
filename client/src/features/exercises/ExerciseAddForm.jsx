@@ -25,13 +25,13 @@ const ExerciseAddForm = () => {
     }
 
     useEffect(() => {
-            const cleanup = () => {
-                resetControlledInputs()
-            }
-            return () => {
-                cleanup()
-            };
-        }, []);
+        const cleanup = () => {
+            resetControlledInputs()
+        }
+        return () => {
+            cleanup()
+        };
+    }, []);
 
     const addExerciseRequestHandler = async(payload) => {
         try {
@@ -120,7 +120,7 @@ const ExerciseAddForm = () => {
                         />
                     </div>
 
-                    <button type='submit' className='add_set__button cursor_pointer' name='add_exercise__button'>Add Exercise</button>
+                    <button type='submit' className='add_set__button cursor_pointer' name='add_exercise__button' disabled={isLoading}>Add Exercise</button>
 
                     <p className="add_set_msg__p" id='add_exercise_msg__p'></p>
                 </form>

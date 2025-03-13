@@ -4,15 +4,17 @@ const initialState = {
     addFormOpen: false,
     addFormType: '',
     location: {center:-9000, bottom:0},
+    routineAddFormData: {
+    },
+    exerciseAddFormData: {
+        routineId: null,
+        session: null
+    },
     setAddFormData: {
         routineId: null,
         sessionId: null,
         exercise: null
     },
-    exerciseAddFormData: {
-        routineId: null,
-        session: null
-    }
 }
 
 export const addFormModalsSlice = createSlice({
@@ -23,14 +25,11 @@ export const addFormModalsSlice = createSlice({
             state.addFormOpen = false
             state.addFormType = ''
         },
-        exSetAddFormOpenChanged: (state, action) => {
-            const { addFormOpen, addFormType, location, routineId, sessionId, exercise } = action.payload
-            state.addFormOpen = addFormOpen // allowed mutating logic due to immer inside createSlice
+        routineAddFormOpenChanged: (state, action) => {
+            const { addFormOpen, addFormType, location } = action.payload
+            state.addFormOpen = addFormOpen
             state.addFormType = addFormType
             state.location = location
-            state.setAddFormData.routineId = routineId
-            state.setAddFormData.sessionId = sessionId
-            state.setAddFormData.exercise = exercise
         },
         exerciseAddFormOpenChanged: (state, action) => {
             const { addFormOpen, addFormType, location, routineId, session } = action.payload
@@ -40,10 +39,18 @@ export const addFormModalsSlice = createSlice({
             state.exerciseAddFormData.routineId = routineId
             state.exerciseAddFormData.session = session
         },
-        // to do thunk? to dispatch submit
+        exSetAddFormOpenChanged: (state, action) => {
+            const { addFormOpen, addFormType, location, routineId, sessionId, exercise } = action.payload
+            state.addFormOpen = addFormOpen // allowed mutating logic due to immer inside createSlice
+            state.addFormType = addFormType
+            state.location = location
+            state.setAddFormData.routineId = routineId
+            state.setAddFormData.sessionId = sessionId
+            state.setAddFormData.exercise = exercise
+        },
     }
 })
 
-export const { addFormClosed, exSetAddFormOpenChanged, exerciseAddFormOpenChanged } = addFormModalsSlice.actions
+export const { addFormClosed, routineAddFormOpenChanged, exerciseAddFormOpenChanged, exSetAddFormOpenChanged } = addFormModalsSlice.actions
 
 export default addFormModalsSlice.reducer

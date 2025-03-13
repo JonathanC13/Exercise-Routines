@@ -2,9 +2,10 @@ import React from 'react'
 import { useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { useGetRoutinesQuery } from './routinesApiSlice'
-import AddRoutine from './AddRoutine'
 import Routine from './Routine'
 import classnames from 'classnames'
+import { useDispatch } from 'react-redux'
+import { routineAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 
 const createRoutineComps = (sortedRoutines, isFetching) => {
   const comps = sortedRoutines.map((routine) => {
@@ -20,6 +21,13 @@ const createRoutineComps = (sortedRoutines, isFetching) => {
 } 
 
 const Routines = () => {
+
+    const dispatch = useDispatch()
+
+    const addRoutineHandler = () => {
+      // open set state to open routine add form modal
+      dispatch(routineAddFormOpenChanged({ addFormOpen: true, addFormType: 'routineAddForm' }))
+    }
 
     //Calling the `useGetRoutinesQuery()` hook automatically fetches data!
     const {
@@ -82,8 +90,8 @@ const Routines = () => {
         <h1 className='routines__h1'>Routines</h1>
         <div className="routines_title_underline"></div>
       </div>
+      <button className='cursor_pointer routines_add__button' onClick={addRoutineHandler}>Add Routine</button>
       { content }
-      {/* todo, add Routines button */}
     </section>
   )
 }

@@ -69,6 +69,15 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
                 }
             }
         }),
+        addRoutine: builder.mutation({
+            query: (args) => ({
+                url: `/routines/`,
+                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                method: 'POST',
+                body: args.body
+            }),
+            invalidatesTags: (result, error, arg) => [{ type: 'Routine', id: 'LIST'}]
+        }),
         updateRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/${args.routineId}`,
@@ -91,6 +100,7 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetRoutinesQuery,
+    useAddRoutineMutation,
     useUpdateRoutineMutation,
     useDeleteRoutineMutation
 } = routinesApiSlice
