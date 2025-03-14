@@ -16,12 +16,14 @@ const ExerciseAddForm = () => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [muscleType, setMuscleType] = useState('')
+    const [msg, setMsg] = useState('')
 
     const resetControlledInputs = () => {
         setOrder('')
         setName('')
         setDescription('')
         setMuscleType('')
+        setMsg('')
     }
 
     useEffect(() => {
@@ -38,10 +40,10 @@ const ExerciseAddForm = () => {
             if (!routineId || !session) {
                 throw new Error('Err: invalid route params.')
             }
-            const response = await addExercise({ routineId, sessionId: session.id, body: payload }).unwrap()
-            return { success: true, response }
+            const response = await addExercise({ routineId, sessionId: session.id, body: payload })
+            return response
         } catch (error) {
-            return { success: false, error }
+            return error
         }
     }
 
@@ -61,14 +63,14 @@ const ExerciseAddForm = () => {
         const response = await addExerciseRequestHandler(payload)
         form.classList.remove('disabled')
 
-        if (response?.success) {
-            closeAddFormHandler()
+        if (response?.error) {
+            const message = response?.error?.data?.message ?? 'Error'
+            setMsg(message)
             return
         }
-        
-        const message = response?.error?.data?.message ?? 'Error'
-        // console.error('Failed to add the exercise: ', err)
-        document.getElementById('add_exercise_msg__p').innerText = `${message}`
+
+        closeAddFormHandler()
+        return
         
         
     }
@@ -122,7 +124,7 @@ const ExerciseAddForm = () => {
 
                     <button type='submit' className='add_set__button cursor_pointer' name='add_exercise__button' disabled={isLoading}>Add Exercise</button>
 
-                    <p className="add_set_msg__p" id='add_exercise_msg__p'></p>
+                    <p className="add_set_msg__p" id='add_exercise_msg__p'>{msg}</p>
                 </form>
       }
   

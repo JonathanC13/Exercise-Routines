@@ -34,21 +34,30 @@ const Exercise = ( { exercise = null } ) => {
         setReadMore(!descOverLimit)
     }, [])
 
+    const resetInfo = () => {
+        if (exercise) {
+            setExerciseName(exercise.name)
+            setExerciseMuscleType(exercise.muscleType)
+            setExerciseOrder(exercise.order)
+            setExerciseDesc(exercise.description)
+        }
+    }
+
     const exerciseFormId = `exercise_form_${exercise.id}`
 
     useEffect(() => {
         if (exercise) {
             const form = document.getElementById(exerciseFormId)
-            const exerciseNameInput = form.querySelector('#exercise_name__input');
+            // const exerciseNameInput = form.querySelector('#exercise_name__input');
             const exerciseMuscleTypeInput = form.querySelector('#exercise_muscType__input');
             const exerciseOrderInput = form.querySelector('#exercise_order__input');
 
             if (edit) {
-                exerciseNameInput.removeAttribute('disabled')
+                // exerciseNameInput.removeAttribute('disabled')
                 exerciseMuscleTypeInput.removeAttribute('disabled')
                 exerciseOrderInput.removeAttribute('disabled')
             } else {
-                exerciseNameInput.setAttribute('disabled', '')
+                // exerciseNameInput.setAttribute('disabled', '')
                 exerciseMuscleTypeInput.setAttribute('disabled', '')
                 exerciseOrderInput.setAttribute('disabled', '')
             }
@@ -65,20 +74,20 @@ const Exercise = ( { exercise = null } ) => {
         }
 
         try {
-            const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body }).unwrap()
-            return {'success': true, response}
+            const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body })
+            return response
         } catch (error) {
-            return {'success': false, error}
+            return error
         }
         return null
     }
 
     const deleteExerciseRequestHandler = async(exercise) => {
         try {
-            const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
-            return {'success': true, response}
+            const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id })
+            return response
         } catch (error) {
-            return {'success': false, error}
+            return error
         }
         return null
     }
@@ -95,12 +104,7 @@ const Exercise = ( { exercise = null } ) => {
                 break
             case 'cancel':
                 form.reset()
-                if (exercise) {
-                    setExerciseName(exercise.name)
-                    setExerciseMuscleType(exercise.muscleType)
-                    setExerciseOrder(exercise.order)
-                    setExerciseDesc(exercise.description)
-                }
+                resetInfo()
                 setEdit(false)
                 break
             case 'save':
@@ -117,9 +121,12 @@ const Exercise = ( { exercise = null } ) => {
                     // console.log(payload)
                     const response = await updateExerciseRequestHandler(payload)
                     // console.log(response)
-                    if (!response?.success) {
-                        throw new Error(response)
+                    if (response?.error) {
+                        resetInfo()
+                        setExerciseMessage(response.error?.data?.message ?? 'Error')
+                        return
                     }
+                    setExerciseMessage('Success!')
                 } catch (error) {
                     setExerciseMessage(error?.data?.message ?? 'Error')
                 } finally {
@@ -133,10 +140,13 @@ const Exercise = ( { exercise = null } ) => {
 
                 try {
                     const response = await deleteExerciseRequestHandler(exercise)
-                    if (!response?.success) {
-                        throw new Error(response)
+                    
+                    if (response?.error) {
+                        setExerciseMessage(response.error?.data?.message ?? 'Error')
+                        return
                     }
-                } catch (err) {
+                    setExerciseMessage('Success!')
+                } catch (error) {
                     setExerciseMessage(error?.data?.message ?? 'Error')
                 } finally {
                     form.classList.remove('disabled')
@@ -177,11 +187,18 @@ const Exercise = ( { exercise = null } ) => {
             <div className="exercise_info__div">
                 <form id={exerciseFormId} onSubmit={(e) => exerciseFormSubmitHandler(e)} className='exercise_info__form'>
                     <div className='ex_form_info__div'>
-                        <label htmlFor='exercise_name__input' className='info_label info_text_padding offscreen'>Name:</label>
-                        <input id='exercise_name__input' className='exercise_name__h1 exercise_form__inputs'
-                            value={ exerciseName }
-                            onChange={(e) => {return setExerciseName(e.target.value)}}
-                        ></input>
+                        { edit ? 
+                            <>
+                                <label htmlFor='exercise_name__ta' className='info_label info_text_padding offscreen'>Name:</label>
+                                <textarea id='exercise_name__ta' className='exercise_name__ta'
+                                    value={ exerciseName }
+                                    onChange={(e) => {return setExerciseName(e.target.value)}}
+                                ></textarea>
+                            </>
+                            :
+                            <h1 className='exercise_name__h1'>{ exerciseName }</h1>
+                        }
+                        
                     </div>
 
                     <div className='ex_form_info__div'>

@@ -17,12 +17,14 @@ const SetAddForm = () => {
     const [exSetWeight, setExSetWeight] = useState('')
     const [exSetReps, setExSetReps] = useState('')
     const [exSetRest, setExSetRest] = useState('')
+    const [msg, setMsg] = useState('')
     
     const resetControlledInputs = () => {
         setExSetOrder('')
         setExSetWeight('')
         setExSetReps('')
         setExSetRest('')
+        setMsg('')
     }
 
     useEffect(() => {
@@ -39,10 +41,10 @@ const SetAddForm = () => {
             if (!routineId || !sessionId || !exercise || !exercise.id) {
                 throw new Error('Err: invalid route params.')
             }
-            const response = await updateExercise({ routineId, sessionId, exerciseId: exercise.id, body: payload }).unwrap()
-            return { success: true, response }
+            const response = await updateExercise({ routineId, sessionId, exerciseId: exercise.id, body: payload })
+            return response
         } catch (error) {
-            return { success: false, error }
+            return error
         }
         return ''
     }
@@ -76,14 +78,14 @@ const SetAddForm = () => {
                 const response = await updateExerciseRequestHandler(payload)
                 form.classList.remove('disabled')
                 
-                if (response?.success) {
-                    closeAddFormHandler()
+                if (response?.error) {
+                    const message = response?.error?.data?.message ?? 'Error'
+                    setMsg(message)
                     return
-                } 
-
-                const message = response?.error?.data?.message ?? 'Error'
-                
-                document.getElementById('add_set_msg__p').innerText = `Failed to save the exercise (set): ${message}`
+                }
+        
+                closeAddFormHandler()
+                return
                 
              
                 break;
@@ -145,7 +147,7 @@ const SetAddForm = () => {
 
                 <button type='submit' className='add_set__button cursor_pointer' name='add_set__button' disabled={isLoading}>Add Set</button>
 
-                <p className="add_set_msg__p" id='add_set_msg__p'></p>
+                <p className="add_set_msg__p" id='add_set_msg__p'>{msg}</p>
             </form>
     }
 

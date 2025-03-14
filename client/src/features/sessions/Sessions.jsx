@@ -3,6 +3,8 @@ import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
 import { useGetSessionsQuery } from './sessionsApiSlice'
 import { useParams } from 'react-router'
 import Session from './Session'
+import { useDispatch } from 'react-redux'
+import { sessionAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 
 const createSessionComps = (routineId, sessionIds) => {
     const comps = sessionIds.map((sessionId) => {
@@ -19,6 +21,7 @@ const createSessionComps = (routineId, sessionIds) => {
 const Sessions = () => {
 
     const { routineId } = useParams()
+    const dispatch = useDispatch()
 
     const { routine } = useGetRoutinesQuery('routinesList',
         {
@@ -41,6 +44,10 @@ const Sessions = () => {
         }
     )
 
+    const addSessionHandler = () => {
+        dispatch(sessionAddFormOpenChanged({ addFormOpen: true, addFormType: 'sessionAddForm', routine: routine }))
+    }
+
     let content = ''
 
     if (isLoading) {
@@ -56,6 +63,7 @@ const Sessions = () => {
                 <h1 className='sessions_title__h1'>Sessions</h1>
                 <div className='sessions_title_underline'></div>
             </div>
+            <button className='cursor_pointer sessions_add__button' onClick={addSessionHandler}>Add Session</button>
             <div className='sessions__div'>
                 {createSessionComps(routineId, ids)}
             </div>

@@ -50,14 +50,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     useEffect(() => {
       if (routine) {
         const form = document.getElementById(routineFormId)
-        const routineNameInput = form.querySelector('#routine_name__input');
+        // const routineNameInput = form.querySelector('#routine_name__input');
         const routineOrderInput = form.querySelector('#routine_order__input');
 
         if (edit) {
-          routineNameInput.removeAttribute('disabled')
+          // routineNameInput.removeAttribute('disabled')
           routineOrderInput.removeAttribute('disabled')
         } else {
-          routineNameInput.setAttribute('disabled', '')
+          // routineNameInput.setAttribute('disabled', '')
           routineOrderInput.setAttribute('disabled', '')
         }
     }
@@ -82,6 +82,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     // const routine = useSelector(state => selectRoutineById(state, routineId))
 
     const descOverLimit = routine.description.length > descMaxLength
+
+    const resetInfo = () => {
+      if (routine) {
+        setRoutineName(routine.name)
+        setRoutineOrder(routine.order)
+        setRoutineDescription(routine.description)
+      }
+    }
     
     // initial state of readMore
     useEffect(() => {
@@ -96,19 +104,19 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
       }
 
       try {
-        const response = await updateRoutine({ routineId: routine.id, body }).unwrap()
-        return {'success': true, response}
+        const response = await updateRoutine({ routineId: routine.id, body })
+        return response
       } catch (error) {
-        return {'success': false, error}
+        return error
       }
     }
 
     const deleteRoutineRequestHandler = async(routine) => {
       try {
         const response = await deleteRoutine({routineId: routine.id})
-        return {'success': true, response}
+        return response
       } catch (error) {
-        return {'success': false, error}
+        return error
       }
     }
 
@@ -124,11 +132,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
               break
           case 'cancel':
               form.reset()
-              if (routine) {
-                  setRoutineName(routine.name)
-                  setRoutineOrder(routine.order)
-                  setRoutineDescription(routine.description)
-              }
+              resetInfo()
               setEdit(false)
               break
           case 'save':
@@ -144,9 +148,12 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                 // console.log(payload)
                 const response = await updateRoutineRequestHandler(payload)
                 // console.log(response)
-                if (!response?.success) {
-                    throw new Error(response)
+                if (response?.error) {
+                  resetInfo()
+                  setRoutineMessage(response.error?.data?.message ?? 'Error')
+                  return
                 }
+                setRoutineMessage('Success!')
             } catch (error) {
                 setRoutineMessage(error?.data?.message ?? 'Error')
             } finally {
@@ -160,9 +167,12 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
             try {
                 const response = await deleteRoutineRequestHandler(routine)
-                if (!response?.success) {
-                    throw new Error(response)
+                if (response?.error) {
+                  setRoutineMessage(response.error?.data?.message ?? 'Error')
+
+                  return
                 }
+                setRoutineMessage('Success!')
             } catch (error) {
               setRoutineMessage(error?.data?.message ?? 'Error')
             } finally {
@@ -206,14 +216,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
       content = 
         <form id={routineFormId} className={containerClassname} onSubmit={routineFormSubmitHandler}>
           <div className='routine_name__div'>
-            <label className='offscreen' htmlFor="routine_name__input">Name:</label>
+            <label className='offscreen' htmlFor="routine_name__ta">Name:</label>
             { edit ? 
-              <input type="text" id='routine_name__input' className='routine_name__input'
+              <textarea type="text" id='routine_name__ta' className='routine_name__ta'
                 value={routineName}
                 onChange={(e) => setRoutineName(e.target.value)}
               />
               :
-              <h1 id='routine_name__input' className='routine__h1'>{routineName}</h1>
+              <h1 id='routine_name__h1' className='routine__h1'>{routineName}</h1>
               }
             <div className="door_open_svg__div cursor_pointer" onClick={() => {routineClickHandler(routine.id)}}> <FaDoorOpen/></div>
           </div>

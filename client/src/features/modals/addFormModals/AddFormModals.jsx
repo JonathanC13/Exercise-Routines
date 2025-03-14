@@ -3,6 +3,7 @@ import { useRef, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import RoutineAddForm from '../../routines/RoutineAddForm'
+import SessionAddForm from '../../sessions/SessionAddForm'
 import ExerciseAddForm from '../../exercises/ExerciseAddForm'
 import SetAddForm from '../../exercises/sets/SetAddForm'
 import { addFormClosed } from './addFormModalsSlice'
@@ -36,16 +37,20 @@ const AddFormModals = () => {
             case 'routineAddForm':
                 formContent = <RoutineAddForm></RoutineAddForm>
                 break;
-            case 'setAddForm':
-                formContent = <SetAddForm></SetAddForm>
+            case 'sessionAddForm':
+                formContent = <SessionAddForm></SessionAddForm>
                 break;
             case 'exerciseAddForm':
                 formContent = <ExerciseAddForm></ExerciseAddForm>
                 break;
+            case 'setAddForm':
+                formContent = <SetAddForm></SetAddForm>
+                break;
             default:
+                // formContent = <p>No matching add form.</p>
                 break;
         }
-
+        
         content = 
             <div className="modal_bg__div" ref={modalBgDiv}>
                 <section className="add_form_modal__section">

@@ -19,6 +19,7 @@ const RoutineAddForm = () => {
         setOrder('')
         setName('')
         setDescription('')
+        setMsg('')
     }
 
     const closeAddFormHandler = (e) => {
@@ -37,10 +38,10 @@ const RoutineAddForm = () => {
 
     const addRoutineRequestHandler = async(body) => {
         try {
-            const response = await addRoutine({ body }).unwrap()
-            return { success: true, response }
+            const response = await addRoutine({ body })
+            return response
         } catch (error) {
-            return { success: false, error}
+            return error
         }
     }
 
@@ -63,14 +64,17 @@ const RoutineAddForm = () => {
         
         const response = await addRoutineRequestHandler(payload)
         form.classList.remove('disabled')
-
-        if (response?.success) {
-            closeAddFormHandler()
+        console.log(response)
+        if (response?.error) {
+            const message = response?.error?.data?.message ?? 'Error'
+            setMsg(message)
             return
         }
+
+        closeAddFormHandler()
+        return
         
-        const message = response?.error?.data?.message ?? 'Error'
-        setMsg(message)
+        
     }
 
     let content = 

@@ -6,6 +6,9 @@ const initialState = {
     location: {center:-9000, bottom:0},
     routineAddFormData: {
     },
+    sessionAddFormData: {
+        routine: null
+    },
     exerciseAddFormData: {
         routineId: null,
         session: null
@@ -31,6 +34,13 @@ export const addFormModalsSlice = createSlice({
             state.addFormType = addFormType
             state.location = location
         },
+        sessionAddFormOpenChanged: (state, action) => {
+            const { addFormOpen, addFormType, routine, location } = action.payload
+            state.addFormOpen = addFormOpen
+            state.addFormType = addFormType
+            state.sessionAddFormData.routine = routine
+            state.location = location
+        },
         exerciseAddFormOpenChanged: (state, action) => {
             const { addFormOpen, addFormType, location, routineId, session } = action.payload
             state.addFormOpen = addFormOpen
@@ -51,6 +61,6 @@ export const addFormModalsSlice = createSlice({
     }
 })
 
-export const { addFormClosed, routineAddFormOpenChanged, exerciseAddFormOpenChanged, exSetAddFormOpenChanged } = addFormModalsSlice.actions
+export const { addFormClosed, routineAddFormOpenChanged, sessionAddFormOpenChanged, exerciseAddFormOpenChanged, exSetAddFormOpenChanged } = addFormModalsSlice.actions
 
 export default addFormModalsSlice.reducer

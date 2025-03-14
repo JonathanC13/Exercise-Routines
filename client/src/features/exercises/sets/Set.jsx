@@ -23,6 +23,15 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
     //     setExSetRest(set.restTimeSeconds)
     // }, [])
 
+    const resetInfo = () => {
+        if (set) {
+            setExSetOrder(set.order)
+            setExSetWeight(set.weight)
+            setExSetReps(set.repsOrDuration)
+            setExSetRest(set.restTimeSeconds)
+        }
+    }
+
     const exSetFormId = `set_form_${setId}`
 
     useEffect(() => {
@@ -58,12 +67,7 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                 break
             case 'cancel':
                 form.reset()
-                if (set) {
-                    setExSetOrder(set.order)
-                    setExSetWeight(set.weight)
-                    setExSetReps(set.repsOrDuration)
-                    setExSetRest(set.restTimeSeconds)
-                }
+                resetInfo()
                 setEdit(false)
                 break
             case 'save':
@@ -102,9 +106,12 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                     // console.log(payload)
                     const response = await updateExerciseRequestHandler(payload)
                     // console.log(response)
-                    if (!response?.success) {
-                        throw new Error(response)
+                    if (response?.error) {
+                        resetInfo()
+                        exSetMessage(response.error?.data?.message ?? 'Error')
+                        return
                     }
+                    exSetMessage('Success!')
                 } catch (error) {
                     exSetMessage(error?.data?.message ?? 'Error')
                 } finally {
@@ -123,9 +130,11 @@ const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {}
                 try {
                     const response = await updateExerciseRequestHandler(payload)
 
-                    if (!response?.success) {
-                        throw new Error(response)
+                    if (response?.error) {
+                        exSetMessage(response.error?.data?.message ?? 'Error')
+                        return
                     }
+                    exSetMessage('Success!')
                 } catch (error) {
                     exSetMessage(error?.data?.message ?? 'Error')
                 } finally {
