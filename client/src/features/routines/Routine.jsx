@@ -128,60 +128,60 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
       const form = e.currentTarget
       switch (action) {
         case 'edit':
-            setEdit(true)
-              break
-          case 'cancel':
-              form.reset()
-              resetInfo()
-              setEdit(false)
-              break
-          case 'save':
-            setEdit(false)
-            form.classList.add('disabled')
-            
-            try {
-                const payload = { 
-                    'name': routineName ?? '',
-                    'order': routineOrder ?? 0,
-                    'description': routineDescription ?? ''
-                }
-                // console.log(payload)
-                const response = await updateRoutineRequestHandler(payload)
-                // console.log(response)
-                if (response?.error) {
-                  resetInfo()
-                  setRoutineMessage(response.error?.data?.message ?? 'Error')
-                  return
-                }
-                setRoutineMessage('Success!')
-            } catch (error) {
-                setRoutineMessage(error?.data?.message ?? 'Error')
-            } finally {
-                form.classList.remove('disabled')
-            }
-            
-            break
-          case 'delete':
-            setEdit(false)
-            form.classList.add('disabled')
-
-            try {
-                const response = await deleteRoutineRequestHandler(routine)
-                if (response?.error) {
-                  setRoutineMessage(response.error?.data?.message ?? 'Error')
-
-                  return
-                }
-                setRoutineMessage('Success!')
-            } catch (error) {
+          setEdit(true)
+          break
+        case 'cancel':
+          form.reset()
+          resetInfo()
+          setEdit(false)
+          break
+        case 'save':
+          setEdit(false)
+          form.classList.add('disabled')
+          
+          try {
+              const payload = { 
+                  'name': routineName ?? '',
+                  'order': routineOrder ?? 0,
+                  'description': routineDescription ?? ''
+              }
+              // console.log(payload)
+              const response = await updateRoutineRequestHandler(payload)
+              // console.log(response)
+              if (response?.error) {
+                resetInfo()
+                setRoutineMessage(response.error?.data?.message ?? 'Error')
+                return
+              }
+              setRoutineMessage('Success!')
+          } catch (error) {
               setRoutineMessage(error?.data?.message ?? 'Error')
-            } finally {
-                form.classList.remove('disabled')
-            }
-        
-            break
-          default:
-            break
+          } finally {
+              form.classList.remove('disabled')
+          }
+          
+          break
+        case 'delete':
+          setEdit(false)
+          form.classList.add('disabled')
+
+          try {
+              const response = await deleteRoutineRequestHandler(routine)
+              if (response?.error) {
+                setRoutineMessage(response.error?.data?.message ?? 'Error')
+
+                return
+              }
+              setRoutineMessage('Success!')
+          } catch (error) {
+            setRoutineMessage(error?.data?.message ?? 'Error')
+          } finally {
+              form.classList.remove('disabled')
+          }
+      
+          break
+        default:
+          break
       }
     }
     
