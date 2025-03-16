@@ -1,18 +1,35 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
 import { useAddRoutineMutation } from './routinesApiSlice'
 import { addFormClosed } from '../modals/addFormModals/addFormModalsSlice'
+import { FaCircleInfo } from 'react-icons/fa6'
+
+const checkValidName = (name) => {
+    return name.length > 0 && name.length <= 50
+}
+
+const checkValidDescription = (description) => {
+    return description.length >= 0 && description.length <= 500
+}
 
 const RoutineAddForm = () => {
+
     const dispatch = useDispatch()
+
+    const nameRef = useRef()
+    const msgRef = useRef()
 
     const [addRoutine, { isLoading }] = useAddRoutineMutation()
 
     // controlled inputs
     const [order, setOrder] = useState('')
     const [name, setName] = useState('')
+    const [validName, setValidName] = useState(false)
+    const [nameFocus, setNameFocus] = useState(false)
     const [description, setDescription] = useState('')
+    const [validDescription, setValidDescription] = useState(true)
+    const [descriptionFocus, setDescriptionFocus] = useState(false)
     const [msg, setMsg] = useState('')
 
     const resetControlledInputs = () => {
@@ -22,12 +39,11 @@ const RoutineAddForm = () => {
         setMsg('')
     }
 
-    const closeAddFormHandler = (e) => {
-        resetControlledInputs()
-        dispatch(addFormClosed())
-    }
-
     useEffect(() => {
+        if (nameRef) {
+            nameRef.current.focus()
+        }
+
         const cleanup = () => {
             resetControlledInputs()
         }
@@ -36,50 +52,88 @@ const RoutineAddForm = () => {
         };
     }, []);
 
-    const addRoutineRequestHandler = async(body) => {
-        try {
-            const response = await addRoutine({ body })
-            return response
-        } catch (error) {
-            return error
+    useEffect(() => {
+        if (checkValidName(name)) {
+            setValidName(true)
+        } else {
+            setValidName(false)
         }
-    }
+    }, [name])
+
+    useEffect(() => {
+        if (checkValidDescription(description)) {
+            setValidDescription(true)
+        } else {
+            setValidDescription(false)
+        }
+    }, [description])
 
     const addRoutineHandler = async(e) => {
         e.preventDefault()
 
-        if (name.length === 0) {
-            setMsg('Please provide a name!')
+        const isValidName = checkValidName(name)
+        const isValidDescription = checkValidDescription(description)
+        if (!isValidName || !isValidDescription) {
+            setMsg('Please provide valid inputs!')
+            msgRef.current.focus()
             return
         }
         
         const form = e.currentTarget
         form.classList.add('disabled')
         
-        const payload = {
-            'order': order ?? 0,
+        const body = {
+            'order': order === '' ? 0 : order ?? 0,
             'name': name ?? '',
             'description': description ?? '',
         }
         
-        const response = await addRoutineRequestHandler(payload)
-        form.classList.remove('disabled')
-        console.log(response)
-        if (response?.error) {
-            const message = response?.error?.data?.message ?? 'Error'
-            setMsg(message)
-            return
+        try {
+            const response = await addRoutine({ body }).unwrap()
+                .then((payload) => {closeAddFormHandler()})
+                .catch((error) => {
+                    msgRef.current.focus()
+                    if (!error?.data) {
+                        setMsg('No Server Response!');
+                    } else if (error?.data) {
+                        const message = error?.data?.message ?? 'Error!'
+                        setMsg(message)
+                    } else {
+                        setMsg('Add routine failed!')
+                    }
+                })
+        } catch (error) {
+            setMsg('Add routine failed!')
+            msgRef.current.focus()
+        } finally {
+            form.classList.remove('disabled')
         }
+    }
 
-        closeAddFormHandler()
-        return
-        
-        
+    const closeAddFormHandler = (e) => {
+        resetControlledInputs()
+        dispatch(addFormClosed())
     }
 
     let content = 
         <form onSubmit={(e) => {addRoutineHandler(e)}} className="add_routine__form">
             <h1 className="add_routine__h1">Add Routine</h1>
+            <div className="add_routine_input__div">
+                <label htmlFor="add_routine_name__input" className="add_routine__label">Name</label>
+                <input required type="text" className="add_routine_name__input" id="add_routine_name__input"
+                    ref={nameRef}
+                    onFocus={() => setNameFocus(true)}
+                    onBlur={() => setNameFocus(false)}
+                    aria-invalid={validName ? "false" : "true"}
+                    aria-describedby="nameNote"
+                    value={name}
+                    onChange={(e) => {setName(e.target.value)}}
+                />
+                <p id="nameNote" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
+                    <FaCircleInfo /><br/>
+                    Please enter a name that is 1 to 50 characters.
+                </p>
+            </div>
             <div className="add_routine_input__div">
                 <label htmlFor="add_routine_order__input" className="add_routine__label">Order</label>
                 <input type="number" className="add_routine_order__input" id="add_routine_order__input" 
@@ -88,27 +142,26 @@ const RoutineAddForm = () => {
                 />
             </div>
             <div className="add_routine_input__div">
-                <label htmlFor="add_routine_name__input" className="add_routine__label">Name</label>
-                <input required type="text" className="add_routine_name__input" id="add_routine_name__input"
-                    value={name}
-                    onChange={(e) => {setName(e.target.value)}}
-                />
-            </div>
-            <div className="add_routine_input__div">
                 <label htmlFor="add_routine_desc__ta" className="add_routine__label">Description</label>
                 <textarea className="add_routine_desc__ta" id="add_routine_desc__ta" name="add_routine_desc__ta" rows='2'
+                    onFocus={() => setDescriptionFocus(true)}
+                    onBlur={() => setDescriptionFocus(false)}
+                    aria-invalid={validDescription ? "false" : "true"}
+                    aria-describedby="descNote"
                     value={description}
                     onChange={(e) => {setDescription(e.target.value)}}
                 ></textarea>
+                <p id="descNote" className={descriptionFocus && description && !validDescription? "instructions" : "offscreen"}>
+                    <FaCircleInfo /><br/>
+                    Please enter a description that is 0 to 500 characters.
+                </p>
             </div>
             <div className="add_routine_input__div">
                 <button className="add_routine__button cursor_pointer" type="submit" disabled={isLoading}>
                     Add Routine
                 </button>
             </div>
-            <div className="add_routine__div">
-                <p className="add_routine__p">{msg}</p>
-            </div>
+            <p className="add_routine__p" ref={msgRef}>{msg}</p>
         </form>
 
 

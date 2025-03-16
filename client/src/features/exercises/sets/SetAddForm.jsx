@@ -1,11 +1,14 @@
 import React from 'react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 // import { createPortal } from 'react-dom';
 import { useSelector, useDispatch } from 'react-redux'
 import { addFormClosed } from '../../modals/addFormModals/addFormModalsSlice'
 import { useUpdateExerciseMutation } from '../exerciseApiSlice'
 
 const SetAddForm = () => {
+
+    const orderRef = useRef()
+    const msgRef = useRef()
 
     const { routineId, sessionId, exercise } = useSelector(state => state.addFormModals.setAddFormData)
     const sets = exercise ? exercise.sets ?? [] : []
@@ -28,6 +31,10 @@ const SetAddForm = () => {
     }
 
     useEffect(() => {
+        if (orderRef) {
+            orderRef.current.focus()
+        }
+
         const cleanup = () => {
             resetControlledInputs()
         }
@@ -36,21 +43,9 @@ const SetAddForm = () => {
         };
     }, []);
 
-    const updateExerciseRequestHandler = async(payload) => {
-        try {
-            if (!routineId || !sessionId || !exercise || !exercise.id) {
-                throw new Error('Err: invalid route params.')
-            }
-            const response = await updateExercise({ routineId, sessionId, exerciseId: exercise.id, body: payload })
-            return response
-        } catch (error) {
-            return error
-        }
-        return ''
-    }
-
     const addSetFormHandler = async(e) => {
         e.preventDefault()
+
         const action = e.nativeEvent.submitter.name;
         const form = e.currentTarget
 
@@ -62,31 +57,37 @@ const SetAddForm = () => {
                 form.classList.add('disabled')
 
                 const addFormData = {
-                    'order': exSetOrder ?? 0,
+                    'order': exSetOrder === '' ? 0 : exSetOrder ?? 0,
                     'weight': exSetWeight ?? '',
                     'repsOrDuration': exSetReps ?? 0,
                     'restTimeSeconds': exSetRest ?? ''
                 }
         
-                const payload = {
+                const body = {
                     'sets': [...sets, addFormData]
                 }
-                // for (let i of payload.sets) {
-                //     console.log(i)
-                // }
                 
-                const response = await updateExerciseRequestHandler(payload)
-                form.classList.remove('disabled')
+                try {
                 
-                if (response?.error) {
-                    const message = response?.error?.data?.message ?? 'Error'
-                    setMsg(message)
-                    return
+                    const response = await updateExercise({ routineId, sessionId, exerciseId: exercise.id, body: body }).unwrap()
+                        .then((payload) => {closeAddFormHandler()})
+                        .catch((error) => {
+                            msgRef.current.focus()
+                            if (!error?.data) {
+                                setMsg('No Server Response!');
+                            } else if (error?.data) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setMsg(message)
+                            } else {
+                                setMsg('Add set failed!')
+                            }
+                        })
+                } catch (error) {
+                    setMsg('Add set failed!')
+                    msgRef.current.focus()
+                } finally {
+                    form.classList.remove('disabled')
                 }
-        
-                closeAddFormHandler()
-                return
-                
              
                 break;
             default:
@@ -116,6 +117,7 @@ const SetAddForm = () => {
                 <div className="add_set_input__div">
                     <label id='add_set_order__label' htmlFor="add_set_order__input" className="add_set_order__label">Order</label>
                     <input type="number" id='add_set_order__input' className='add_set_order__input' name='add_set_order__input'
+                        ref={orderRef}
                         value={exSetOrder}
                         onChange={(e) => {setExSetOrder(e.target.value)}}
                     />
@@ -147,7 +149,7 @@ const SetAddForm = () => {
 
                 <button type='submit' className='add_set__button cursor_pointer' name='add_set__button' disabled={isLoading}>Add Set</button>
 
-                <p className="add_set_msg__p" id='add_set_msg__p'>{msg}</p>
+                <p className="add_set_msg__p" id='add_set_msg__p' ref={msgRef}>{msg}</p>
             </form>
     }
 

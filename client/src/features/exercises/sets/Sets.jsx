@@ -44,7 +44,7 @@ const Sets = ( { exercise = {}, updateExerciseRequestHandler = () => {} } ) => {
                 <section className="set_items__section">
                     { createSetComps(sets, updateExerciseRequestHandler) }
                     <section className="sets_add__section">
-                        <button className="sets_add__button" onClick={(e) => openSetAddFormHandler(e)}>Add Set</button>
+                        <button className="sets_add__button cursor_pointer" onClick={(e) => openSetAddFormHandler(e)}>Add Set</button>
                     </section>
                 </section>
                 

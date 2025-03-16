@@ -155,6 +155,7 @@ body {
 
 .info_value {
   font-size: 1rem;
+  word-break: break-word;
 }
 
 .info_text_padding {
@@ -217,6 +218,16 @@ body {
 .disabled {
   opacity: 0.5;
 }
+
+.instructions {
+  font-size: 0.75rem;
+  border-radius: 0.5rem;
+  background: #000;
+  color: #fff;
+  padding: 0.25rem;
+  position: relative;
+  bottom: -0.25rem;
+}
 /* /GENERAL */
 
 /* MODAL */
@@ -240,7 +251,7 @@ body {
   display: flex;
   flex-flow: column nowrap;
   gap: var(--ADD-FORM-GAP);
-  max-width: 80vw;
+  width: 80vw;
 }
 
 .add_form_modal_x__div {

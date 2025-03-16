@@ -5,7 +5,7 @@ const errorHandler = (err, req, res, next) => {
         message: err.message || 'Something went wrong, try again later.',
         status: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR
     }
-
+    
     if (err.name === 'ValidationError') {
         customError.status = StatusCodes.BAD_REQUEST
         customError.message = `Validation failed for the following fields: ${Object.values(err.errors).map((itm) => itm.message).join(', ')}`
@@ -17,7 +17,7 @@ const errorHandler = (err, req, res, next) => {
     if (err.code && err.code === 11000) {
         // Remember that 'unique' in the schema does not fail a validation, it will return an error after commiting to the DB.
         customError.status = StatusCodes.BAD_REQUEST
-        customError.message = `Duplicate value entered in ${Object.keys(err.keyValue)} field! Please use a different one.`
+        customError.message = `Duplicate value ${Object.keys(err.keyValue)} already exists! Please use a different one.`
     }
     
     return res.status(customError.status).json({'message': customError.message})
