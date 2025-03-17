@@ -1,13 +1,24 @@
 import React from 'react'
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useRef } from 'react'
 import { useGetSessionsQuery, useUpdateSessionMutation, useDeleteSessionMutation } from './sessionsApiSlice'
 import { useParams } from 'react-router'
 import Exercises from '../exercises/Exercises'
-import { FaTrashCan, FaDoorOpen } from 'react-icons/fa6'
+import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
+
+const checkValidName = (name) => {
+    return name.length > 0 && name.length <= 50
+}
+
+const checkValidDescription = (description) => {
+    return description.length >= 0 && description.length <= 500
+}
 
 const Session = ( { sessionId = null }) => {
 
     const { routineId } = useParams()
+
+    const nameRef = useRef()
+    const msgRef = useRef()
 
     const [updateSession, { isLoading }] = useUpdateSessionMutation()
     const [deleteSession, { isLoadingDelete }] = useDeleteSessionMutation()
@@ -20,8 +31,12 @@ const Session = ( { sessionId = null }) => {
     })
 
     const [name, setName] = useState(session?.name ?? '')
+    const [validName, setValidName] = useState(session?.name ? checkValidName(session.name) : false)
+    const [nameFocus, setNameFocus] = useState(false)
     const [order, setOrder] = useState(session?.order ?? '')
     const [desc, setDesc] = useState(session?.description ?? '')
+    const [validDesc, setValidDesc] = useState(session?.description ? checkValidDescription(session.description) : false)
+    const [descFocus, setDescFocus] = useState(false)
     const [edit, setEdit] = useState(false)
     const [msg, setMsg] = useState('')
 
@@ -36,6 +51,10 @@ const Session = ( { sessionId = null }) => {
     const sessionFormId = `session_form_${session.id}`
     
     useEffect(() => {
+        if (edit) {
+            nameRef.current.focus()
+        }
+
         if (session) {
             const form = document.getElementById(sessionFormId)
             const sessionOrderInput = form.querySelector('#session_order__input');
@@ -47,6 +66,15 @@ const Session = ( { sessionId = null }) => {
             }
         }
     }, [edit])
+
+    useEffect(() => {
+        setValidName(checkValidName(name))
+    }, [name])
+
+    useEffect(() => {
+        setValidDesc(checkValidDescription(desc))
+    }, [desc])
+
 
     // Read more
     const [readMore, setReadMore] = useState(false)
@@ -62,28 +90,10 @@ const Session = ( { sessionId = null }) => {
     // initial state of readMore
     useEffect(() => {
         setReadMore(!descOverLimit)
-    }, [])
+    }, [session])
 
     const description = readMore ? session.description : `${session.description.slice(0, descMaxLength)}...`
     // /Read more
-
-    const updateSessionRequestHandler = async(body) => {
-        try {
-            const response = await updateSession({routineId: routineId, sessionId: session.id, body: body})
-            return response
-        } catch (error) {
-            return error
-        }
-    }
-
-    const deleteSessionRequestHandler = async(session) => {
-        try {
-            const response = await deleteSession({routineId: routineId, sessionId: session.id})
-            return response
-        } catch (error) {
-            return error
-        }
-    }
 
     const sessionFormSubmitHandler = async(e) => {
         e.preventDefault()
@@ -103,26 +113,40 @@ const Session = ( { sessionId = null }) => {
                 setEdit(false)
                 break
             case 'save':
+                const isValidName = checkValidName(name)
+                const isValidDesc = checkValidDescription(desc)
+                if (!isValidName || !isValidDesc) {
+                    setMsg('Please provide valid inputs!')
+                    msgRef.current.focus()
+                    return
+                }
+
                 setEdit(false)
                 form.classList.add('disabled')
                 
                 try {
-                    const payload = { 
+                    const body = { 
                         'name': name ?? '',
                         'order': order ?? 0,
                         'description': desc ?? ''
                     }
                     
-                    const response = await updateSessionRequestHandler(payload)
-                    
-                    if (response?.error) {
-                        resetInfo()
-                        setMsg(response.error?.data?.message ?? 'Error')
-                        return
-                    }
-                    setMsg('Success!')
+                    const response = await updateSession({routineId: routineId, sessionId: session.id, body: body}).unwrap()
+                        .then((payload) => {})
+                        .catch((error) => {
+                            msgRef.current.focus()
+                            if (error?.data) {
+                                setMsg('No server response!')
+                            } else if (error?.data?.message) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setMsg(message)
+                            } else {
+                                setMsg('Update session failed!')
+                            }
+                        })
                 } catch (error) {
-                    setMsg(error?.data?.message ?? 'Error')
+                    setMsg('Update session failed!')
+                    msgRef.current.focus()
                 } finally {
                     form.classList.remove('disabled')
                 }
@@ -133,15 +157,22 @@ const Session = ( { sessionId = null }) => {
                 form.classList.add('disabled')
 
                 try {
-                    const response = await deleteSessionRequestHandler(session)
-                    if (response?.error) {
-                        setMsg(response.error?.data?.message ?? 'Error')
-
-                        return
-                    }
-                    setMsg('Success!')
+                    const response = await deleteSession({routineId: routineId, sessionId: session.id}).unwrap()
+                        .then((payload) => {})
+                        .catch((error) => {
+                            msgRef.current.focus()
+                            if (error?.data) {
+                                setMsg('No server response!')
+                            } else if (error?.data?.message) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setMsg(message)
+                            } else {
+                                setMsg('Update session failed!')
+                            }
+                        })
                 } catch (error) {
-                    setMsg(error?.data?.message ?? 'Error')
+                    setMsg('Delete session failed!')
+                    msgRef.current.focus()
                 } finally {
                     form.classList.remove('disabled')
                 }
@@ -158,21 +189,21 @@ const Session = ( { sessionId = null }) => {
         let sessionOptionButtons =
             edit ? 
                 <div className='editing__div'>
-                    <button className="routine_delete__button cursor_pointer" name='delete' value='delete'>
+                    <button className="session_delete__button cursor_pointer" name='delete' value='delete'>
                         <FaTrashCan></FaTrashCan>
                     </button>
                     <div className="modifyOpts__div">
-                        <button className="routine_cancel__button cursor_pointer" name='cancel' value='cancel'>
+                        <button className="session_cancel__button cursor_pointer" name='cancel' value='cancel'>
                             Cancel
                         </button>
-                        <button className="routine_save__button cursor_pointer" name='save' value='save'>
+                        <button className="session_save__button cursor_pointer" name='save' value='save'>
                             Save
                         </button>
                     </div>
                 </div> :
                 <div className="edit__div">
-                    <button className="routine_edit__button cursor_pointer" name='edit' value='edit'>
-                        Edit Routine
+                    <button className="session_edit__button cursor_pointer" name='edit' value='edit'>
+                        Edit Session
                     </button>
                 </div>
             
@@ -181,12 +212,23 @@ const Session = ( { sessionId = null }) => {
             <div className="session__div">
                 <form id={sessionFormId} className='session__form' onSubmit={sessionFormSubmitHandler}>
                     <div className='session_name__div'>
-                        <label className='offscreen' htmlFor="session_name__ta">Name:</label>
                         { edit ? 
-                            <textarea type="text" id='session_name__ta' className='session_name__ta'
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                            />
+                            <>
+                                <label className='offscreen' htmlFor="session_name__ta">Name:</label>
+                                <textarea type="text" id='session_name__ta' className='session_name__ta'
+                                    ref={nameRef}
+                                    onFocus={() => setNameFocus(true)}
+                                    onBlur={() => setNameFocus(false)}
+                                    aria-invalid={validName ? "false" : "true"}
+                                    aria-describedby="nameNote"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                />
+                                <p id="nameNote" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
+                                    <FaCircleInfo /><br/>
+                                    Please enter a name that is 1 to 50 characters.
+                                </p>
+                            </>
                             :
                             <h1 id='session_name__h1' className='session__h1'>{name}</h1>
                             }
@@ -205,10 +247,20 @@ const Session = ( { sessionId = null }) => {
                             <label htmlFor='session_desc__ta' className='session_desc__label info_label info_text_padding'>Description:</label>
                             {
                                 edit ?
-                                    <textarea id='session_desc__ta' className='session_desc__ta' rows={4}
-                                        value={ desc }
-                                        onChange={(e) => {return setDesc(e.target.value)}}
-                                    ></textarea>
+                                    <>                                   
+                                        <textarea id='session_desc__ta' className='session_desc__ta' rows={4}
+                                            onFocus={() => setDescFocus(true)}
+                                            onBlur={() => setDescFocus(false)}
+                                            aria-invalid={validDesc ? "false" : "true"}
+                                            aria-describedby="descNote"
+                                            value={ desc }
+                                            onChange={(e) => {return setDesc(e.target.value)}}
+                                        ></textarea>
+                                        <p id="descNote" className={descFocus && desc && !validDesc? "instructions" : "offscreen"}>
+                                            <FaCircleInfo /><br/>
+                                            Please enter a description that is 0 to 500 characters.
+                                        </p>
+                                    </>
                                     :
                                     <div id='session_info_desc__div' className='session_info_desc__div info_text_padding'>
                                     { description }
@@ -221,7 +273,7 @@ const Session = ( { sessionId = null }) => {
                             }
                         </div>
                         { sessionOptionButtons }
-                        <p id='session_msg__p'>{msg}</p>
+                        <p id='session_msg__p' ref={msgRef}>{msg}</p>
                         {/* <label htmlFor="session__chkbx"></label>
                         <input type="checkbox" className="session__chkbx" id="session__chkbx"/> */}
                     </div>

@@ -3,7 +3,7 @@ import { useState, useEffect, memo } from 'react'
 import { FaTrashCan } from 'react-icons/fa6'
 import { useUpdateExerciseMutation } from '../exerciseApiSlice'
 
-const Set = ( { sets = [], setId = null, updateExerciseRequestHandler = () => {} } ) => {
+const Set = ( { sets = [], setId = null } ) => {
     
     const set = sets.find((set) => {
         return set.id === setId

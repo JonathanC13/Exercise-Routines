@@ -1,19 +1,34 @@
 import React from 'react'
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
 import Sets from './sets/Sets.jsx'
-import { FaTrashCan } from 'react-icons/fa6'
+import { FaTrashCan, FaCircleInfo } from 'react-icons/fa6'
+
+const checkValidName = (name) => {
+    return name.length > 0 && name.length <= 50
+}
+
+const checkValidDescription = (description) => {
+    return description.length >= 0 && description.length <= 500
+}
 
 const Exercise = ( { exercise = null } ) => {
     const { routineId } = useParams()
 
+    const nameRef = useRef()
+    const msgRef = useRef()
+
     const [edit, setEdit] = useState(false)
-    const [exerciseName, setExerciseName] = useState(exercise ? exercise.name ?? '' : '')
-    const [exerciseOrder, setExerciseOrder] = useState(exercise ? exercise.order ?? '' : '')
-    const [exerciseDesc, setExerciseDesc] = useState(exercise ? exercise.description ?? '' : '')
-    const [exerciseMuscleType, setExerciseMuscleType] = useState(exercise ? exercise.muscleType ?? '' : '')
-    const [exerciseCompleted, setExerciseCompleted] = useState(exercise ? exercise.completed ?? '' : '')
+    const [exerciseName, setExerciseName] = useState(exercise?.name ?? '')
+    const [validExerciseName, setValidExerciseName] = useState(exercise?.name ? checkValidName(exercise.name) : false)
+    const [exerciseNameFocus, setExerciseNameFocus] = useState(false)
+    const [exerciseOrder, setExerciseOrder] = useState(exercise?.order ?? '')
+    const [exerciseDesc, setExerciseDesc] = useState(exercise?.description ? checkValidDescription(exercise.description) : false)
+    const [validExerciseDesc, setValidExerciseDesc] = useState(true)
+    const [exerciseDescFocus, setExerciseDescFocus] = useState(false)
+    const [exerciseMuscleType, setExerciseMuscleType] = useState(exercise?.muscleType ?? '')
+    const [exerciseCompleted, setExerciseCompleted] = useState(exercise?.completed ?? '')
     const [exerciseMessage, setExerciseMessage] = useState('')
 
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
@@ -32,7 +47,15 @@ const Exercise = ( { exercise = null } ) => {
     // initial state of readMore
     useEffect(() => {
         setReadMore(!descOverLimit)
-    }, [])
+    }, [exercise])
+
+    useEffect(() => {
+        setValidExerciseName(checkValidName(exerciseName))
+    }, [exerciseName])
+
+    useEffect(() => {
+        setValidExerciseDesc(checkValidDescription(exerciseDesc))
+    }, [exerciseDesc])
 
     const resetInfo = () => {
         if (exercise) {
@@ -46,6 +69,10 @@ const Exercise = ( { exercise = null } ) => {
     const exerciseFormId = `exercise_form_${exercise.id}`
 
     useEffect(() => {
+        if (edit) {
+            nameRef.current.focus()
+        }
+        
         if (exercise) {
             const form = document.getElementById(exerciseFormId)
             // const exerciseNameInput = form.querySelector('#exercise_name__input');
@@ -68,30 +95,6 @@ const Exercise = ( { exercise = null } ) => {
 
     // console.log('re-render: ', exercise.id)
 
-    const updateExerciseRequestHandler = async(payload) => {
-        const body = {
-            ...payload
-        }
-
-        try {
-            const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body })
-            return response
-        } catch (error) {
-            return error
-        }
-        return null
-    }
-
-    const deleteExerciseRequestHandler = async(exercise) => {
-        try {
-            const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id })
-            return response
-        } catch (error) {
-            return error
-        }
-        return null
-    }
-
     const exerciseFormSubmitHandler = async(e) => {
         e.preventDefault()
         setExerciseMessage('')
@@ -108,27 +111,43 @@ const Exercise = ( { exercise = null } ) => {
                 setEdit(false)
                 break
             case 'save':
+                const isNameValid = checkValidName(exerciseName)
+                const isDescValid = checkValidDescription(exerciseDesc)
+                if (!isNameValid || !isDescValid) {
+                    setExerciseMessage('Please provide valid inputs!')
+                    msgRef.current.focus()
+                    return
+                }
+
                 setEdit(false)
                 form.classList.add('disabled')
                 
                 try {
-                    const payload = { 
+                    const body = { 
                         'name': exerciseName ?? '',
                         'muscleType': exerciseMuscleType ?? '',
-                        'order': exerciseOrder ?? 0,
+                        'order': exerciseOrder === '' ? 0 : exerciseOrder ?? 0,
                         'description': exerciseDesc ?? ''
                     }
                     // console.log(payload)
-                    const response = await updateExerciseRequestHandler(payload)
-                    // console.log(response)
-                    if (response?.error) {
-                        resetInfo()
-                        setExerciseMessage(response.error?.data?.message ?? 'Error')
-                        return
-                    }
-                    setExerciseMessage('Success!')
+                    const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body }).unwrap()
+                        .then((payload) => {
+                            // setExerciseMessage('Success!');
+                        })
+                        .catch((error) => {
+                            msgRef.current.focus()
+                            if (!error?.data) {
+                                setExerciseMessage('No Server Response!');
+                            } else if (error?.data) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setExerciseMessage(message)
+                            } else {
+                                setExerciseMessage('Edit exercise failed!')
+                            }
+                        })
                 } catch (error) {
-                    setExerciseMessage(error?.data?.message ?? 'Error')
+                    setExerciseMessage('Edit exercise failed!')
+                    msgRef.current.focus()
                 } finally {
                     form.classList.remove('disabled')
                 }
@@ -139,15 +158,24 @@ const Exercise = ( { exercise = null } ) => {
                 form.classList.add('disabled')
 
                 try {
-                    const response = await deleteExerciseRequestHandler(exercise)
-                    
-                    if (response?.error) {
-                        setExerciseMessage(response.error?.data?.message ?? 'Error')
-                        return
-                    }
-                    setExerciseMessage('Success!')
+                    const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
+                        .then((payload) => {
+                            // setExerciseMessage('Success!');
+                        })
+                        .catch((error) => {
+                            msgRef.current.focus()
+                            if (!error?.data) {
+                                setExerciseMessage('No Server Response!');
+                            } else if (error?.data) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setExerciseMessage(message)
+                            } else {
+                                setExerciseMessage('Delete exercise failed!')
+                            }
+                        })
                 } catch (error) {
-                    setExerciseMessage(error?.data?.message ?? 'Error')
+                    setExerciseMessage('Delete exercise failed!')
+                    msgRef.current.focus()
                 } finally {
                     form.classList.remove('disabled')
                 
@@ -187,13 +215,23 @@ const Exercise = ( { exercise = null } ) => {
             <div className="exercise_info__div">
                 <form id={exerciseFormId} onSubmit={(e) => exerciseFormSubmitHandler(e)} className='exercise_info__form'>
                     <div className='ex_form_info__div'>
+                        
                         { edit ? 
                             <>
                                 <label htmlFor='exercise_name__ta' className='info_label info_text_padding offscreen'>Name:</label>
                                 <textarea id='exercise_name__ta' className='exercise_name__ta'
+                                    ref={nameRef}
+                                    onFocus={() => setExerciseNameFocus(true)}
+                                    onBlur={() => setExerciseNameFocus(false)}
+                                    aria-invalid={validExerciseName ? "false" : "true"}
+                                    aria-describedby="nameNote"
                                     value={ exerciseName }
                                     onChange={(e) => {return setExerciseName(e.target.value)}}
                                 ></textarea>
+                                <p id="nameNote" className={exerciseNameFocus && exerciseName && !validExerciseName ? "instructions" : "offscreen"}>
+                                    <FaCircleInfo /><br/>
+                                    Please enter a name that is 1 to 50 characters.
+                                </p>
                             </>
                             :
                             <h1 className='exercise_name__h1'>{ exerciseName }</h1>
@@ -222,10 +260,20 @@ const Exercise = ( { exercise = null } ) => {
                             <label htmlFor='exercise_desc__ta' className='info_label info_text_padding'>Description:</label>
                         </div>
                         { edit ? 
-                            <textarea id='exercise_desc__ta' className='exercise_desc__ta' rows={4}
-                                value={ exerciseDesc }
-                                onChange={(e) => {return setExerciseDesc(e.target.value)}}
-                            ></textarea>
+                            <>
+                                <textarea id='exercise_desc__ta' className='exercise_desc__ta' rows={4}
+                                    onFocus={() => setExerciseDescFocus(true)}
+                                    onBlur={() => setExerciseDescFocus(false)}
+                                    aria-invalid={validExerciseDesc ? "false" : "true"}
+                                    aria-describedby="descNote"
+                                    value={ exerciseDesc }
+                                    onChange={(e) => {return setExerciseDesc(e.target.value)}}
+                                ></textarea>
+                                <p id="descNote" className={exerciseDescFocus && exerciseDesc && !validExerciseDesc? "instructions" : "offscreen"}>
+                                    <FaCircleInfo /><br/>
+                                    Please enter a description that is 0 to 500 characters.
+                                </p>
+                            </>
                             :
                             <div id='exercise_desc__div' className='routine_info_desc__div info_text_padding'>
                                 { description }
@@ -239,11 +287,10 @@ const Exercise = ( { exercise = null } ) => {
                         
                     </div>
                     { exerciseOptionButtons }
-                    <p id='exercise_msg__p'>{exerciseMessage}</p>
+                    <p id='exercise_msg__p' ref={msgRef}>{exerciseMessage}</p>
                 </form>
                 <Sets
                     exercise={exercise}
-                    updateExerciseRequestHandler={updateExerciseRequestHandler}
                 ></Sets>
                 
 

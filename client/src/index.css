@@ -180,6 +180,8 @@ body {
 
 .routine_edit__button,
 .routine_save__button,
+.session_edit__button,
+.session_save__button,
 .exercise_edit__button,
 .exercise_save__button,
 .set_edit__button,
@@ -192,6 +194,7 @@ body {
 }
 
 .routine_cancel__button,
+.session_cancel__button,
 .set_cancel__button,
 .exercise_cancel__button {
   border-radius: var(--EDIT-BTN-BORDER-RAD);
@@ -201,6 +204,7 @@ body {
 }
 
 .routine_delete__button,
+.session_delete__button,
 .exercise_delete__button,
 .set_delete__button {
   border-radius: var(--EDIT-BTN-BORDER-RAD);
@@ -418,6 +422,14 @@ body {
   gap: var(--ADD-FORM-GAP)
 }
 
+.routine_name_input__div {
+  flex: 1 1 auto;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
 .routine_name__input {
   width: 100%;
   color: #ffffff;
@@ -463,6 +475,7 @@ body {
 .routine_info_desc__div {
   background-color: var(--ROUTINE-INFO-DESC-BG-COLOR);
   border-radius: var(--ROUTINE-DIV-BORDER-RAD);
+  word-break: break-word;
 }
 
 .routine_info {
@@ -500,6 +513,7 @@ body {
   color: #fff;
   font-size: 1.5rem;
   flex: 1 1 auto;
+  word-break: break-word;
 }
 
 .routine_name__ta {
@@ -709,6 +723,7 @@ body {
   background-color: var(--SESSION-TITLE-BG-COLOR);
   padding: var(--SESSION-INFO-DIV-PADDING);
   display: flex;
+  flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
   gap: var(--ADD-FORM-GAP)
@@ -766,6 +781,7 @@ body {
 .session_info_desc__div {
   background-color: var(--SESSION-INFO-DESC-BG-COLOR);
   border-radius: var(--SESSION-DIV-BORDER-RAD);
+  word-break: break-word;
 }
 /* /SESSION */
 
@@ -864,6 +880,7 @@ body {
 
 .exercise_desc__div {
   width: 100%;
+  word-break: break-word;
 }
 
 

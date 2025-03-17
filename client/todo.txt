@@ -8,6 +8,17 @@ at 17:22
 continue with videos 
 
 
+
+***
+validation and focus in the edit forms for:
+    Routine
+    Session
+    Exercise
+    Set
+
+Create Registration form!
+
+
 ** RIGHT NOW< CSS for Routines THEN: 
 https://www.youtube.com/playlist?list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd
 

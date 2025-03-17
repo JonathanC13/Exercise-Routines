@@ -1,10 +1,10 @@
 import React from 'react'
 // import { selectRoutineById } from './routinesApiSlice'
-import { memo, useState, useEffect } from 'react'
+import { memo, useState, useEffect, useRef } from 'react'
 import { useGetRoutinesQuery, useUpdateRoutineMutation, useDeleteRoutineMutation } from './routinesApiSlice'
 import { useNavigate } from 'react-router'
 import classnames from 'classnames'
-import { FaTrashCan, FaDoorOpen } from 'react-icons/fa6'
+import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
 
 const months = {
   0: 'Jan',
@@ -26,8 +26,19 @@ const formatDisplayDate = (strDate) => {
   return `${date.getFullYear()}, ${months[date.getMonth()]} ${date.getDate()}`
 }
 
+const checkValidName = (name) => {
+  return name.length > 0 && name.length <= 50
+}
+
+const checkValidDescription = (description) => {
+  return description.length >= 0 && description.length <= 500
+}
+
 const Routine = ( { routineId = null, isFetching = true } ) => {
     // console.log(`${routineId} has rendered!`)
+
+    const routineNameRef = useRef()
+    const msgRef = useRef()
 
     const { routine } = useGetRoutinesQuery('routinesList',
       {
@@ -41,13 +52,21 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
     const [edit, setEdit] = useState(false)    
     const [routineName, setRoutineName] = useState(routine?.name ?? '')
+    const [validRoutineName, setValidRoutineName] = useState(routine?.name ? checkValidName(routine.name) : false)
+    const [routineNameFocus, setRoutineNameFocus] = useState(false)
     const [routineOrder, setRoutineOrder] = useState(routine?.order ?? '')
     const [routineDescription, setRoutineDescription] = useState(routine?.description ?? '')
+    const [validRoutineDescription, setValidRoutineDescription] = useState(routine?.Description ? checkValidDescription(routine.Description) : false)
+    const [routineDescriptionFocus, setRoutineDescriptionFocus] = useState(false)
     const [routineMessage, setRoutineMessage] = useState('')
 
     const routineFormId = `routine_form_${routine.id}`
 
     useEffect(() => {
+      if (edit) {
+        routineNameRef.current.focus()
+      }
+
       if (routine) {
         const form = document.getElementById(routineFormId)
         // const routineNameInput = form.querySelector('#routine_name__input');
@@ -62,6 +81,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
         }
     }
     }, [edit])
+
+    useEffect(() => {
+      setValidRoutineName(checkValidName(routineName))
+    }, [routineName])
+
+    useEffect(() => {
+      setValidRoutineDescription(checkValidDescription(routineDescription))
+    }, [routineDescription])
 
     const [readMore, setReadMore] = useState(false)
     const descMaxLength = 100
@@ -98,28 +125,6 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
     const description = readMore ? routine.description : `${routine.description.slice(0, descMaxLength)}...`
 
-    const updateRoutineRequestHandler = async(payload) => {
-      const body = {
-        ...payload
-      }
-
-      try {
-        const response = await updateRoutine({ routineId: routine.id, body })
-        return response
-      } catch (error) {
-        return error
-      }
-    }
-
-    const deleteRoutineRequestHandler = async(routine) => {
-      try {
-        const response = await deleteRoutine({routineId: routine.id})
-        return response
-      } catch (error) {
-        return error
-      }
-    }
-
     const routineFormSubmitHandler = async(e) => {
       e.preventDefault()
       setRoutineMessage('')
@@ -136,26 +141,40 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           setEdit(false)
           break
         case 'save':
+          const isValidName = checkValidName(routineName)
+          const isValidDesc = checkValidDescription(routineDescription)
+          if (!isValidName || !isValidDesc) {
+            setRoutineMessage('Please provide valid inputs!')
+            msgRef.current.focus()
+            return
+          }
+          
           setEdit(false)
           form.classList.add('disabled')
           
           try {
-              const payload = { 
+              const body = { 
                   'name': routineName ?? '',
                   'order': routineOrder ?? 0,
                   'description': routineDescription ?? ''
               }
               // console.log(payload)
-              const response = await updateRoutineRequestHandler(payload)
-              // console.log(response)
-              if (response?.error) {
-                resetInfo()
-                setRoutineMessage(response.error?.data?.message ?? 'Error')
-                return
-              }
-              setRoutineMessage('Success!')
+              const response = await updateRoutine({ routineId: routine.id, body }).unwrap()
+                .then((payload) => {})
+                .catch((error) => {
+                  msgRef.current.focus()
+                  if (error?.data) {
+                    setRoutineMessage('No server response!')
+                  } else if (error?.data?.message) {
+                      const message = error?.data?.message ?? 'Error!'
+                      setRoutineMessage(message)
+                  } else {
+                    setRoutineMessage('Update routine failed!')
+                  }
+                })
           } catch (error) {
-              setRoutineMessage(error?.data?.message ?? 'Error')
+            setRoutineMessage('Update routine failed!')
+            msgRef.current.focus()
           } finally {
               form.classList.remove('disabled')
           }
@@ -166,17 +185,24 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           form.classList.add('disabled')
 
           try {
-              const response = await deleteRoutineRequestHandler(routine)
-              if (response?.error) {
-                setRoutineMessage(response.error?.data?.message ?? 'Error')
-
-                return
-              }
-              setRoutineMessage('Success!')
+            const response = await deleteRoutine({routineId: routine.id}).unwrap()
+              .then((payload) => {})
+              .catch((error) => {
+                msgRef.current.focus()
+                if (error?.data) {
+                  setRoutineMessage('No server response!')
+                } else if (error?.data?.message) {
+                    const message = error?.data?.message ?? 'Error!'
+                    setRoutineMessage(message)
+                } else {
+                  setRoutineMessage('Delete routine failed!')
+                }
+              })
           } catch (error) {
-            setRoutineMessage(error?.data?.message ?? 'Error')
+            setRoutineMessage('Delete routine failed!')
+            msgRef.current.focus()
           } finally {
-              form.classList.remove('disabled')
+            form.classList.remove('disabled')
           }
       
           break
@@ -216,12 +242,23 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
       content = 
         <form id={routineFormId} className={containerClassname} onSubmit={routineFormSubmitHandler}>
           <div className='routine_name__div'>
-            <label className='offscreen' htmlFor="routine_name__ta">Name:</label>
             { edit ? 
-              <textarea type="text" id='routine_name__ta' className='routine_name__ta'
-                value={routineName}
-                onChange={(e) => setRoutineName(e.target.value)}
-              />
+              <div className='routine_name_input__div'>
+                <label className='offscreen' htmlFor="routine_name__ta">Name:</label>
+                <textarea type="text" id='routine_name__ta' className='routine_name__ta'
+                  ref={routineNameRef}
+                    onFocus={() => setRoutineNameFocus(true)}
+                    onBlur={() => setRoutineNameFocus(false)}
+                    aria-invalid={validRoutineName ? "false" : "true"}
+                    aria-describedby="nameNote"
+                  value={routineName}
+                  onChange={(e) => setRoutineName(e.target.value)}
+                />
+                <p id="nameNote" className={routineNameFocus && routineName && !validRoutineName ? "instructions" : "offscreen"}>
+                    <FaCircleInfo /><br/>
+                    Please enter a name that is 1 to 50 characters.
+                </p>
+              </div>
               :
               <h1 id='routine_name__h1' className='routine__h1'>{routineName}</h1>
               }
@@ -240,16 +277,27 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
               <label htmlFor='routine_desc__ta' className='routine_desc__label info_label info_text_padding'>Description:</label>
               {
                 edit ?
-                  <textarea id='routine_desc__ta' className='routine_desc__ta' rows={4}
-                  value={ routineDescription }
-                  onChange={(e) => {return setRoutineDescription(e.target.value)}}
-                ></textarea>
+                  <>
+                    
+                    <textarea id='routine_desc__ta' className='routine_desc__ta' rows={4}
+                      onFocus={() => {setRoutineDescriptionFocus(true)}}
+                      onBlur={() => {setRoutineDescriptionFocus(false)}}
+                      aria-invalid={validRoutineDescription ? "false" : "true"}
+                      aria-describedby="descNote"
+                      value={ routineDescription }
+                      onChange={(e) => {return setRoutineDescription(e.target.value)}}
+                    ></textarea>
+                    <p id="descNote" className={routineDescriptionFocus && routineDescription && !validRoutineDescription? "instructions" : "offscreen"}>
+                        <FaCircleInfo /><br/>
+                        Please enter a description that is 0 to 500 characters.
+                    </p>
+                  </>
                 :
                 <div id='routine_info_desc__div' className='routine_info_desc__div info_text_padding'>
                   { description }
                   { descOverLimit && 
                       <div className="desc_footer__div">
-                          <div className='readMore' onClick={toggleReadMoreHandler}>{readMore ? 'Show less' : 'Read more'}</div>
+                          <div className='readMore cursor_pointer' onClick={toggleReadMoreHandler}>{readMore ? 'Show less' : 'Read more'}</div>
                       </div>
                   }
                 </div>
@@ -264,7 +312,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
             </div>
 
             { routineOptionButtons }
-            <p id='routine_msg__p'>{routineMessage}</p>
+            <p id='routine_msg__p' ref={msgRef}>{routineMessage}</p>
           </section>
         </form> 
     } else {

@@ -53,19 +53,11 @@ const SessionAddForm = () => {
     }, []);
 
     useEffect(() => {
-        if (checkValidName(name)) {
-            setValidName(true)
-        } else {
-            setValidName(false)
-        }
+        setValidName(checkValidName(name))
     }, [name])
 
     useEffect(() => {
-        if (checkValidDescription(description)) {
-            setValidDescription(true)
-        } else {
-            setValidDescription(false)
-        }
+        setValidDescription(checkValidDescription(description))
     }, [description])
 
     const addSessionHandler = async(e) => {
