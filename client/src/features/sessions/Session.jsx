@@ -135,7 +135,7 @@ const Session = ( { sessionId = null }) => {
                         .then((payload) => {})
                         .catch((error) => {
                             msgRef.current.focus()
-                            if (error?.data) {
+                            if (!error?.data) {
                                 setMsg('No server response!')
                             } else if (error?.data?.message) {
                                 const message = error?.data?.message ?? 'Error!'

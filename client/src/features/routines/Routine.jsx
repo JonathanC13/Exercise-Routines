@@ -163,7 +163,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                 .then((payload) => {})
                 .catch((error) => {
                   msgRef.current.focus()
-                  if (error?.data) {
+                  if (!error?.data) {
                     setRoutineMessage('No server response!')
                   } else if (error?.data?.message) {
                     const message = error?.data?.message ?? 'Error!'

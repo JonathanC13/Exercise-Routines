@@ -22,6 +22,7 @@ continue with videos
     3. naviagate
     4. save token to cookies
 
+3. login, register, edit, add form add icon to show when input is valid
 
 ** RIGHT NOW< CSS for Routines THEN: 
 https://www.youtube.com/playlist?list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd

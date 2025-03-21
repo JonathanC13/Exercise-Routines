@@ -68,88 +68,75 @@ const Register = () => {
         setConfPassword('')
     }
 
+    const gotoLogin = () => {
+        resetControlledInputs()
+        //navigate to login
+    }
+
     const registerFormSubmitHandler = async(e) => {
         e.preventDefault()
         setMsg('')
         
-        const action = e.nativeEvent.submitter.value;
+        // const action = e.nativeEvent.submitter.value;
         const form = e.currentTarget
 
-        switch (action) {
-            case 'gotoLogin':
-                resetControlledInputs()
-                // navigate to login page
-                console.log('goto login')
-                break;
-            case 'register':
-                form.classList.add('disabled')
+        form.classList.add('disabled')
 
-                const isEmailValid = EMAIL_REGEX.test(email)
-                if (!isEmailValid) {
+        const isEmailValid = EMAIL_REGEX.test(email)
+        if (!isEmailValid) {
+            msgRef.current.focus()
+            setMsg('Please provide a valid email!')
+            form.classList.remove('disabled')
+            return
+        }
+
+        if (!name || !email || !password || !confPassword) {
+            msgRef.current.focus()
+            setMsg('Please provide all required information!')
+            form.classList.remove('disabled')
+            return
+        }
+
+        if (password !== confPassword) {
+            msgRef.current.focus()
+            setMsg('Passwords do not match!')
+            form.classList.remove('disabled')
+            return
+        }
+
+        try {
+            const response = await register({name: name, email: email, password: password}).unwrap()
+                .then((payload) => {
+                    resetControlledInputs()
+                    // save JWT token returned
+                    console.log(payload)
+                    // clear form
+                    // navigate to dashboard
+                })
+                .catch((error) => {
+                    if (!error?.data) {
+                        setMsg('No server response!')
+                    // } else if (error?.data?.status === 409) {
+                    //     setMsg('Email already registred, please enter a different one.')
+                    } else if (error?.data?.message) {
+                        const message = error?.data?.message ?? 'Error!'
+                        setMsg(message)
+                    } else {
+                        setMsg('Registration failed!')
+                    }
                     msgRef.current.focus()
-                    setMsg('Please provide a valid email!')
-                    form.classList.remove('disabled')
-                    return
-                }
-
-                if (!name || !email || !password || !confPassword) {
-                    msgRef.current.focus()
-                    setMsg('Please provide all required information!')
-                    form.classList.remove('disabled')
-                    return
-                }
-
-                if (password !== confPassword) {
-                    msgRef.current.focus()
-                    setMsg('Passwords do not match!')
-                    form.classList.remove('disabled')
-                    return
-                }
-
-                try {
-                    const response = await register({name: name, email: email, password: password}).unwrap()
-                        .then((payload) => {
-                            resetControlledInputs()
-                            // save JWT token returned
-                            console.log(payload)
-                            // clear form
-                            // navigate to dashboard
-                        })
-                        .catch((error) => {
-                            msgRef.current.focus()
-                            if (error?.data) {
-                                setMsg('No server response!')
-                            } else if (error?.data?.message) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setMsg(message)
-                            } else {
-                                setMsg('Registration failed!')
-                            }
-                        })
-                } catch(error) {
-                    console.log(error)
-                    msgRef.current.focus()
-                    setMsg('Registration failed!')
-                } finally {
-                    form.classList.remove('disabled')
-                }
-
-                break
-            default:
-                break
+                })
+        } catch(error) {
+            msgRef.current.focus()
+            setMsg('Registration failed!')
+        } finally {
+            form.classList.remove('disabled')
         }
     }
 
   return (
     <section className="register__section">
         <form className="register__form" onSubmit={registerFormSubmitHandler}>
-            <div className="register__form__div">
-                <p>Have an account?</p>
-                <button className="gotoLogin__button" type="submit" name='gotoLogin' value='gotoLogin' disabled={isLoading}>
-                    Log in
-                </button>
-            </div>
-            <hr />
             <h1>Register</h1>
             <div className="register__form__div">
                 <label htmlFor="register-name__input" className="register-name__label">Name</label>
@@ -236,6 +223,12 @@ const Register = () => {
                 }
             </div>
         </form>
+        <div className="register__form__div">
+            <p>Have an account?</p>
+            <button className="gotoLogin__button" type="submit" name='gotoLogin' value='gotoLogin' disabled={isLoading} onClick={gotoLogin}>
+                Log in
+            </button>
+        </div>
     </section>
   )
 }
