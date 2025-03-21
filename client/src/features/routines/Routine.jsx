@@ -166,8 +166,8 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                   if (error?.data) {
                     setRoutineMessage('No server response!')
                   } else if (error?.data?.message) {
-                      const message = error?.data?.message ?? 'Error!'
-                      setRoutineMessage(message)
+                    const message = error?.data?.message ?? 'Error!'
+                    setRoutineMessage(message)
                   } else {
                     setRoutineMessage('Update routine failed!')
                   }
@@ -176,7 +176,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
             setRoutineMessage('Update routine failed!')
             msgRef.current.focus()
           } finally {
-              form.classList.remove('disabled')
+            form.classList.remove('disabled')
           }
           
           break

@@ -10,13 +10,17 @@ continue with videos
 
 
 ***
-validation and focus in the edit forms for:
-    Routine
-    Session
-    Exercise
-    Set
+1. Registration form
+    1. CSS
+    2. navigate
+    3. check video how to save token, (try to save in cookies?)
+        auto login -> go to dashboard
 
-Create Registration form!
+2. Login form
+    1. Create jsx
+    2. CSS
+    3. naviagate
+    4. save token to cookies
 
 
 ** RIGHT NOW< CSS for Routines THEN: 
