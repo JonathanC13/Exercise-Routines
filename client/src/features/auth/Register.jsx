@@ -66,6 +66,7 @@ const Register = () => {
         setEmail('')
         setPassword('')
         setConfPassword('')
+        setShowPassword(false)
     }
 
     const gotoLogin = () => {
@@ -107,10 +108,10 @@ const Register = () => {
         try {
             const response = await register({name: name, email: email, password: password}).unwrap()
                 .then((payload) => {
-                    resetControlledInputs()
                     // save JWT token returned
                     console.log(payload)
                     // clear form
+                    resetControlledInputs()
                     // navigate to dashboard
                 })
                 .catch((error) => {

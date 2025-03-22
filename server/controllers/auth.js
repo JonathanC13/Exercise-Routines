@@ -10,7 +10,7 @@ const register = async(req, res) => {
     }
 
     // mongoose will exec default pre('save') that exec the validation checks, then run the any custom pre('save') function, then send the request to MongoDB
-    const response = await UserModel.create({name, email, emailLowercase: email, password})  // in the model, it will call our pre('save') to encrypt the password
+    const response = await UserModel.create({name, email, emailLowercase: email.toLowerCase(), password})  // in the model, it will call our pre('save') to encrypt the password
 
     const token = response.generateJWT()
 

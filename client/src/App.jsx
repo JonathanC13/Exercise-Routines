@@ -26,7 +26,7 @@ function App() {
         <BrowserRouter>
             <Routes>
               <Route index element={<h1>hello</h1>}></Route>
-              <Route element={<Layout />}> 
+              <Route element={<Layout />}>
                 {/* Public */}
                 <Route element={<AuthLayout />}>
                   <Route path="login" element={<Login />} />
