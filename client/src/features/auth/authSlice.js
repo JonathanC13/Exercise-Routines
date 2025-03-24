@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    credentials: {user_name: null, token: null},
+    credentials: {},
     // save JWT into cookies later, for now just in var for current session
 }
 
@@ -10,13 +10,13 @@ export const authSlice = createSlice({
     initialState: initialState,
     reducers: {
         credentialsSet: (state, action) => {
-            const { user: {name}, token } = action.payload
-            state.credentials.user_name = name  // allowed mutating logic due to immer inside createSlice
+            const { name, email, token } = action.payload
+            state.credentials.name = name  // allowed mutating logic due to immer inside createSlice
+            state.credentials.email = email
             state.credentials.token = token
         },
         loggedOut: (state, action) => {
-            state.credentials.user_name = null
-            state.credentials.token = null
+            state.credentials = {}
         }
     }
 })

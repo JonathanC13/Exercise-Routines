@@ -4,6 +4,7 @@ import { FaEyeSlash, FaEye, FaCircleInfo } from 'react-icons/fa6'
 import { useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendRegisterMutation } from './authApiSlice'
+import { credentialsSet } from './authSlice'
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
@@ -20,6 +21,7 @@ const checkValidPassword = (password) => {
 }
 
 const Register = () => {
+    const dispatch = useDispatch()
 
     const nameRef = useRef()
     const msgRef = useRef()
@@ -110,6 +112,13 @@ const Register = () => {
                 .then((payload) => {
                     // save JWT token returned
                     console.log(payload)
+                    const credentials = {
+                        name: payload?.user?.name,
+                        email: payload?.user?.email,
+                        id: payload?.user?.id,
+                        token: payload?.token
+                    }
+                    dispatch(credentialsSet(credentials))
                     // clear form
                     resetControlledInputs()
                     // navigate to dashboard

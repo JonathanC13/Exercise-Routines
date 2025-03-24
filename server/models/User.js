@@ -46,6 +46,10 @@ UserSchema.methods.getName = function() {
     return this.name
 }
 
+UserSchema.methods.getEmail = function() {
+    return this.email
+}
+
 UserSchema.methods.getId = function() {
     return this._id
 }

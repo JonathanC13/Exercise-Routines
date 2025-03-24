@@ -10,6 +10,7 @@ continue with videos
 
 
 ***
+0. here: https://www.youtube.com/watch?v=oUZjO00NkhY&list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd&index=4
 1. Registration form
     1. CSS
     2. navigate

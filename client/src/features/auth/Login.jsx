@@ -3,10 +3,17 @@ import { useState, useEffect, useRef } from 'react'
 import { FaEye, FaEyeSlash, FaCircleInfo } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendLoginMutation } from './authApiSlice'
+import { credentialsSet, loggedOut } from './authSlice'
 
 const Login = () => {
     const emailRef = useRef()
     const msgRef = useRef()
+
+    const dispatch = useDispatch()
+    const loggedInCredentials = useSelector(state => state.auth)
+    useEffect(() => {
+        console.log(loggedInCredentials)
+    }, [loggedInCredentials])
 
     // authApiSlice mutations
     const [login, {isLoading}] = useUserSendLoginMutation()
@@ -40,6 +47,13 @@ const Login = () => {
                 .then((payload) => {
                     // save JWT token returned
                     console.log(payload)
+                    const credentials = {
+                        name: payload?.user?.name,
+                        email: payload?.user?.email,
+                        id: payload?.user?.id,
+                        token: payload?.token
+                    }
+                    dispatch(credentialsSet(credentials))
                     // clear form
                     resetControlledInputs()
                     // navigate to dashboard
@@ -65,6 +79,10 @@ const Login = () => {
         } finally {
             form.classList.remove('disabled')
         }
+    }
+
+    const logOutHandler = () => {
+        dispatch(loggedOut())
     }
 
   return (
@@ -109,6 +127,7 @@ const Login = () => {
                 }
             </div>
         </form>
+        <button onClick={logOutHandler}>Log out</button>
     </section>
   )
 }

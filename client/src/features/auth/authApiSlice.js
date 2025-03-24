@@ -11,7 +11,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (credentials) => ({
                 method: 'POST',
                 url: '/auth/login',
-                body: {...credentials}
+                body: {...credentials},
+                withCredentials: true
             })
             
         }),
@@ -36,7 +37,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (registerInfo) => ({
                 method: 'POST',
                 url: '/auth/register',
-                body: {...registerInfo}
+                body: {...registerInfo},
+                withCredentials: true
             })
         }),
       })

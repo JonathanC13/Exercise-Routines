@@ -4,7 +4,7 @@ import { Outlet, NavLink } from 'react-router'
 const AuthLayout = () => {
   return (
     <section className="auth-layout__section">
-        <h1>Auth</h1>
+        <p>Auth</p>
         <NavLink to="/login" end>
           Login
         </NavLink>
