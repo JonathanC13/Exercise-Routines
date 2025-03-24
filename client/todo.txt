@@ -25,6 +25,8 @@ continue with videos
 
 3. login, register, edit, add form add icon to show when input is valid
 
+4. within RequireAuth route, encase other routes in the Dashboard layout which will contain the navbar
+
 ** RIGHT NOW< CSS for Routines THEN: 
 https://www.youtube.com/playlist?list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd
 

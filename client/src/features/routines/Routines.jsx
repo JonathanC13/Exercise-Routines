@@ -1,10 +1,9 @@
 import React from 'react'
 import { useMemo } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useGetRoutinesQuery } from './routinesApiSlice'
 import Routine from './Routine'
 import classnames from 'classnames'
-import { useDispatch } from 'react-redux'
 import { routineAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 
 const createRoutineComps = (sortedRoutines, isFetching) => {
@@ -23,6 +22,7 @@ const createRoutineComps = (sortedRoutines, isFetching) => {
 const Routines = () => {
 
     const dispatch = useDispatch()
+    const auth = useSelector(state => state.auth)
 
     const addRoutineHandler = () => {
       // open set state to open routine add form modal
@@ -38,7 +38,7 @@ const Routines = () => {
       isSuccess,
       isError,
       error
-    } = useGetRoutinesQuery('routinesList',
+    } = useGetRoutinesQuery({token: auth?.credentials?.token},
       {
         pollingInterval: 100000, //60000
         refetchOnFocus: true,

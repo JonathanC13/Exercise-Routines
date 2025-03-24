@@ -40,9 +40,9 @@ routine : {
 export const routinesApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getRoutines: builder.query({
-            query: () => ({
+            query: (args) => ({
                 url: '/routines',
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                headers: { authorization: `Bearer ${args.token}` },
                 method: 'GET'
             }),
             validateStatus: (response, result) => {
@@ -72,7 +72,7 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         addRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                headers: { authorization: `Bearer ${args.token}` },
                 method: 'POST',
                 body: args.body
             }),
@@ -81,7 +81,7 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         updateRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/${args.routineId}`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                headers: { authorization: `Bearer ${args.token}` },
                 method: 'PATCH',
                 body: args.body
             }),
@@ -90,7 +90,7 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         deleteRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/${args.routineId}`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
+                headers: { authorization: `Bearer ${args.token}` },
                 method: 'DELETE'
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Routine', id: arg.routineId }]

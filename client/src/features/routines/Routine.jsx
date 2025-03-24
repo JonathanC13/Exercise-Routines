@@ -3,6 +3,7 @@ import React from 'react'
 import { memo, useState, useEffect, useRef } from 'react'
 import { useGetRoutinesQuery, useUpdateRoutineMutation, useDeleteRoutineMutation } from './routinesApiSlice'
 import { useNavigate } from 'react-router'
+import { useSelector } from 'react-redux'
 import classnames from 'classnames'
 import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
 
@@ -36,11 +37,12 @@ const checkValidDescription = (description) => {
 
 const Routine = ( { routineId = null, isFetching = true } ) => {
     // console.log(`${routineId} has rendered!`)
+    const auth = useSelector(state => state.auth)
 
     const routineNameRef = useRef()
     const msgRef = useRef()
 
-    const { routine } = useGetRoutinesQuery('routinesList',
+    const { routine } = useGetRoutinesQuery({token: auth?.credentials?.token},
       {
         selectFromResult: ({ data }) => ({
           routine: data?.entities[routineId]
@@ -159,7 +161,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                   'description': routineDescription ?? ''
               }
               // console.log(payload)
-              const response = await updateRoutine({ routineId: routine.id, body }).unwrap()
+              const response = await updateRoutine({ routineId: routine.id, body, token: auth?.credentials?.token }).unwrap()
                 .then((payload) => {})
                 .catch((error) => {
                   msgRef.current.focus()
@@ -185,7 +187,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           form.classList.add('disabled')
 
           try {
-            const response = await deleteRoutine({routineId: routine.id}).unwrap()
+            const response = await deleteRoutine({routineId: routine.id, token: auth?.credentials?.token }).unwrap()
               .then((payload) => {})
               .catch((error) => {
                 msgRef.current.focus()

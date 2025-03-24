@@ -4,8 +4,14 @@ import { FaEye, FaEyeSlash, FaCircleInfo } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendLoginMutation } from './authApiSlice'
 import { credentialsSet, loggedOut } from './authSlice'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 
 const Login = () => {
+
+    const navigate = useNavigate()
+    const location = useLocation()
+    const from = location.state?.from.pathname ?? '/'
+
     const emailRef = useRef()
     const msgRef = useRef()
 
@@ -46,7 +52,7 @@ const Login = () => {
             const response = await login({email: email, password: password}).unwrap()
                 .then((payload) => {
                     // save JWT token returned
-                    console.log(payload)
+                    // console.log(payload)
                     const credentials = {
                         name: payload?.user?.name,
                         email: payload?.user?.email,
@@ -57,6 +63,7 @@ const Login = () => {
                     // clear form
                     resetControlledInputs()
                     // navigate to dashboard
+                    navigate(from, { replace: true })
                 })
                 .catch((error) => {
                     console.log(error)

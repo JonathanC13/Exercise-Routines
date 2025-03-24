@@ -14,6 +14,9 @@ import Routine from './features/routines/Routine'
 import Sessions from './features/sessions/Sessions'
 import SessionPage from './features/sessions/SessionPage'
 import AddFormModals from './features/modals/addFormModals/AddFormModals'
+import Missing from './components/Missing'
+import Home from './components/Home'
+import RequireAuth from './components/RequireAuth'
 import store from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -25,25 +28,31 @@ function App() {
       <Provider store={store}>
         <BrowserRouter>
             <Routes>
-              <Route index element={<h1>hello</h1>}></Route>
               <Route element={<Layout />}>
+
                 {/* Public */}
+                <Route index element={<Home />}></Route>
                 <Route element={<AuthLayout />}>
                   <Route path="login" element={<Login />} />
                   <Route path="register" element={<Register />} />
                 </Route>
 
-                {/* later protected routes, for valid logged in users. */}
-                <Route path="routines">
-                  <Route index element={<Routines />}></Route>
-                  {/* <Route path=":routineId" element={<Routine />}></Route> */}
-                  <Route path=":routineId/sessions">
-                    <Route index element={<Sessions />}></Route>
-                    <Route path=":sessionId" element={<SessionPage />}></Route>
-                    {/* Route for exercises within the session */}
+                {/* protected routes valid logged in users. */}
+                <Route element={<RequireAuth />}>
+                  <Route path="routines">
+                    <Route index element={<Routines />}></Route>
+                    {/* <Route path=":routineId" element={<Routine />}></Route> */}
+                    <Route path=":routineId/sessions">
+                      <Route index element={<Sessions />}></Route>
+                      <Route path=":sessionId" element={<SessionPage />}></Route>
+                      {/* Route for exercises within the session */}
+                    </Route>
                   </Route>
-                  
                 </Route>
+
+                {/* catach all */}
+                <Route path='*' element={<Missing/>}></Route>
+
               </Route>
             </Routes>
         </BrowserRouter>
