@@ -21,7 +21,7 @@ const Login = () => {
         console.log(loggedInCredentials)
     }, [loggedInCredentials])
 
-    // authApiSlice mutations
+    // authApiSlice
     const [login, {isLoading}] = useUserSendLoginMutation()
 
     // controlled inputs
@@ -66,7 +66,6 @@ const Login = () => {
                     navigate(from, { replace: true })
                 })
                 .catch((error) => {
-                    console.log(error)
                     if (!error?.data) {
                         setMsg('No server response!')
                     // } else if (error?.data?.status === 409) {

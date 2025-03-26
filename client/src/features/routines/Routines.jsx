@@ -5,6 +5,7 @@ import { useGetRoutinesQuery } from './routinesApiSlice'
 import Routine from './Routine'
 import classnames from 'classnames'
 import { routineAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
+import { useRefreshToken } from '../../hooks/useRefreshToken'
 
 const createRoutineComps = (sortedRoutines, isFetching) => {
   const comps = sortedRoutines.map((routine) => {
@@ -23,6 +24,8 @@ const Routines = () => {
 
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
+
+    const refreshToken = useRefreshToken()
 
     const addRoutineHandler = () => {
       // open set state to open routine add form modal
@@ -78,6 +81,8 @@ const Routines = () => {
       content = <div className={containerClassname}>
           { routineComps }
           <button onClick={refetch}>manual refetch</button>
+          <br />
+          <button onClick={() => refreshToken()}>manual refresh token</button>
         </div>
       // console.log(content)
     } else if (isError) {
