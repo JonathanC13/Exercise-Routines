@@ -1,6 +1,7 @@
 const { StatusCodes } = require('http-status-codes')
 const UserModel = require('../models/User')
-const { BadRequestError, UnauthenticatedError } = require('../errors/')
+const { BadRequestError, UnauthenticatedError, ForbiddenError } = require('../errors/')
+const jwt = require('jsonwebtoken')
 
 const register = async(req, res) => {
     const { name, email, password } = req.body
@@ -43,16 +44,82 @@ const login = async(req, res) => {
         response.refreshToken = refreshToken
         const saveResponse = response.save()
     } catch (error) {
-        console.log(error)
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({'message': 'Server error!'})
         return
     }
 
     // send refresh token in a httpOnly cookie
-    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000})
+    res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None', secure: true}) // for prod: secure: true
     res.status(StatusCodes.OK).json({user: {name: response.getName(), email: response.getEmail(), id: response.getId()}, token: token})
 }
 
+const refreshToken = async(req, res) => {
+    const cookies = req.cookies
 
+    if (!cookies?.jwt) {
+        throw new UnauthenticatedError()
+    }
 
-module.exports = { login, register }
+    const refreshJWT = cookies.jwt
+    // if refresh token valid, gets here
+    const userDocument = await UserModel.findOne({refreshToken: refreshJWT})
+
+    if (!userDocument) {
+        // console.log('user not found!')
+        throw new ForbiddenError()
+    }
+
+    // verify refresh token is valid
+    const payload = jwt.verify(refreshJWT, process.env.JWT_REFRESH_SECRET, 
+        function(err, decoded) {
+            if (err || userDocument.getId() !== decoded.userId) {
+                // console.log(err)
+                // console.log('refresh token expired!')
+                throw new ForbiddenError()
+            }
+            return decoded
+        }
+    );
+
+    // generate new access token
+    const accessToken = userDocument.generateJWT()
+    // console.log('generated new access token: ', accessToken)
+
+    res.status(StatusCodes.OK).json({token: accessToken})
+}
+
+const logout = async(req, res) => {
+    // in the client side, also delete the access token. This will be in the memory; like in a Redux store or React Context
+
+    const cookies = req.cookies
+
+    if (!cookies?.jwt) {
+        res.status(StatusCodes.NO_CONTENT).json()   // successful and 204 = no content
+        return
+    }
+
+    const refreshJWT = cookies.jwt
+    // if refresh token valid, gets here
+    const userDocument = await UserModel.findOne({refreshToken: refreshJWT})
+
+    if (!userDocument) {
+        // have cookie, but no associated user. Need to remove the cookie
+        res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None', secure: true }) // for prod: secure: true // To clear the exact cookie, need to provide the same options as when it was created. // deprecated maxAge: 24 * 60 * 60 * 1000. Don't need to include
+        res.status(StatusCodes.NO_CONTENT).json()   // successful and 204 = no content
+        return
+    }
+
+    // remove refresh token from user
+    userDocument.refreshToken = ''
+    try {
+        const saveResponse = userDocument.save()
+        res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true }) // for prod: secure: true        // deprecated maxAge: 24 * 60 * 60 * 1000. Don't need to include
+    } catch (error) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({'message': 'Server error!'})
+        return
+    }
+
+    res.status(StatusCodes.NO_CONTENT).json()
+}
+
+module.exports = { login, register, refreshToken, logout }

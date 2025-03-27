@@ -25,3 +25,12 @@ Front end
 
 app.js
 app.use(limiter) // disabled for now *******
+
+
+
+
+** FOR PROD
+1. Change token expiry
+2. for Cookies, add option: secure: true  // actually, it works in dev too, so added already.
+  in Login
+  in Logout

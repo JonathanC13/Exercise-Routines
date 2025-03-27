@@ -1,6 +1,6 @@
 const UserModel = require('../models/User')
 const jwt = require('jsonwebtoken')
-const { UnauthenticatedError, ForbiddinError } = require('../errors')
+const { UnauthenticatedError, ForbiddenError } = require('../errors')
 
 const authorization = async(req, res, next) => {
     // request has the token in the header:
@@ -11,24 +11,24 @@ const authorization = async(req, res, next) => {
     }
 
     const token = authHeader.split(' ')[1]
-    try {
-        const payload = jwt.verify(token, process.env.JWT_SECRET, 
-            function(err, decoded) {
-                if (err) {
-                /*
-                    err = {
-                    name: 'TokenExpiredError',
-                    message: 'jwt expired',
-                    expiredAt: 1408621000
-                    }
-                */
-
-                    throw new ForbiddinError('name: ' + err.name + ', message: ' + err.message)
+    const payload = jwt.verify(token, process.env.JWT_SECRET, 
+        function(err, decoded) {
+            if (err) {
+            /*
+                err = {
+                name: 'TokenExpiredError',
+                message: 'jwt expired',
+                expiredAt: 1408621000
                 }
-                return decoded
-            }
-        );
+            */
 
+                throw new ForbiddenError('Access token expired!')
+            }
+            return decoded
+        }
+    );
+
+    try {
         // validate that the user decoded from the token exists in the DB
         const response = await UserModel.findById(payload.userId).select('-password')
         

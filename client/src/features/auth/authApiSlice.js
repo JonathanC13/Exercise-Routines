@@ -16,10 +16,10 @@ export const authApiSlice = apiSlice.injectEndpoints({
             })
             
         }),
-        userRefreshToken: builder.mutation({
+        userRefreshToken: builder.query({
             query: () => ({
-                method: 'POST',
-                url: '/auth/refresh',
+                method: 'GET',
+                url: '/auth/refreshToken',
                 withCredentials: true
             }),
         }),
@@ -52,4 +52,4 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useUserSendLoginMutation, useUserRefreshTokenMutation, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice
+export const { useUserSendLoginMutation, useUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice

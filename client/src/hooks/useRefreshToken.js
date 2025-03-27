@@ -1,4 +1,4 @@
-import { useUserRefreshTokenMutation } from "../features/auth/authApiSlice"
+import { useUserRefreshTokenQuery } from "../features/auth/authApiSlice"
 import { credentialsSet } from '../features/auth/authSlice'
 import { useSelector, useDispatch } from "react-redux"
 
@@ -6,7 +6,7 @@ const useRefreshToken = () => {
     const auth = useSelector(state => state.auth)
     const dispatch = useDispatch()
 
-    const [refreshToken, {isLoading}] = useUserRefreshTokenMutation()
+    const [refreshToken, {isLoading}] = useUserRefreshTokenQuery()
 
     const refresh = async() => {
         try {

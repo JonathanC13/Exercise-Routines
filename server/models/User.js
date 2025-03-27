@@ -54,21 +54,24 @@ UserSchema.methods.getEmail = function() {
 }
 
 UserSchema.methods.getId = function() {
-    return this._id
+    return this._id.toString()
 }
 
 UserSchema.methods.generateJWT = function() {
     return jwt.sign({userId:this._id, name:this.name}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_LIFETIME})
 }
 
-UserSchema.methods.generateRefreshJWT= function() {
+UserSchema.methods.generateRefreshJWT = function() {
     return jwt.sign({userId:this._id, name:this.name}, process.env.JWT_REFRESH_SECRET, {expiresIn: process.env.JWT_REFRESH_LIFETIME})
 }
 
+
 UserSchema.pre('save', function(next) {
-    // encrypt password
-    const salt = bcrypt.genSaltSync(10);
-    this.password = bcrypt.hashSync(this.password, salt);
+    if (this.isNew) {
+        // encrypt password
+        const salt = bcrypt.genSaltSync(10);
+        this.password = bcrypt.hashSync(this.password, salt);
+    }
     next()
 })
 

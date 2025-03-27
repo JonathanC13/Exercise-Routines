@@ -5,6 +5,7 @@ const helmet = require('helmet')
 const cors = require('cors')
 const rateLimit = require('express-rate-limit')
 const xss = require('./middleware/xss-clean')
+const cookieParser = require('cookie-parser')
 
 // db
 const connectDB = require('./db/connect')
@@ -31,6 +32,9 @@ const notFoundMiddleware = require('./middleware/not-found')
 const app = express()
 const port = process.env.PORT || 5000
 app.use(express.json());
+
+// middleware for cookies
+app.use(cookieParser())
 
 // extra security packages
 app.use(helmet())
