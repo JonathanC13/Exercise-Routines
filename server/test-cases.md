@@ -1,5 +1,6 @@
 # ./routes/auth
 ## POST : http://localhost:5000/api/v1/auth/register
+**Resonse changed: Will not respond with user credentials with token!**
 - Test 1: Missing key "name".
     *Description*:
         Request POST to register with missing "name" in the body.

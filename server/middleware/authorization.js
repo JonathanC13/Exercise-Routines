@@ -1,6 +1,6 @@
 const UserModel = require('../models/User')
 const jwt = require('jsonwebtoken')
-const { UnauthenticatedError } = require('../errors')
+const { UnauthenticatedError, ForbiddinError } = require('../errors')
 
 const authorization = async(req, res, next) => {
     // request has the token in the header:
@@ -23,7 +23,7 @@ const authorization = async(req, res, next) => {
                     }
                 */
 
-                    throw new Error('name: ' + err.name + ', message: ' + err.message)
+                    throw new ForbiddinError('name: ' + err.name + ', message: ' + err.message)
                 }
                 return decoded
             }
