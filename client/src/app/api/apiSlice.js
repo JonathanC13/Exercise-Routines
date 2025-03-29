@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { loggedOut } from '../../features/auth/authSlice'
+import { accessTokenSet, loggedOut } from '../../features/auth/authSlice'
 
 const url = 'http://localhost:5000/api/v1/' // import.meta.env.REACT_APP_BE_URL + '/auth' || 
 
@@ -9,10 +9,11 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
     if (result.error && result.error.status === 401) {
       // try to get a new token
       const refreshResult = await baseQuery('/userRefreshToken', api, extraOptions)
-      console.log('1: ',refreshResult)
+      console.log('2: ', refreshResult)
       if (refreshResult.data?.token) {
+        console.log('3: ', refreshResult.data?.token)
         // store the new token
-        api.dispatch(tokenReceived(refreshResult.data.token))
+        api.dispatch(accessTokenSet({accessToken: refreshResult.data.token}))
         // retry the initial query
         result = await baseQuery(args, api, extraOptions)
       } else {
@@ -24,7 +25,17 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
 
 const baseQuery = fetchBaseQuery({
     baseUrl: url,
-    credentials: 'include'
+    credentials: 'include',
+    prepareHeaders: (headers, { getState }) => {
+      const token = getState().auth.credentials.token
+  
+      // If we have a token set in state, let's assume that we should be passing it.
+      if (token) {
+        headers.set('authorization', `Bearer ${token}`)
+      }
+  
+      return headers
+    }
 })
 
 // Define our single API slice object
@@ -34,7 +45,7 @@ export const apiSlice = createApi({
     // All of our requests will have URLs starting with
     baseQuery: baseQueryWithReauth,
     // For cached data, so when it is invalidated it will retrieve.
-    tagTypes: ['Routine', 'Session', 'Exercise', 'Comment'],
+    tagTypes: ['User', 'Routine', 'Session', 'Exercise', 'Comment'],
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({})
 })

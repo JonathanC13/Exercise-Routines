@@ -36,7 +36,6 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
         getSessions: builder.query({
             query: (args) => ({
                 url: `/routines/${args.routineId}/sessions`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
                 method: 'GET'
             }),
             validateStatus: (response, result) => {
@@ -82,7 +81,6 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
         addSession: builder.mutation({
             query:  (args) => ({
                 url: `/routines/${args.routineId}/sessions`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
                 method: 'POST',
                 body: args.body
             }),
@@ -91,7 +89,6 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
         updateSession: builder.mutation({
             query:  (args) => ({
                 url: `/routines/${args.routineId}/sessions/${args.sessionId}`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
                 method: 'PATCH',
                 body: args.body
             }),
@@ -100,7 +97,6 @@ export const sessionsApiSlice = apiSlice.injectEndpoints({
         deleteSession: builder.mutation({
             query:  (args) => ({
                 url: `/routines/${args.routineId}/sessions/${args.sessionId}`,
-                headers: { authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2NzlmY2UyNTcwNDJmOTQyNmE0Yzc0OWEiLCJuYW1lIjoiSm9uIiwiaWF0IjoxNzM5NzM1OTEzLCJleHAiOjE3NDIzMjc5MTN9.EpCJIg0DXMw0o4u-ZxYOVhm8pmOO7oPHp_HFYnIgebU' },
                 method: 'DELETE'
             }),
             invalidatesTags: (result, error, arg) => [{type: 'Session', id: arg.sessionId}]

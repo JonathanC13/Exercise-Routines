@@ -1,8 +1,8 @@
-import { apiAuthSlice } from "../../app/api/apiAuthSlice"
+import { apiSlice } from "../../app/api/apiSlice"
 import { loggedOut } from "./authSlice"
 
 // Define our single API slice object
-export const authApiSlice = apiAuthSlice.injectEndpoints({
+export const authApiSlice = apiSlice.injectEndpoints({
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
         // The `login` endpoint is a "query" operation that returns data in the result object
