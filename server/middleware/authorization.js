@@ -5,8 +5,8 @@ const { UnauthenticatedError, ForbiddenError } = require('../errors')
 const authorization = async(req, res, next) => {
     // request has the token in the header:
     // authentication: Bearer token
-    const authHeader = req.headers.authorization
-    if (!authHeader || !authHeader.startsWith('Bearer')) {
+    const authHeader = req.headers.authorization || req.headers.Authorization
+    if (!authHeader?.startsWith('Bearer')) {
         throw new UnauthenticatedError('Not authenticated!')
     }
 
@@ -36,7 +36,7 @@ const authorization = async(req, res, next) => {
             throw new Error('User does not exist.')
         }
 
-        // attach the user to the job routes
+        // attach the user to the route
         req.user = {userId: payload.userId, name:payload.name}
     } catch (err) {
         throw new UnauthenticatedError('Not authenticated! ' + err.message)

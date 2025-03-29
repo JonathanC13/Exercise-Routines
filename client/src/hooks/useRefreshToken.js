@@ -1,40 +1,23 @@
-import { useUserRefreshTokenQuery } from "../features/auth/authApiSlice"
+import { useLazyUserRefreshTokenQuery } from "../features/auth/authApiSlice"
 import { credentialsSet } from '../features/auth/authSlice'
 import { useSelector, useDispatch } from "react-redux"
+import { useEffect } from 'react'
 
 const useRefreshToken = () => {
-    const auth = useSelector(state => state.auth)
+    const auth = useSelector(state => state.auth.credentials)
     const dispatch = useDispatch()
 
-    const [refreshToken, {isLoading}] = useUserRefreshTokenQuery()
+    const [refreshToken, { data, isLoading, isSuccess }] = useLazyUserRefreshTokenQuery()
 
-    const refresh = async() => {
-        try {
-            const response = await refreshToken().unwrap()
-                .then((payload) => {
-                    console.log('previous token: ', auth.token)
-                    console.log('new token ', payload.token)
-                    dispatch(credentialsSet({...auth, token: payload?.token}))
-                    return payload?.token
-                })
-                .error((error) => {
-                    if (!error?.data) {
-                        console.log('No server response!')
-                    } else if (error?.data?.message) {
-                        const message = error?.data?.message ?? 'Error!'
-                        console.log(message)
-                    } else {
-                        console.log('Refresh failed!')
-                    }
-                    return null
-                })
-        } catch (error) {
-            console.log('refresh err: ', error)
-            return null
+    useEffect(() => {
+        if (isSuccess) {
+            console.log('prev token: ', auth?.token)
+            dispatch(credentialsSet({...auth, token: data?.token}))
+            console.log('new token: ', data?.token)
         }
-    }
+    }, [data, isSuccess])
 
-    return refresh
+    return refreshToken
 }
 
 export default useRefreshToken

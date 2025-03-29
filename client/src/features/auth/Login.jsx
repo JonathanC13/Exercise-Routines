@@ -17,9 +17,9 @@ const Login = () => {
 
     const dispatch = useDispatch()
     const loggedInCredentials = useSelector(state => state.auth)
-    useEffect(() => {
-        console.log(loggedInCredentials)
-    }, [loggedInCredentials])
+    // useEffect(() => {
+    //     console.log(loggedInCredentials)
+    // }, [loggedInCredentials])
 
     // authApiSlice
     const [login, {isLoading}] = useUserSendLoginMutation()

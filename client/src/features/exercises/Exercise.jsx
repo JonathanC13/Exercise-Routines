@@ -43,11 +43,11 @@ const Exercise = ( { exercise = null } ) => {
         setReadMore(!readMore)
     }
 
-    const descOverLimit = exercise.description.length > descMaxLength
+    const descOverLimit = exerciseDesc.length > descMaxLength
     // initial state of readMore
     useEffect(() => {
         setReadMore(!descOverLimit)
-    }, [exercise])
+    }, [exerciseDesc])
 
     useEffect(() => {
         setValidExerciseName(checkValidName(exerciseName))
@@ -90,8 +90,6 @@ const Exercise = ( { exercise = null } ) => {
             }
         }
     }, [edit])
-
-    const description = readMore ? exercise.description : `${exercise.description.slice(0, descMaxLength)}...`
 
     // console.log('re-render: ', exercise.id)
 
@@ -189,7 +187,9 @@ const Exercise = ( { exercise = null } ) => {
 
     let content = ''
     
-    if (exercise) {
+    if (exercise?.id) {
+        const description = readMore ? exerciseDesc : `${exerciseDesc.slice(0, descMaxLength)}...`
+
         let exerciseOptionButtons =
             edit ?
                 <div className='editing__div'>

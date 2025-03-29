@@ -48,14 +48,14 @@ const Session = ( { sessionId = null }) => {
         }
     }
 
-    const sessionFormId = `session_form_${session.id}`
+    const sessionFormId = `session_form_${session?.id}`
     
     useEffect(() => {
         if (edit) {
             nameRef.current.focus()
         }
 
-        if (session) {
+        if (session?.id) {
             const form = document.getElementById(sessionFormId)
             const sessionOrderInput = form.querySelector('#session_order__input');
 
@@ -85,14 +85,13 @@ const Session = ( { sessionId = null }) => {
         setReadMore(!readMore)
     }
 
-    const descOverLimit = session.description.length > descMaxLength
+    const descOverLimit = desc.length > descMaxLength
         
     // initial state of readMore
     useEffect(() => {
         setReadMore(!descOverLimit)
-    }, [session])
+    }, [desc])
 
-    const description = readMore ? session.description : `${session.description.slice(0, descMaxLength)}...`
     // /Read more
 
     const sessionFormSubmitHandler = async(e) => {
@@ -185,7 +184,10 @@ const Session = ( { sessionId = null }) => {
 
     let content = ''
 
-    if (session) {
+    if (session?.id) {
+        
+        const description = readMore ? desc : `${desc.slice(0, descMaxLength)}...`
+
         let sessionOptionButtons =
             edit ? 
                 <div className='editing__div'>

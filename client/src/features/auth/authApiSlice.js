@@ -11,22 +11,20 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (credentials) => ({
                 method: 'POST',
                 url: '/auth/login',
-                body: {...credentials},
-                withCredentials: true
+                body: {...credentials}
             })
             
         }),
         userRefreshToken: builder.query({
             query: () => ({
                 method: 'GET',
-                url: '/auth/refreshToken',
-                withCredentials: true
+                url: '/auth/refreshToken'
             }),
         }),
         userSendLogOut: builder.mutation({
             query: () => ({
                 method: 'POST',
-                url: '/auth/logout',
+                url: '/auth/logout'
             }),
             async onQueryStarted(arg, {dispatch, queryFulfilled}) {
                 // callback for query
@@ -44,12 +42,11 @@ export const authApiSlice = apiSlice.injectEndpoints({
             query: (registerInfo) => ({
                 method: 'POST',
                 url: '/auth/register',
-                body: {...registerInfo},
-                withCredentials: true
+                body: {...registerInfo}
             })
         }),
       })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useUserSendLoginMutation, useUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice
+export const { useUserSendLoginMutation, useLazyUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice

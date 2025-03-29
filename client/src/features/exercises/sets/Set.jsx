@@ -24,7 +24,7 @@ const Set = ( { sets = [], setId = null } ) => {
     // }, [])
 
     const resetInfo = () => {
-        if (set) {
+        if (set?.id) {
             setExSetOrder(set.order)
             setExSetWeight(set.weight)
             setExSetReps(set.repsOrDuration)
@@ -150,7 +150,7 @@ const Set = ( { sets = [], setId = null } ) => {
 
     let content = ''
 
-    if (set) {
+    if (set?.id) {
         const setOptionButtons = 
             edit ?
                 <div className='editing__div'>

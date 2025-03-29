@@ -1,11 +1,13 @@
 import React from 'react'
-import { useMemo } from 'react'
+import { useMemo, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useGetRoutinesQuery } from './routinesApiSlice'
+import { loggedOut } from '../auth/authSlice'
 import Routine from './Routine'
 import classnames from 'classnames'
 import { routineAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
-import { useRefreshToken } from '../../hooks/useRefreshToken'
+import useRefreshToken from '../../hooks/useRefreshToken'
+import { useNavigate } from 'react-router-dom'
 
 const createRoutineComps = (sortedRoutines, isFetching) => {
   const comps = sortedRoutines.map((routine) => {
@@ -67,6 +69,23 @@ const Routines = () => {
       return sortedRoutines
     }, [routines])
 
+    const refreshRefetchHandler = async() => {
+      try {
+        console.log('11')
+        await refreshToken()
+        console.log('22')
+        const responseRefetch = await refetch().unwrap()
+        .then((payload) => {})
+        .catch((error) => {
+          return null
+        })
+        console.log('refetch: ', responseRefetch)
+        return responseRefetch
+      } catch {
+        return null
+      }
+    }
+
     let content = null
 
     if (isLoading) {
@@ -82,11 +101,22 @@ const Routines = () => {
           { routineComps }
           <button onClick={refetch}>manual refetch</button>
           <br />
-          <button onClick={() => refreshToken()}>manual refresh token</button>
+          <button onClick={() => refreshToken()}>manual refresh access token</button>
         </div>
       // console.log(content)
     } else if (isError) {
-      content = <h2 className="routines-error__h2">{error?.error ?? 'Error with server.'}</h2>
+      console.log(error)
+      if (error?.status === 403) {
+        console.log('aaaa')
+        content = <button onClick={() => refreshToken()}>manual refresh access token</button>
+        // retry query
+        if (!refreshRefetchHandler()) {
+          dispatch(loggedOut())
+          useNavigate('/login')
+        }
+      } else {
+        content = <h2 className="routines-error__h2">{error?.data?.message ?? 'Error with server.'}</h2>
+      }
     }
 
   return (

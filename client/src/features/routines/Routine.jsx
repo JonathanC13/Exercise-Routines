@@ -45,12 +45,12 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     const { routine } = useGetRoutinesQuery({token: auth?.credentials?.token},
       {
         selectFromResult: ({ data }) => ({
-          routine: data?.entities[routineId]
+          routine: data?.entities[routineId] ?? {}
       }),
     })
 
-    const [updateRoutine, { isLoading }] = useUpdateRoutineMutation()
-    const [deleteRoutine, { isLoadingDelete }] = useDeleteRoutineMutation()
+    const [updateRoutine, { isLoading: isLoadingUpdate }] = useUpdateRoutineMutation()
+    const [deleteRoutine, { isLoading: isLoadingDelete }] = useDeleteRoutineMutation()
 
     const [edit, setEdit] = useState(false)    
     const [routineName, setRoutineName] = useState(routine?.name ?? '')
@@ -58,18 +58,18 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     const [routineNameFocus, setRoutineNameFocus] = useState(false)
     const [routineOrder, setRoutineOrder] = useState(routine?.order ?? '')
     const [routineDescription, setRoutineDescription] = useState(routine?.description ?? '')
-    const [validRoutineDescription, setValidRoutineDescription] = useState(routine?.Description ? checkValidDescription(routine.Description) : false)
+    const [validRoutineDescription, setValidRoutineDescription] = useState(routine?.description ? checkValidDescription(routine.description) : false)
     const [routineDescriptionFocus, setRoutineDescriptionFocus] = useState(false)
     const [routineMessage, setRoutineMessage] = useState('')
 
-    const routineFormId = `routine_form_${routine.id}`
+    const routineFormId = `routine_form_${routine?.id}`
 
     useEffect(() => {
       if (edit) {
         routineNameRef.current.focus()
       }
 
-      if (routine) {
+      if (routine?.id) {
         const form = document.getElementById(routineFormId)
         // const routineNameInput = form.querySelector('#routine_name__input');
         const routineOrderInput = form.querySelector('#routine_order__input');
@@ -110,10 +110,10 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
     // const routine = useSelector(state => selectRoutineById(state, routineId))
 
-    const descOverLimit = routine.description.length > descMaxLength
+    const descOverLimit = routineDescription.length > descMaxLength
 
     const resetInfo = () => {
-      if (routine) {
+      if (routine?.id) {
         setRoutineName(routine.name)
         setRoutineOrder(routine.order)
         setRoutineDescription(routine.description)
@@ -123,9 +123,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     // initial state of readMore
     useEffect(() => {
       setReadMore(!descOverLimit)
-    }, [routine])
-
-    const description = readMore ? routine.description : `${routine.description.slice(0, descMaxLength)}...`
+    }, [routineDescription])
 
     const routineFormSubmitHandler = async(e) => {
       e.preventDefault()
@@ -214,7 +212,9 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     }
     
     let content = ''
-    if (routine) {
+    if (routine?.id) {
+      const description = readMore ? routine.description : `${routine.description.slice(0, descMaxLength)}...`
+
       // const routine = useSelector(selectRoutineById(routineId))
       let routineOptionButtons =
         edit ?

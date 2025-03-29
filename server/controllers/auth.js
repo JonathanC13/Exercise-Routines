@@ -57,6 +57,7 @@ const refreshToken = async(req, res) => {
     const cookies = req.cookies
 
     if (!cookies?.jwt) {
+        console.log('no jwt!')
         throw new UnauthenticatedError()
     }
 
@@ -65,7 +66,7 @@ const refreshToken = async(req, res) => {
     const userDocument = await UserModel.findOne({refreshToken: refreshJWT})
 
     if (!userDocument) {
-        // console.log('user not found!')
+        console.log('user not found!')
         throw new ForbiddenError()
     }
 
@@ -73,7 +74,7 @@ const refreshToken = async(req, res) => {
     const payload = jwt.verify(refreshJWT, process.env.JWT_REFRESH_SECRET, 
         function(err, decoded) {
             if (err || userDocument.getId() !== decoded.userId) {
-                // console.log(err)
+                console.log(err)
                 // console.log('refresh token expired!')
                 throw new ForbiddenError()
             }
