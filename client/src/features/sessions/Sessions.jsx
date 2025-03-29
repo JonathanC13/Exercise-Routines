@@ -38,7 +38,7 @@ const Sessions = () => {
         error
     } = useGetSessionsQuery( {routineId: routineId},
         {
-            pollingInterval: 30000,
+            pollingInterval: 30000, //30000
             refetchOnFocus: true,
             refetchOnMountOrArgChange: true
         }

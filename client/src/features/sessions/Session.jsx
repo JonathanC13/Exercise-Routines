@@ -30,15 +30,27 @@ const Session = ( { sessionId = null }) => {
         }),
     })
 
-    const [name, setName] = useState(session?.name ?? '')
-    const [validName, setValidName] = useState(session?.name ? checkValidName(session.name) : false)
+    const [sessionFormId, setSessionFormId] = useState(`session_form_${sessionId}`)
+    const [name, setName] = useState('')
+    const [validName, setValidName] = useState(false)
     const [nameFocus, setNameFocus] = useState(false)
-    const [order, setOrder] = useState(session?.order ?? '')
-    const [desc, setDesc] = useState(session?.description ?? '')
-    const [validDesc, setValidDesc] = useState(session?.description ? checkValidDescription(session.description) : false)
+    const [order, setOrder] = useState('')
+    const [desc, setDesc] = useState('')
+    const [validDesc, setValidDesc] = useState(false)
     const [descFocus, setDescFocus] = useState(false)
     const [edit, setEdit] = useState(false)
     const [msg, setMsg] = useState('')
+
+    useEffect(() => {
+        if (session?.id) {
+            setSessionFormId(`session_form_${session?.id}`)
+            setName(session?.name ?? '')
+            setValidName(session?.name ? checkValidName(session.name) : false)
+            setOrder(session?.order ?? '')
+            setDesc(session?.description ?? '')
+            setValidDesc(session?.description ? checkValidDescription(session.description) : false)
+        }
+    }, [session])
 
     const resetInfo = () => {
         if (session) {
@@ -47,15 +59,13 @@ const Session = ( { sessionId = null }) => {
             setDesc(session?.description ?? '')
         }
     }
-
-    const sessionFormId = `session_form_${session?.id}`
     
     useEffect(() => {
         if (edit) {
             nameRef.current.focus()
         }
 
-        if (session?.id) {
+        if (session?.id && document.getElementById(sessionFormId)) {
             const form = document.getElementById(sessionFormId)
             const sessionOrderInput = form.querySelector('#session_order__input');
 
@@ -130,7 +140,7 @@ const Session = ( { sessionId = null }) => {
                         'description': desc ?? ''
                     }
                     
-                    const response = await updateSession({routineId: routineId, sessionId: session.id, body: body}).unwrap()
+                    const response = await updateSession({routineId: routineId, sessionId: sessionId, body: body}).unwrap()
                         .then((payload) => {})
                         .catch((error) => {
                             msgRef.current.focus()
@@ -156,7 +166,7 @@ const Session = ( { sessionId = null }) => {
                 form.classList.add('disabled')
 
                 try {
-                    const response = await deleteSession({routineId: routineId, sessionId: session.id}).unwrap()
+                    const response = await deleteSession({routineId: routineId, sessionId: sessionId}).unwrap()
                         .then((payload) => {})
                         .catch((error) => {
                             msgRef.current.focus()

@@ -1,8 +1,8 @@
-import { apiSlice } from "../../app/api/apiSlice"
+import { apiAuthSlice } from "../../app/api/apiAuthSlice"
 import { loggedOut } from "./authSlice"
 
 // Define our single API slice object
-export const authApiSlice = apiSlice.injectEndpoints({
+export const authApiSlice = apiAuthSlice.injectEndpoints({
     // The "endpoints" represent operations and requests for this server
     endpoints: (builder) => ({
         // The `login` endpoint is a "query" operation that returns data in the result object
@@ -32,7 +32,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     const {data} = await queryFulfilled
 
                     dispatch(loggedOut())
-                    dispatch(apiSlice.util.resetApiState()) // clear the cache of this request
+                    dispatch(apiAuthSlice.util.resetApiState()) // clear the cache of this request
                 } catch (err) {
                     console.log(err)
                 }

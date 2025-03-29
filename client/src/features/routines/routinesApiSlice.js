@@ -42,7 +42,6 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         getRoutines: builder.query({
             query: (args) => ({
                 url: '/routines',
-                headers: { authorization: `Bearer ${args.token}` },
                 method: 'GET'
             }),
             validateStatus: (response, result) => {
@@ -72,7 +71,6 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         addRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/`,
-                headers: { authorization: `Bearer ${args.token}` },
                 method: 'POST',
                 body: args.body
             }),
@@ -81,7 +79,6 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         updateRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/${args.routineId}`,
-                headers: { authorization: `Bearer ${args.token}` },
                 method: 'PATCH',
                 body: args.body
             }),
@@ -90,7 +87,6 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
         deleteRoutine: builder.mutation({
             query: (args) => ({
                 url: `/routines/${args.routineId}`,
-                headers: { authorization: `Bearer ${args.token}` },
                 method: 'DELETE'
             }),
             invalidatesTags: (result, error, arg) => [{ type: 'Routine', id: arg.routineId }]

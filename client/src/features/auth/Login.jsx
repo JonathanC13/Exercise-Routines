@@ -51,6 +51,7 @@ const Login = () => {
         try {
             const response = await login({email: email, password: password}).unwrap()
                 .then((payload) => {
+                    console.log('login ', payload)
                     // save JWT token returned
                     // console.log(payload)
                     const credentials = {
@@ -89,6 +90,7 @@ const Login = () => {
 
     const logOutHandler = () => {
         dispatch(loggedOut())
+        navigate('/login')
     }
 
   return (

@@ -23,6 +23,9 @@ const months = {
 }
 
 const formatDisplayDate = (strDate) => {
+  if (strDate === '') {
+    return 'error'
+  }
   const date = new Date(strDate)
   return `${date.getFullYear()}, ${months[date.getMonth()]} ${date.getDate()}`
 }
@@ -52,24 +55,38 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     const [updateRoutine, { isLoading: isLoadingUpdate }] = useUpdateRoutineMutation()
     const [deleteRoutine, { isLoading: isLoadingDelete }] = useDeleteRoutineMutation()
 
-    const [edit, setEdit] = useState(false)    
-    const [routineName, setRoutineName] = useState(routine?.name ?? '')
-    const [validRoutineName, setValidRoutineName] = useState(routine?.name ? checkValidName(routine.name) : false)
+    const [edit, setEdit] = useState(false)
+    const [routineFormId, setRoutineFormId] = useState(`routine_form_${routineId}`)
+    const [routineName, setRoutineName] = useState('')
+    const [validRoutineName, setValidRoutineName] = useState(false)
     const [routineNameFocus, setRoutineNameFocus] = useState(false)
-    const [routineOrder, setRoutineOrder] = useState(routine?.order ?? '')
-    const [routineDescription, setRoutineDescription] = useState(routine?.description ?? '')
-    const [validRoutineDescription, setValidRoutineDescription] = useState(routine?.description ? checkValidDescription(routine.description) : false)
+    const [routineOrder, setRoutineOrder] = useState('')
+    const [routineDescription, setRoutineDescription] = useState('')
+    const [validRoutineDescription, setValidRoutineDescription] = useState(false)
     const [routineDescriptionFocus, setRoutineDescriptionFocus] = useState(false)
+    const [routineUpdatedAt, setRoutineUpdatedAt] = useState(0)
+    const [routineCreatedAt, setRoutineCreatedAt] = useState(0)
     const [routineMessage, setRoutineMessage] = useState('')
 
-    const routineFormId = `routine_form_${routine?.id}`
+    useEffect(() => {
+      if (routine?.id) {
+        setRoutineFormId(`routine_form_${routine?.id}`)
+        setRoutineName(routine?.name ?? '')
+        setValidRoutineName(routine?.name ? checkValidName(routine.name) : false)
+        setRoutineOrder(routine?.order ?? '')
+        setRoutineDescription(routine?.description ?? '')
+        setValidRoutineDescription(routine?.description ? checkValidDescription(routine.description) : false)
+        setRoutineUpdatedAt(routine?.updatedAt)
+        setRoutineCreatedAt(routine?.createdAt)
+      }
+    }, [routine])
 
     useEffect(() => {
       if (edit) {
         routineNameRef.current.focus()
       }
-
-      if (routine?.id) {
+      
+      if (routine?.id && document.getElementById(routineFormId)) {
         const form = document.getElementById(routineFormId)
         // const routineNameInput = form.querySelector('#routine_name__input');
         const routineOrderInput = form.querySelector('#routine_order__input');
@@ -81,7 +98,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           // routineNameInput.setAttribute('disabled', '')
           routineOrderInput.setAttribute('disabled', '')
         }
-    }
+      }
     }, [edit])
 
     useEffect(() => {
@@ -159,7 +176,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                   'description': routineDescription ?? ''
               }
               // console.log(payload)
-              const response = await updateRoutine({ routineId: routine.id, body, token: auth?.credentials?.token }).unwrap()
+              const response = await updateRoutine({ routineId: routineId, body, token: auth?.credentials?.token }).unwrap()
                 .then((payload) => {})
                 .catch((error) => {
                   msgRef.current.focus()
@@ -185,7 +202,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           form.classList.add('disabled')
 
           try {
-            const response = await deleteRoutine({routineId: routine.id, token: auth?.credentials?.token }).unwrap()
+            const response = await deleteRoutine({routineId: routineId, token: auth?.credentials?.token }).unwrap()
               .then((payload) => {})
               .catch((error) => {
                 msgRef.current.focus()
@@ -213,7 +230,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     
     let content = ''
     if (routine?.id) {
-      const description = readMore ? routine.description : `${routine.description.slice(0, descMaxLength)}...`
+      const description = readMore ? routineDescription : `${routineDescription.slice(0, descMaxLength)}...`
 
       // const routine = useSelector(selectRoutineById(routineId))
       let routineOptionButtons =
@@ -264,7 +281,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
               :
               <h1 id='routine_name__h1' className='routine__h1'>{routineName}</h1>
               }
-            <div className="door_open_svg__div cursor_pointer" onClick={() => {routineClickHandler(routine.id)}}> <FaDoorOpen/></div>
+            <div className="door_open_svg__div cursor_pointer" onClick={() => {routineClickHandler(routineId)}}> <FaDoorOpen/></div>
           </div>
           
           <section className="routine_info__div">
@@ -308,8 +325,8 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
             </div>
             <div className='routine__div_footer'>
               <div className="routine_footer__timestamps">
-                <span className='routine_footer__span'>Updated on: {formatDisplayDate(routine.updatedAt)}</span>
-                <span className='routine_footer__span'>Created on: {formatDisplayDate(routine.createdAt)}</span>
+                <span className='routine_footer__span'>Updated on: {formatDisplayDate(routineUpdatedAt)}</span>
+                <span className='routine_footer__span'>Created on: {formatDisplayDate(routineCreatedAt)}</span>
               </div>
             </div>
 
