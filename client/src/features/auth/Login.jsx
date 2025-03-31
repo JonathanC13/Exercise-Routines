@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendLoginMutation } from './authApiSlice'
 import { credentialsSet, loggedOut } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import FormInput from '../../components/FormInput'
 
 const Login = () => {
 
@@ -93,52 +94,14 @@ const Login = () => {
         navigate('/login')
     }
 
-    const inputOnFocusHandler = (e) => {
-        const inputId = e.currentTarget.id
-        let label = null
-        switch (inputId) {
-            case ('login-email__input'):
-                label = document.getElementById('login-email__label')
-                break;
-            case ('login-password__input'):
-                label = document.getElementById('login-password__label')
-                break;
-            default:
-                break;
-        }
-
-        if (label) {
-            label.classList.add('login__input__focus')
-        }
-    }
-
-    const inputOnBlurHandler = (e) => {
-        const inputElem = e.currentTarget
-        let label = null
-        switch (inputElem.id) {
-            case ('login-email__input'):
-                label = document.getElementById('login-email__label')
-                break;
-            case ('login-password__input'):
-                label = document.getElementById('login-password__label')
-                break;
-            default:
-                break;
-        }
-        
-        if (label && inputElem.value === '') {
-            label.classList.remove('login__input__focus')
-        }
-    }
-
   return (
     <section className="login__section">
         <form className="login__form" onSubmit={loginFormSubmitHandler}>
             <div className="login__form__div">
-                <div className="login_input_outer__div">
-                    <div className="login_input_inner__div">
-                        <label id='login-email__label' htmlFor="login-email__input" className="login-email__label login__label">Email*</label>
-                        <input required type="text" className="login-email__input login__input" id="login-email__input"
+                {/* <div className="form-input_outer__div">
+                    <div className="form-input_inner__div">
+                        <label id='login-email__label' htmlFor="login-email__input" className="form__label">Email*</label>
+                        <input required type="text" className="form-input__input" id="login-email__input"
                             onFocus={(e) => {inputOnFocusHandler(e)}}
                             onBlur={(e) => {inputOnBlurHandler(e)}}
                             ref={emailRef}
@@ -146,13 +109,26 @@ const Login = () => {
                             onChange={(e) => {setEmail(e.target.value)}}
                         />
                     </div>
-                </div>
+                </div> */}
+                <FormInput
+                    required = {true}
+                    labelId = 'login-email__label'
+                    labelText = 'Email*'
+                    inputType = 'text'
+                    inputId = 'login-email__input'
+                    onFocusCB = {() => {}}
+                    onBlurCB = {() => {}}
+                    inputRef = {emailRef}
+                    inputValueState = {email}
+                    inputOnChangeCB = {setEmail}
+                    aria = {false}
+                ></FormInput>
             </div>
             <div className="login__form__div">
-                <div className="login_input_outer__div">
-                    <div className="login_input_inner__div">
-                        <label id='login-password__label' htmlFor="login-password__input" className="login-password__label login__label">Password*</label>
-                        <input required className="login-password__input login__input" id="login-password__input" 
+                {/* <div className="form-input_outer__div">
+                    <div className="form-input_inner__div">
+                        <label id='login-password__label' htmlFor="login-password__input" className="form__label">Password*</label>
+                        <input required className="form-input__input" id="login-password__input" 
                             type = {
                                 showPassword ? "text" : "password"
                             }
@@ -162,7 +138,20 @@ const Login = () => {
                             onChange={(e) => {setPassword(e.target.value)}}
                         />
                     </div>
-                </div>
+                </div> */}
+                <FormInput
+                    required = {true}
+                    labelId = 'login-password__label'
+                    labelText = 'Password*'
+                    inputType = {showPassword ? "text" : "password"}
+                    inputId = 'login-password__input'
+                    onFocusCB = {inputOnFocusHandler}
+                    onBlurCB = {inputOnBlurHandler}
+                    inputRef = {null}
+                    inputValueState = {password}
+                    inputOnChangeCB = {setPassword}
+                    aria = {false}
+                ></FormInput>
                 <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
                     {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
                 </button>

@@ -232,10 +232,75 @@ body {
   background: #000;
   color: #fff;
   padding: 0.25rem;
-  position: relative;
-  bottom: -0.25rem;
+  position: absolute;
+  top: 60px;
+  z-index: 9002;
 }
 /* /GENERAL */
+
+/* FORM GENERAL */
+.form-input_outer__div {
+  width: 100%;
+  height: 80px;
+  padding: var(--LOGIN-REG-INPUT-PADDING);
+  background-color: var(--BG-COLOR);
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-input_inner__div {
+  width: 100%;
+  height: 60px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.form-input__input {
+  position: absolute;
+  font-size: 20px;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  left: 0;
+  bottom: 0;
+  border: none;
+  background-color: var(--BG-COLOR);
+}
+
+.form__label {
+  position: absolute;
+  width: 100%;
+  font-size: 1.25rem;
+  left: 0;
+  z-index: 9001;
+
+  /* animation-direction: alternate; */
+  transition-property: transform,color,font-size;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-duration: 200ms;
+  transition-delay: 0ms;
+  -webkit-transform: translateY(-0px);
+  -moz-transform: translateY(-0px);
+  -ms-transform: translateY(-0px);
+  transform: translateY(-0px);
+}
+
+.form-input__focus {
+  /* animation: form_label_animation 200ms cubic-bezier(0.25, 0.1, 0.25, 1) 0s 1 normal forwards; */
+  font-size: 14px;
+  /* transition-property: transform,color,font-size;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-duration: 200ms;
+  transition-delay: 0ms;
+  -webkit-transform: translateY(-0px);
+  -moz-transform: translateY(-0px);
+  -ms-transform: translateY(-0px); */
+  transform: translateY(-20px);
+}
+/* /FORM GENERAL */
 
 /* ANIMATIONS */
 /* The animation code */
@@ -333,76 +398,6 @@ body {
   width: 456px;
 }
 /* /LOGIN */
-
-/* LOGIN and REGISTRATION */
-.login_input_outer__div,
-.register_input_outer__div {
-  width: 100%;
-  height: 80px;
-  padding: var(--LOGIN-REG-INPUT-PADDING);
-  background-color: var(--BG-COLOR);
-  display: flex;
-  flex-flow: column nowrap;
-  align-items: center;
-  justify-content: center;
-}
-
-.login_input_inner__div,
-.register_input_inner__div {
-  width: 100%;
-  height: 60px;
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.login__label,
-.register__label {
-  position: absolute;
-  width: 100%;
-  font-size: 1.25rem;
-  left: 0;
-  z-index: 9001;
-
-  /* animation-direction: alternate; */
-  transition-property: transform,color,font-size;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  transition-duration: 200ms;
-  transition-delay: 0ms;
-  -webkit-transform: translateY(-0px);
-  -moz-transform: translateY(-0px);
-  -ms-transform: translateY(-0px);
-  transform: translateY(-0px);
-}
-
-.login__input,
-.register__input {
-  position: absolute;
-  font-size: 20px;
-  width: 100%;
-  height: 40px;
-  line-height: 40px;
-  left: 0;
-  bottom: 0;
-  border: none;
-  background-color: var(--BG-COLOR);
-}
-
-.login__input__focus,
-.register__input__focus {
-  /* animation: form_label_animation 200ms cubic-bezier(0.25, 0.1, 0.25, 1) 0s 1 normal forwards; */
-  font-size: 14px;
-  /* transition-property: transform,color,font-size;
-  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
-  transition-duration: 200ms;
-  transition-delay: 0ms;
-  -webkit-transform: translateY(-0px);
-  -moz-transform: translateY(-0px);
-  -ms-transform: translateY(-0px); */
-  transform: translateY(-20px);
-}
-
-/* /LOGIN and REGISTRATION */
 
 /* ROUTINES */
 .routines__section {

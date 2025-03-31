@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendRegisterMutation } from './authApiSlice'
 import { credentialsSet } from './authSlice'
+import FormInput from '../../components/FormInput'
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
@@ -149,7 +150,7 @@ const Register = () => {
         <form className="register__form" onSubmit={registerFormSubmitHandler}>
             <h1>Register</h1>
             <div className="register__form__div">
-                <label htmlFor="register-name__input" className="register-name__label">Name</label>
+                {/* <label htmlFor="register-name__input" className="register-name__label form__label">Name*</label>
                 <input required type="text" className="register-name__input" id="register-name__input"
                     ref={nameRef}
                     onFocus={() => setNameFocus(true)}
@@ -159,13 +160,30 @@ const Register = () => {
                     value={name}
                     onChange={(e) => {setName(e.target.value)}}
                 />
-                <p id="nameNote" className={nameFocus && name && !nameValid? "instructions" : "offscreen"}>
+                <p id="nameNote" className={nameFocus && name && !nameValid ? "instructions" : "offscreen"}>
                     <FaCircleInfo /><br/>
                     Please enter a name that is 1 to 50 characters.
-                </p>
+                </p> */}
+                <FormInput
+                    required = {true}
+                    labelId = 'register-name__label'
+                    labelText = 'Name*'
+                    inputType = 'text'
+                    inputId = 'register-name__input'
+                    onFocusCB = {setNameFocus}
+                    onBlurCB = {setNameFocus}
+                    inputRef = {nameRef}
+                    inputValueState = {name}
+                    inputOnChangeCB = {setName}
+                    aria = {true}
+                    ariaInvalidState = {nameValid}
+                    ariaDescribedby = 'nameNote'
+                    ariaInfoCond = {nameFocus && name && !nameValid}
+                    ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                ></FormInput>
             </div>
             <div className="register__form__div">
-                <label htmlFor="register-email__input" className="register-email__label">Email</label>
+                <label htmlFor="register-email__input" className="register-email__label form__label">Email</label>
                 <input required type="text" className="register-email__input" id="register-email__input" 
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
@@ -181,7 +199,7 @@ const Register = () => {
             </div>
             <div className="register__form__div">
                 <div className="register-password-label__div">
-                    <label htmlFor="register-password__input" className="register-password__label">Password</label>
+                    <label htmlFor="register-password__input" className="register-password__label form__label">Password</label>
                     <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
                         {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
                     </button>
@@ -202,7 +220,7 @@ const Register = () => {
                 </p>
             </div>
             <div className="register__form__div">
-                <label htmlFor="register-conf-password__input" className="register-conf-password__label">Confirm password</label>
+                <label htmlFor="register-conf-password__input" className="register-conf-password__label form__label">Confirm password</label>
                 <input required className="register-conf-password__input" id="register-conf-password__input" 
                     onFocus={() => setConfPasswordFocus(true)}
                     onBlur={() => setConfPasswordFocus(false)}
