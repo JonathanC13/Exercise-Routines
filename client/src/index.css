@@ -399,6 +399,21 @@ body {
 }
 /* /LOGIN */
 
+/* REGISTER */
+.register__form {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  width: 100%;
+  padding: var(--LOGIN-REG-FORM-PADDING);
+  gap: var(--LOGIN-REG-FORM-GAP);
+}
+
+.register__form__div {
+  width: 456px;
+}
+/* /REGISTER */
+
 /* ROUTINES */
 .routines__section {
   width: 100%;
@@ -493,7 +508,7 @@ body {
 .add_routine_input__div {
   display: flex;
   flex-flow: column nowrap;
-  width: 100%;
+  width: 456px;
   height: 100%;
   gap: var(--ADD-FORM-GAP);
   font-weight: bold;

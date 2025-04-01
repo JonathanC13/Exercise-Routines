@@ -170,8 +170,8 @@ const Register = () => {
                     labelText = 'Name*'
                     inputType = 'text'
                     inputId = 'register-name__input'
-                    onFocusCB = {setNameFocus}
-                    onBlurCB = {setNameFocus}
+                    onFocusCB = {(e) => setNameFocus(true)}
+                    onBlurCB = {(e) => setNameFocus(false)}
                     inputRef = {nameRef}
                     inputValueState = {name}
                     inputOnChangeCB = {setName}
@@ -183,7 +183,7 @@ const Register = () => {
                 ></FormInput>
             </div>
             <div className="register__form__div">
-                <label htmlFor="register-email__input" className="register-email__label form__label">Email</label>
+                {/* <label htmlFor="register-email__input" className="register-email__label form__label">Email</label>
                 <input required type="text" className="register-email__input" id="register-email__input" 
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
@@ -192,13 +192,30 @@ const Register = () => {
                     value={email}
                     onChange={(e) => {setEmail(e.target.value)}}
                 />
-                <p id="nameNote" className={emailFocus && email && !emailValid? "instructions" : "offscreen"}>
+                <p id="emailNote" className={emailFocus && email && !emailValid? "instructions" : "offscreen"}>
                     <FaCircleInfo /><br/>
                     Please provide a valid email.
-                </p>
+                </p> */}
+                <FormInput
+                    required = {true}
+                    labelId = 'register-email__label'
+                    labelText = 'Email*'
+                    inputType = 'text'
+                    inputId = 'register-email__input'
+                    onFocusCB = {(e) => setEmailFocus(true)}
+                    onBlurCB = {(e) => setEmailFocus(false)}
+                    inputRef = {null}
+                    inputValueState = {email}
+                    inputOnChangeCB = {setEmail}
+                    aria = {true}
+                    ariaInvalidState = {emailValid}
+                    ariaDescribedby = 'emailNote'
+                    ariaInfoCond = {emailFocus && email && !emailValid}
+                    ariaInfoText = 'Please provide a valid email.'
+                ></FormInput>
             </div>
             <div className="register__form__div">
-                <div className="register-password-label__div">
+                {/* <div className="register-password-label__div">
                     <label htmlFor="register-password__input" className="register-password__label form__label">Password</label>
                     <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
                         {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
@@ -217,10 +234,31 @@ const Register = () => {
                 <p id="passwordNote" className={passwordFocus && password && !passwordValid? "instructions" : "offscreen"}>
                     <FaCircleInfo /><br/>
                     Please provide a password that is 6 or more characters.
-                </p>
+                </p> */}
+
+                <FormInput
+                    required = {true}
+                    labelId = 'register-password__label'
+                    labelText = 'Password*'
+                    inputType = {showPassword ? "text" : "password"}
+                    inputId = 'register-password__input'
+                    onFocusCB = {(e) => setPasswordFocus(true)}
+                    onBlurCB = {(e) => setPasswordFocus(false)}
+                    inputRef = {null}
+                    inputValueState = {password}
+                    inputOnChangeCB = {setPassword}
+                    aria = {true}
+                    ariaInvalidState = {passwordValid}
+                    ariaDescribedby = 'passwordNote'
+                    ariaInfoCond = {passwordFocus && password && !passwordValid}
+                    ariaInfoText = 'Please provide a password that is 6 or more characters.'
+                ></FormInput>
+                <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
+                    {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+                </button>
             </div>
             <div className="register__form__div">
-                <label htmlFor="register-conf-password__input" className="register-conf-password__label form__label">Confirm password</label>
+                {/* <label htmlFor="register-conf-password__input" className="register-conf-password__label form__label">Confirm password</label>
                 <input required className="register-conf-password__input" id="register-conf-password__input" 
                     onFocus={() => setConfPasswordFocus(true)}
                     onBlur={() => setConfPasswordFocus(false)}
@@ -233,7 +271,25 @@ const Register = () => {
                 <p id="confPasswordNote" className={confPasswordFocus && confPassword && !confPasswordValid? "instructions" : "offscreen"}>
                     <FaCircleInfo /><br/>
                     Passwords do not match.
-                </p>
+                </p> */}
+
+                <FormInput
+                    required = {true}
+                    labelId = 'register-conf-password__label'
+                    labelText = 'Confirm password*'
+                    inputType = {showPassword ? "text" : "password"}
+                    inputId = 'register-conf-password__input'
+                    onFocusCB = {(e) => setConfPasswordFocus(true)}
+                    onBlurCB = {(e) => setConfPasswordFocus(false)}
+                    inputRef = {null}
+                    inputValueState = {confPassword}
+                    inputOnChangeCB = {setConfPassword}
+                    aria = {true}
+                    ariaInvalidState = {confPasswordValid}
+                    ariaDescribedby = 'confPasswordNote'
+                    ariaInfoCond = {confPasswordFocus && confPassword && !confPasswordValid}
+                    ariaInfoText = 'Passwords do not match.'
+                ></FormInput>
             </div>
             <div className="register__form__div">
                 <button className="register__button" type="submit" name='register' value='register' disabled={isLoading}>
@@ -251,12 +307,6 @@ const Register = () => {
                 }
             </div>
         </form>
-        <div className="register__form__div">
-            <p>Have an account?</p>
-            <button className="gotoLogin__button" type="submit" name='gotoLogin' value='gotoLogin' disabled={isLoading} onClick={gotoLogin}>
-                Log in
-            </button>
-        </div>
     </section>
   )
 }

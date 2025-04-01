@@ -124,7 +124,7 @@ const ExerciseAddForm = () => {
                     </div>
 
                     <div className="add_exercise_input__div">
-                        <label id='add_exercise_name__label' htmlFor="add_exercise_name__input" className="add_exercise__label">Name</label>
+                        {/* <label id='add_exercise_name__label' htmlFor="add_exercise_name__input" className="add_exercise__label">Name</label>
                         <input type="text" id='add_exercise_name__input' className='add_exercise_name__input' name='add_exercise_name__input' required
                             ref={nameRef}
                             onFocus={() => setNameFocus(true)}
@@ -137,7 +137,25 @@ const ExerciseAddForm = () => {
                         <p id="nameNote" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
                             <FaCircleInfo /><br/>
                             Please enter a name that is 1 to 50 characters.
-                        </p>
+                        </p> */}
+
+                        <FormInput
+                            required = {true}
+                            labelId = 'add_exercise_name__label'
+                            labelText = 'Name*'
+                            inputType = 'text'
+                            inputId = 'add_exercise_name__input'
+                            onFocusCB = {(e) => {setNameFocus(true)}}
+                            onBlurCB = {(e) => {setNameFocus(false)}}
+                            inputRef = {nameRef}
+                            inputValueState = {name}
+                            inputOnChangeCB = {setName}
+                            aria = {true}
+                            ariaInvalidState = {validName}
+                            ariaDescribedby = 'nameNote'
+                            ariaInfoCond = {nameFocus && name && !validName}
+                            ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                        ></FormInput>
                     </div>
 
                     <div className="add_exercise_input__div">
@@ -146,6 +164,24 @@ const ExerciseAddForm = () => {
                             value={order}
                             onChange={(e) => {setOrder(e.target.value)}}
                         />
+
+                        <FormInput
+                            required = {false}
+                            labelId = 'add_exercise_order__label'
+                            labelText = 'Order'
+                            inputType = 'number'
+                            inputId = 'add_exercise_order__input'
+                            onFocusCB = {(e) => {}}
+                            onBlurCB = {(e) => {}}
+                            inputRef = {null}
+                            inputValueState = {order}
+                            inputOnChangeCB = {setOrder}
+                            aria = {false}
+                            ariaInvalidState = {null}
+                            ariaDescribedby = ''
+                            ariaInfoCond = {false}
+                            ariaInfoText = ''
+                        ></FormInput>
                     </div>
 
                     <div className="add_exercise_input__div">

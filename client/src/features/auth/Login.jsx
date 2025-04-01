@@ -116,8 +116,8 @@ const Login = () => {
                     labelText = 'Email*'
                     inputType = 'text'
                     inputId = 'login-email__input'
-                    onFocusCB = {() => {}}
-                    onBlurCB = {() => {}}
+                    onFocusCB = {(e) => {}}
+                    onBlurCB = {(e) => {}}
                     inputRef = {emailRef}
                     inputValueState = {email}
                     inputOnChangeCB = {setEmail}
@@ -145,8 +145,8 @@ const Login = () => {
                     labelText = 'Password*'
                     inputType = {showPassword ? "text" : "password"}
                     inputId = 'login-password__input'
-                    onFocusCB = {inputOnFocusHandler}
-                    onBlurCB = {inputOnBlurHandler}
+                    onFocusCB = {(e) => {}}
+                    onBlurCB = {(e) => {}}
                     inputRef = {null}
                     inputValueState = {password}
                     inputOnChangeCB = {setPassword}

@@ -111,7 +111,7 @@ const RoutineAddForm = () => {
         <form onSubmit={(e) => {addRoutineHandler(e)}} className="add_routine__form">
             <h1 className="add_routine__h1">Add Routine</h1>
             <div className="add_routine_input__div">
-                <label htmlFor="add_routine_name__input" className="add_routine__label">Name</label>
+                {/* <label htmlFor="add_routine_name__input" className="add_routine__label">Name</label>
                 <input required type="text" className="add_routine_name__input" id="add_routine_name__input"
                     ref={nameRef}
                     onFocus={() => setNameFocus(true)}
@@ -124,14 +124,50 @@ const RoutineAddForm = () => {
                 <p id="nameNote" className={nameFocus && name && !validName ? "instructions" : "offscreen"}>
                     <FaCircleInfo /><br/>
                     Please enter a name that is 1 to 50 characters.
-                </p>
+                </p> */}
+
+                <FormInput
+                    required = {true}
+                    labelId = 'add_routine_name__label'
+                    labelText = 'Name*'
+                    inputType = 'text'
+                    inputId = 'add_routine_name__input'
+                    onFocusCB = {(e) => setNameFocus(true)}
+                    onBlurCB = {(e) => setNameFocus(false)}
+                    inputRef = {nameRef}
+                    inputValueState = {name}
+                    inputOnChangeCB = {setName}
+                    aria = {true}
+                    ariaInvalidState = {validName}
+                    ariaDescribedby = 'nameNote'
+                    ariaInfoCond = {nameFocus && name && !validName}
+                    ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                ></FormInput>
             </div>
             <div className="add_routine_input__div">
-                <label htmlFor="add_routine_order__input" className="add_routine__label">Order</label>
+                {/* <label htmlFor="add_routine_order__input" className="add_routine__label">Order</label>
                 <input type="number" className="add_routine_order__input" id="add_routine_order__input" 
                     value={order}
                     onChange={(e) => {setOrder(e.target.value)}}
-                />
+                /> */}
+
+                <FormInput
+                    required = {false}
+                    labelId = 'add_routine_order__label'
+                    labelText = 'Order'
+                    inputType = 'number'
+                    inputId = 'add_routine_order__input'
+                    onFocusCB = {(e) => {}}
+                    onBlurCB = {(e) => {}}
+                    inputRef = {null}
+                    inputValueState = {order}
+                    inputOnChangeCB = {setOrder}
+                    aria = {false}
+                    ariaInvalidState = {null}
+                    ariaDescribedby = ''
+                    ariaInfoCond = {false}
+                    ariaInfoText = ''
+                ></FormInput>
             </div>
             <div className="add_routine_input__div">
                 <label htmlFor="add_routine_desc__ta" className="add_routine__label">Description</label>

@@ -115,36 +115,108 @@ const SetAddForm = () => {
                 </div>
 
                 <div className="add_set_input__div">
-                    <label id='add_set_order__label' htmlFor="add_set_order__input" className="add_set_order__label">Order</label>
+                    {/* <label id='add_set_order__label' htmlFor="add_set_order__input" className="add_set_order__label">Order</label>
                     <input type="number" id='add_set_order__input' className='add_set_order__input' name='add_set_order__input'
                         ref={orderRef}
                         value={exSetOrder}
                         onChange={(e) => {setExSetOrder(e.target.value)}}
-                    />
+                    /> */}
+
+                    <FormInput
+                        required = {false}
+                        labelId = 'add_set_order__label'
+                        labelText = 'Order'
+                        inputType = 'number'
+                        inputId = 'add_set_order__input'
+                        onFocusCB = {(e) => {}}
+                        onBlurCB = {(e) => {}}
+                        inputRef = {orderRef}
+                        inputValueState = {exSetOrder}
+                        inputOnChangeCB = {setExSetOrder}
+                        aria = {false}
+                        ariaInvalidState = {null}
+                        ariaDescribedby = ''
+                        ariaInfoCond = {false}
+                        ariaInfoText = ''
+                    ></FormInput>
                 </div>
 
                 <div className="add_set_input__div">
-                    <label id='add_set_weight__label' htmlFor="add_set_weight__input" className="add_set_weight__label">Weight</label>
+                    {/* <label id='add_set_weight__label' htmlFor="add_set_weight__input" className="add_set_weight__label">Weight</label>
                     <input type="text" id='add_set_weight__input' className='add_set_weight__input' name='add_set_weight__input'
                         value={exSetWeight}
                         onChange={(e) => {setExSetWeight(e.target.value)}}
-                    />
+                    /> */}
+
+                    <FormInput
+                        required = {false}
+                        labelId = 'add_set_weight__label'
+                        labelText = 'Weight'
+                        inputType = 'text'
+                        inputId = 'add_set_weight__input'
+                        onFocusCB = {(e) => {}}
+                        onBlurCB = {(e) => {}}
+                        inputRef = {null}
+                        inputValueState = {exSetWeight}
+                        inputOnChangeCB = {setExSetWeight}
+                        aria = {false}
+                        ariaInvalidState = {null}
+                        ariaDescribedby = ''
+                        ariaInfoCond = {false}
+                        ariaInfoText = ''
+                    ></FormInput>
                 </div>
 
                 <div className="add_set_input__div">
-                    <label id='add_set_reps__label' htmlFor="add_set_reps__input" className="add_set_reps__label">Reps/Duration</label>
+                    {/* <label id='add_set_reps__label' htmlFor="add_set_reps__input" className="add_set_reps__label">Reps/Duration</label>
                     <input type="text" id='add_set_reps__input' className='add_set_reps__input' name='add_set_reps__input'
                         value={exSetReps}
                         onChange={(e) => {setExSetReps(e.target.value)}}
-                    />
+                    /> */}
+
+                    <FormInput
+                        required = {false}
+                        labelId = 'add_set_reps__label'
+                        labelText = 'Reps/Duration'
+                        inputType = 'text'
+                        inputId = 'add_set_reps__input'
+                        onFocusCB = {(e) => {}}
+                        onBlurCB = {(e) => {}}
+                        inputRef = {null}
+                        inputValueState = {exSetReps}
+                        inputOnChangeCB = {setExSetReps}
+                        aria = {false}
+                        ariaInvalidState = {null}
+                        ariaDescribedby = ''
+                        ariaInfoCond = {false}
+                        ariaInfoText = ''
+                    ></FormInput>
                 </div>
 
                 <div className="add_set_input__div">
-                    <label id='add_set_rest__label' htmlFor="add_set_rest__input" className="add_set_rest__label">Rest (seconds)</label>
+                    {/* <label id='add_set_rest__label' htmlFor="add_set_rest__input" className="add_set_rest__label">Rest (seconds)</label>
                     <input type="number" id='add_set_rest__input' className='add_set_rest__input' name='add_set_rest__input'
                         value={exSetRest}
                         onChange={(e) => {setExSetRest(e.target.value)}}
-                    />
+                    /> */}
+
+                    <FormInput
+                        required = {false}
+                        labelId = 'add_set_rest__label'
+                        labelText = 'Rest (seconds)'
+                        inputType = 'number'
+                        inputId = 'add_set_rest__input'
+                        onFocusCB = {(e) => {}}
+                        onBlurCB = {(e) => {}}
+                        inputRef = {null}
+                        inputValueState = {exSetRest}
+                        inputOnChangeCB = {setExSetRest}
+                        aria = {false}
+                        ariaInvalidState = {null}
+                        ariaDescribedby = ''
+                        ariaInfoCond = {false}
+                        ariaInfoText = ''
+                    ></FormInput>
                 </div>
 
                 <button type='submit' className='add_set__button cursor_pointer' name='add_set__button' disabled={isLoading}>Add Set</button>
