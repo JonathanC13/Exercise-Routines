@@ -151,7 +151,7 @@ const ExerciseAddForm = () => {
                             inputValueState = {name}
                             inputOnChangeCB = {setName}
                             aria = {true}
-                            ariaInvalidState = {validName}
+                            ariaValidState = {validName}
                             ariaDescribedby = 'nameNote'
                             ariaInfoCond = {nameFocus && name && !validName}
                             ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
@@ -177,10 +177,6 @@ const ExerciseAddForm = () => {
                             inputValueState = {order}
                             inputOnChangeCB = {setOrder}
                             aria = {false}
-                            ariaInvalidState = {null}
-                            ariaDescribedby = ''
-                            ariaInfoCond = {false}
-                            ariaInfoText = ''
                         ></FormInput>
                     </div>
 

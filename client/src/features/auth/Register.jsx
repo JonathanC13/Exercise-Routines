@@ -21,6 +21,12 @@ const checkValidPassword = (password) => {
     return password.length >= 6
 }
 
+const createShowPasswordComp = (showPassword, setShowPassword) => {
+    return <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
+        {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+    </button>
+}
+
 const Register = () => {
     const dispatch = useDispatch()
 
@@ -148,7 +154,6 @@ const Register = () => {
   return (
     <section className="register__section">
         <form className="register__form" onSubmit={registerFormSubmitHandler}>
-            <h1>Register</h1>
             <div className="register__form__div">
                 {/* <label htmlFor="register-name__input" className="register-name__label form__label">Name*</label>
                 <input required type="text" className="register-name__input" id="register-name__input"
@@ -176,7 +181,7 @@ const Register = () => {
                     inputValueState = {name}
                     inputOnChangeCB = {setName}
                     aria = {true}
-                    ariaInvalidState = {nameValid}
+                    ariaValidState = {nameValid}
                     ariaDescribedby = 'nameNote'
                     ariaInfoCond = {nameFocus && name && !nameValid}
                     ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
@@ -208,7 +213,7 @@ const Register = () => {
                     inputValueState = {email}
                     inputOnChangeCB = {setEmail}
                     aria = {true}
-                    ariaInvalidState = {emailValid}
+                    ariaValidState = {emailValid}
                     ariaDescribedby = 'emailNote'
                     ariaInfoCond = {emailFocus && email && !emailValid}
                     ariaInfoText = 'Please provide a valid email.'
@@ -247,15 +252,13 @@ const Register = () => {
                     inputRef = {null}
                     inputValueState = {password}
                     inputOnChangeCB = {setPassword}
+                    inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword)}
                     aria = {true}
-                    ariaInvalidState = {passwordValid}
+                    ariaValidState = {passwordValid}
                     ariaDescribedby = 'passwordNote'
                     ariaInfoCond = {passwordFocus && password && !passwordValid}
                     ariaInfoText = 'Please provide a password that is 6 or more characters.'
                 ></FormInput>
-                <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
-                    {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
-                </button>
             </div>
             <div className="register__form__div">
                 {/* <label htmlFor="register-conf-password__input" className="register-conf-password__label form__label">Confirm password</label>
@@ -285,14 +288,14 @@ const Register = () => {
                     inputValueState = {confPassword}
                     inputOnChangeCB = {setConfPassword}
                     aria = {true}
-                    ariaInvalidState = {confPasswordValid}
+                    ariaValidState = {confPasswordValid}
                     ariaDescribedby = 'confPasswordNote'
                     ariaInfoCond = {confPasswordFocus && confPassword && !confPasswordValid}
                     ariaInfoText = 'Passwords do not match.'
                 ></FormInput>
             </div>
-            <div className="register__form__div">
-                <button className="register__button" type="submit" name='register' value='register' disabled={isLoading}>
+            <div className="register-button__div">
+                <button className="register__button cursor_pointer" type="submit" name='register' value='register' disabled={isLoading}>
                     Register
                 </button>
             </div>

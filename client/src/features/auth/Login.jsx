@@ -7,6 +7,12 @@ import { credentialsSet, loggedOut } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import FormInput from '../../components/FormInput'
 
+const createShowPasswordComp = (showPassword, setShowPassword) => {
+    return <button type="button" className="show-password__button cursor_pointer" onClick={() => {setShowPassword(!showPassword)}}>
+        {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+    </button>
+}
+
 const Login = () => {
 
     const navigate = useNavigate()
@@ -150,14 +156,12 @@ const Login = () => {
                     inputRef = {null}
                     inputValueState = {password}
                     inputOnChangeCB = {setPassword}
+                    inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword)}
                     aria = {false}
                 ></FormInput>
-                <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
-                    {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
-                </button>
             </div>
-            <div className="login__form__div">
-                <button className="login__button" type="submit" disabled={isLoading}>
+            <div className="login-button__div">
+                <button className="login__button cursor_pointer" type="submit" disabled={isLoading}>
                     Login
                 </button>
             </div>

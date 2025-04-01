@@ -134,10 +134,6 @@ const SetAddForm = () => {
                         inputValueState = {exSetOrder}
                         inputOnChangeCB = {setExSetOrder}
                         aria = {false}
-                        ariaInvalidState = {null}
-                        ariaDescribedby = ''
-                        ariaInfoCond = {false}
-                        ariaInfoText = ''
                     ></FormInput>
                 </div>
 
@@ -160,10 +156,6 @@ const SetAddForm = () => {
                         inputValueState = {exSetWeight}
                         inputOnChangeCB = {setExSetWeight}
                         aria = {false}
-                        ariaInvalidState = {null}
-                        ariaDescribedby = ''
-                        ariaInfoCond = {false}
-                        ariaInfoText = ''
                     ></FormInput>
                 </div>
 
@@ -186,10 +178,6 @@ const SetAddForm = () => {
                         inputValueState = {exSetReps}
                         inputOnChangeCB = {setExSetReps}
                         aria = {false}
-                        ariaInvalidState = {null}
-                        ariaDescribedby = ''
-                        ariaInfoCond = {false}
-                        ariaInfoText = ''
                     ></FormInput>
                 </div>
 
@@ -212,10 +200,6 @@ const SetAddForm = () => {
                         inputValueState = {exSetRest}
                         inputOnChangeCB = {setExSetRest}
                         aria = {false}
-                        ariaInvalidState = {null}
-                        ariaDescribedby = ''
-                        ariaInfoCond = {false}
-                        ariaInfoText = ''
                     ></FormInput>
                 </div>
 
