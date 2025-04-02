@@ -299,10 +299,10 @@ const Register = () => {
                     Register
                 </button>
             </div>
-            <div className="register__form__div">
+            <div className={msg ? "register__form__div" : "offscreen"}>
                 <p className="register__p" ref={msgRef}>{msg}</p>
             </div>
-            <div className="register__form__div">
+            <div className={isLoading ? "register__form__div" : "offscreen"}>
                 {
                     isLoading ? 
                     <div className="loader"></div> :

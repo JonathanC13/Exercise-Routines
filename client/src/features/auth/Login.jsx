@@ -165,10 +165,10 @@ const Login = () => {
                     Login
                 </button>
             </div>
-            <div className="login__form__div">
+            <div className={msg ? "login__form__div" : "offscreen"}>
                 <p className="login__p" ref={msgRef}>{msg}</p>
             </div>
-            <div className="login__form__div">
+            <div className={isLoading ? "login__form__div" : "offscreen"}>
                 {
                     isLoading ? 
                     <div className="loader"></div> :
