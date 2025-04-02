@@ -31,7 +31,7 @@ img {
 
   /* COLOUR */
   --AUTH-LAYOUT-BG-COLOR: #fff;
-  --AUTH-OPTIONS-BG-COLOR: #8BBEB2;
+  --AUTH-OPTIONS-ACTIVE-COLOR: #8BBEB2;
   --FORM-INPUT-COLOR: #2E2836;
   --FORM-INPUT-ACTIVE-COLOR: #1A936F;
   --FORM-INPUT-INCORRECT-COLOR: red;
@@ -467,13 +467,20 @@ body {
   justify-content: center;
   font-size: 20px;
   text-decoration: none;
+
+  transition-property: box-shadow;
+  transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+  transition-duration: 500ms;
+  transition-delay: 0ms;
+  background-color: var(--BG-COLOR);
 }
 
-.slider {
-  position: absolute;
-  width: 50%;
-  height: 100%;
-  background-color: green;
+.login__navlink.active {
+  box-shadow: inset -10em 0 0 0 var(--AUTH-OPTIONS-ACTIVE-COLOR);
+}
+
+.register__navlink.active {
+  box-shadow: inset 10em 0 0 0 var(--AUTH-OPTIONS-ACTIVE-COLOR);
 }
 /* /AUTHLAYOUT */
 
