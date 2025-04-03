@@ -4,7 +4,7 @@ import { FaEyeSlash, FaEye, FaCircleInfo } from 'react-icons/fa6'
 import { useNavigate } from 'react-router'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendRegisterMutation } from './authApiSlice'
-import { credentialsSet } from './authSlice'
+import { credentialsSet, authMessageSet } from './authSlice'
 import FormInput from '../../components/FormInput'
 
 const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
@@ -22,13 +22,14 @@ const checkValidPassword = (password) => {
 }
 
 const createShowPasswordComp = (showPassword, setShowPassword) => {
-    return <button type="button" className="show-password__button" onClick={() => {setShowPassword(!showPassword)}}>
+    return <button type="button" className="show-password__button cursor_pointer" onClick={() => {setShowPassword(!showPassword)}}>
         {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
     </button>
 }
 
 const Register = () => {
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const nameRef = useRef()
     const msgRef = useRef()
@@ -86,11 +87,19 @@ const Register = () => {
     const registerFormSubmitHandler = async(e) => {
         e.preventDefault()
         setMsg('')
+        dispatch(authMessageSet({message: ''}))
         
         // const action = e.nativeEvent.submitter.value;
         const form = e.currentTarget
 
         form.classList.add('disabled')
+
+        if (!name || !email || !password || !confPassword) {
+            msgRef.current.focus()
+            setMsg('Please provide all required information!')
+            form.classList.remove('disabled')
+            return
+        }
 
         const isEmailValid = EMAIL_REGEX.test(email)
         if (!isEmailValid) {
@@ -100,9 +109,10 @@ const Register = () => {
             return
         }
 
-        if (!name || !email || !password || !confPassword) {
+        const isValidPassword = checkValidPassword(password)
+        if (!isValidPassword) {
             msgRef.current.focus()
-            setMsg('Please provide all required information!')
+            setMsg('Please enter valid password!')
             form.classList.remove('disabled')
             return
         }
@@ -118,17 +128,18 @@ const Register = () => {
             const response = await register({name: name, email: email, password: password}).unwrap()
                 .then((payload) => {
                     // save JWT token returned
-                    console.log(payload)
                     const credentials = {
                         name: payload?.user?.name,
                         email: payload?.user?.email,
                         id: payload?.user?.id,
                         token: payload?.token
                     }
-                    dispatch(credentialsSet(credentials))
                     // clear form
                     resetControlledInputs()
-                    // navigate to dashboard
+
+                    dispatch(authMessageSet({message: 'Registration successful, you may log in!'}))
+
+                    navigate("/login");
                 })
                 .catch((error) => {
                     if (!error?.data) {
@@ -300,7 +311,7 @@ const Register = () => {
                 </button>
             </div>
             <div className={msg ? "register__form__div" : "offscreen"}>
-                <p className="register__p" ref={msgRef}>{msg}</p>
+                <p className="register-error__p" ref={msgRef}>{msg}</p>
             </div>
             <div className={isLoading ? "register__form__div" : "offscreen"}>
                 {

@@ -15,7 +15,7 @@ const Layout = () => {
     
 
   return (
-    <section className="Home__section">
+    <section className="Layout__section">
         <Outlet />
     </section>
   )

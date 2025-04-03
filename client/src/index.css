@@ -63,6 +63,7 @@ img {
   --CANCEL-BUTTON-COLOR: #BE8A60;
   --DELETE-ICON-COLOR: #ff0000b0;
   --ADD-BUTTON-COLOR: #1a936f;
+  --ADD-BUTTON-HOVER-COLOR: rgba(26, 147, 111, 85%);
   --MODAL-CONTAINER-COLOR: #ffffff;
   --MODAL-BG-COLOR: rgba(239, 239, 239, 0.25);
   --MODAL-SHADOW-COLOR: gray;
@@ -423,6 +424,15 @@ body {
 /* /MODAL */
 
 /* AUTHLAYOUT */
+.auth-layout__div {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--BG-COLOR);
+}
+
 .auth-layout__section {
   width: 100%;
   max-width: 600px;
@@ -476,11 +486,11 @@ body {
 }
 
 .login__navlink.active {
-  box-shadow: inset -10em 0 0 0 var(--AUTH-OPTIONS-ACTIVE-COLOR);
+  box-shadow: inset -20em 0 0 0 var(--AUTH-OPTIONS-ACTIVE-COLOR);
 }
 
 .register__navlink.active {
-  box-shadow: inset 10em 0 0 0 var(--AUTH-OPTIONS-ACTIVE-COLOR);
+  box-shadow: inset 20em 0 0 0 var(--AUTH-OPTIONS-ACTIVE-COLOR);
 }
 /* /AUTHLAYOUT */
 
@@ -488,8 +498,9 @@ body {
 .login__section {
   width: 100%;
   display: flex;
+  flex-flow: column nowrap;
   justify-content: center;
-  
+  gap: var(--FORM-INPUT-GAP);
   background-color: #fff;
 }
 
@@ -523,6 +534,17 @@ body {
 
 .login__button:hover {
   background-color: var(--LOGIN-BUTTON-HOVER-COLOR);
+}
+
+.auth-msg__p {
+  color: green;
+  font-weight: 300;
+}
+
+.login-error__p,
+.register-error__p {
+  color: red;
+  font-weight: 300;
 }
 /* /LOGIN */
 
@@ -574,14 +596,13 @@ body {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--ROUTINES-SEC-GAP);
   padding: var(--ROUTINES-SEC-TB-PADDING);
 }
 
 .routines_title__div {
   width: min-content;
-  height: 100%;
 }
 
 .routines__h1 {
@@ -634,10 +655,15 @@ body {
   color:var(--BG-COLOR);
   border-radius: var(--ADD-BTN-BORDER-RAD);
 }
+
+.routines_add__button:hover {
+  background-color: var(--ADD-BUTTON-HOVER-COLOR);
+}
 /* /ROUTINES */
 
 /* ROUTINE ADD FORM */
 .add_routine__form {
+  width: 100%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -661,7 +687,7 @@ body {
 .add_routine_input__div {
   display: flex;
   flex-flow: column nowrap;
-  width: 456px;
+  width: 100%;
   height: 100%;
   gap: var(--ADD-FORM-GAP);
   font-weight: bold;
@@ -679,6 +705,7 @@ body {
 .add_routine_desc__ta {
   min-width: 100%;
   max-width: 100%;
+  font-size: 20px;
 }
 
 .add_routine_order__input,
@@ -691,7 +718,6 @@ body {
 /* ROUTINE */
 .routine__section {
   width: 100%;
-  height: 100%;
   border-radius: var(--ROUTINE-SEC-BORDER-RAD);
   background-color: var(--ROUTINE-BG-COLOR);
   box-shadow: var(--ROUTINE-SEC-SHADOW);  
@@ -738,7 +764,6 @@ body {
 
 .routine_info__div {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-flow: column nowrap;
   gap: var(--ROUTINE-DIV-GAP);
@@ -769,7 +794,6 @@ body {
 
 .routine__div_footer {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-flow: row nowrap;
   justify-content: space-between;

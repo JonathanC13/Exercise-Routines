@@ -13,7 +13,7 @@ const register = async(req, res) => {
     // mongoose will exec default pre('save') that exec the validation checks, then run the any custom pre('save') function, then send the request to MongoDB
     const response = await UserModel.create({name, email, emailLowercase: email.toLowerCase(), password})  // in the model, it will call our pre('save') to encrypt the password
 
-    res.status(StatusCodes.CREATED)
+    res.status(StatusCodes.CREATED).json()
 }
 
 const login = async(req, res) => {
@@ -57,16 +57,17 @@ const refreshToken = async(req, res) => {
     const cookies = req.cookies
 
     if (!cookies?.jwt) {
-        console.log('no jwt!')
+        // console.log('no jwt!')
         throw new UnauthenticatedError()
     }
 
     const refreshJWT = cookies.jwt
+    // console.log(refreshJWT)
     // if refresh token valid, gets here
     const userDocument = await UserModel.findOne({refreshToken: refreshJWT})
 
     if (!userDocument) {
-        console.log('user not found!')
+        // console.log('user not found!')
         throw new ForbiddenError()
     }
 
@@ -74,7 +75,7 @@ const refreshToken = async(req, res) => {
     const payload = jwt.verify(refreshJWT, process.env.JWT_REFRESH_SECRET, 
         function(err, decoded) {
             if (err || userDocument.getId() !== decoded.userId) {
-                console.log(err)
+                // console.log(err)
                 // console.log('refresh token expired!')
                 throw new ForbiddenError()
             }

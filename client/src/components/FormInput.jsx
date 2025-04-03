@@ -31,7 +31,7 @@ const FormInput = ({
         <></>
 
     const label = document.getElementById(labelId)
-    if (label ) {
+    if (label && aria) {
         if (!ariaValidState && inputValueState.length > 0) {
             label.classList.add('form-input-incorrect-color')
         } else {
@@ -40,7 +40,7 @@ const FormInput = ({
     }
 
     const outerDiv = document.getElementById(outerDivId)
-    if (outerDiv) {
+    if (outerDiv && aria) {
         if (!ariaValidState && inputValueState.length > 0) {
             outerDiv.classList.add('form-outer-div-incorrect-color')
         } else {
@@ -56,7 +56,7 @@ const FormInput = ({
             label.classList.add('form-input__focus-color')
             label.classList.add('form-input__focus')
 
-            if (!ariaValidState) {
+            if (aria && !ariaValidState) {
                 label.classList.add('form-input-incorrect-color')
             }
         }
@@ -64,7 +64,7 @@ const FormInput = ({
         if (outerDiv) {
             outerDiv.classList.add('form-outer-div__focus')
 
-            if (!ariaValidState) {
+            if (aria && !ariaValidState) {
                 outerDiv.classList.add('form-outer-div-incorrect-color')
             }
         }

@@ -28,32 +28,29 @@ function App() {
       <Provider store={store}>
         <BrowserRouter>
             <Routes>
-              <Route element={<Layout />}>
+              {/* Public */}
+              <Route index element={<Home />}></Route>
+              <Route element={<AuthLayout />}>
+                <Route path="login" element={<Login />} />
+                <Route path="register" element={<Register />} />
+              </Route>
 
-                {/* Public */}
-                <Route index element={<Home />}></Route>
-                <Route element={<AuthLayout />}>
-                  <Route path="login" element={<Login />} />
-                  <Route path="register" element={<Register />} />
-                </Route>
-
-                {/* protected routes valid logged in users. */}
-                <Route element={<RequireAuth />}>
-                  <Route path="routines">
-                    <Route index element={<Routines />}></Route>
-                    {/* <Route path=":routineId" element={<Routine />}></Route> */}
-                    <Route path=":routineId/sessions">
-                      <Route index element={<Sessions />}></Route>
-                      <Route path=":sessionId" element={<SessionPage />}></Route>
-                      {/* Route for exercises within the session */}
-                    </Route>
+              {/* protected routes valid logged in users. */}
+              <Route element={<RequireAuth />}>
+                <Route path="routines">
+                  <Route index element={<Routines />}></Route>
+                  {/* <Route path=":routineId" element={<Routine />}></Route> */}
+                  <Route path=":routineId/sessions">
+                    <Route index element={<Sessions />}></Route>
+                    <Route path=":sessionId" element={<SessionPage />}></Route>
+                    {/* Route for exercises within the session */}
                   </Route>
                 </Route>
-
-                {/* catach all */}
-                <Route path='*' element={<Missing/>}></Route>
-
               </Route>
+
+              {/* catach all */}
+              <Route path='*' element={<Missing/>}></Route>
+
             </Routes>
         </BrowserRouter>
         <AddFormModals></AddFormModals>

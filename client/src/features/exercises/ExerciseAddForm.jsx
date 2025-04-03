@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addFormClosed } from '../modals/addFormModals/addFormModalsSlice'
 import { useAddExerciseMutation } from './exerciseApiSlice'
 import { FaCircleInfo } from 'react-icons/fa6'
+import FormInput from '../../components/FormInput'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50

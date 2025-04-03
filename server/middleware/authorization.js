@@ -22,7 +22,7 @@ const authorization = async(req, res, next) => {
                 }
             */
 
-                throw new ForbiddenError('Access token expired!')
+                throw new UnauthenticatedError('Access token expired!')
             }
             return decoded
         }

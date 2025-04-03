@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addFormClosed } from '../modals/addFormModals/addFormModalsSlice'
 import { useAddSessionMutation } from './sessionsApiSlice'
 import { FaCircleInfo } from 'react-icons/fa6'
+import FormInput from '../../components/FormInput'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -170,7 +171,7 @@ const SessionAddForm = () => {
                         inputValueState = {order}
                         inputOnChangeCB = {setOrder}
                         aria = {false}
-                        ariaValidState = {null}
+                        ariaValidState = {true}
                         ariaDescribedby = ''
                         ariaInfoCond = {false}
                         ariaInfoText = ''

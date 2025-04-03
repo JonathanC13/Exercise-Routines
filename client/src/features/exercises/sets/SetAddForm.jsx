@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { addFormClosed } from '../../modals/addFormModals/addFormModalsSlice'
 import { useUpdateExerciseMutation } from '../exerciseApiSlice'
+import FormInput from '../../../components/FormInput'
 
 const SetAddForm = () => {
 

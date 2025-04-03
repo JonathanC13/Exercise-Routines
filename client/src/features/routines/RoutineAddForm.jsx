@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { useAddRoutineMutation } from './routinesApiSlice'
 import { addFormClosed } from '../modals/addFormModals/addFormModalsSlice'
 import { FaCircleInfo } from 'react-icons/fa6'
+import FormInput from '../../components/FormInput'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -155,7 +156,7 @@ const RoutineAddForm = () => {
                     required = {false}
                     labelId = 'add_routine_order__label'
                     labelText = 'Order'
-                    inputType = 'number'
+                    inputType = 'Number'
                     inputId = 'add_routine_order__input'
                     onFocusCB = {(e) => {}}
                     onBlurCB = {(e) => {}}
@@ -163,7 +164,7 @@ const RoutineAddForm = () => {
                     inputValueState = {order}
                     inputOnChangeCB = {setOrder}
                     aria = {false}
-                    ariaValidState = {null}
+                    ariaValidState = {true}
                     ariaDescribedby = ''
                     ariaInfoCond = {false}
                     ariaInfoText = ''

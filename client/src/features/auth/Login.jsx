@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FaEye, FaEyeSlash, FaCircleInfo } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendLoginMutation } from './authApiSlice'
-import { credentialsSet, loggedOut } from './authSlice'
+import { authMessageSet, credentialsSet, loggedOut } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import FormInput from '../../components/FormInput'
 
@@ -23,7 +23,7 @@ const Login = () => {
     const msgRef = useRef()
 
     const dispatch = useDispatch()
-    const loggedInCredentials = useSelector(state => state.auth)
+    const {credentials: loggedInCredentials, authMessage: authMessage} = useSelector(state => state.auth)
     // useEffect(() => {
     //     console.log(loggedInCredentials)
     // }, [loggedInCredentials])
@@ -42,6 +42,8 @@ const Login = () => {
         emailRef.current.focus()
     }, [])
 
+
+
     const resetControlledInputs = () => {
         setEmail('')
         setPassword('')
@@ -52,13 +54,14 @@ const Login = () => {
         e.preventDefault()
         const form = e.currentTarget
         setMsg('')
+        dispatch(authMessageSet({message: ''}))
 
         form.classList.add('disabled')
 
         try {
             const response = await login({email: email, password: password}).unwrap()
                 .then((payload) => {
-                    console.log('login ', payload)
+                    // console.log('login ', payload)
                     // save JWT token returned
                     // console.log(payload)
                     const credentials = {
@@ -102,6 +105,7 @@ const Login = () => {
 
   return (
     <section className="login__section">
+        <p className={authMessage !== '' ? 'auth-msg__p' : 'auth-msg__p offscreen'}>{authMessage}</p>
         <form className="login__form" onSubmit={loginFormSubmitHandler}>
             <div className="login__form__div">
                 {/* <div className="form-input_outer__div">
@@ -166,7 +170,7 @@ const Login = () => {
                 </button>
             </div>
             <div className={msg ? "login__form__div" : "offscreen"}>
-                <p className="login__p" ref={msgRef}>{msg}</p>
+                <p className="login-error__p" ref={msgRef}>{msg}</p>
             </div>
             <div className={isLoading ? "login__form__div" : "offscreen"}>
                 {
