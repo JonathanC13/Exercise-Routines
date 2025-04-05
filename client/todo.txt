@@ -30,8 +30,8 @@ continue with videos
 ** RIGHT NOW< CSS for Routines THEN: 
 https://www.youtube.com/playlist?list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd
 
-1. CSS for Routine container Edit button
-1.1. Edit button to Routine form. then fire edit to server. useNavigate back to routines page.
+persitent login: https://www.youtube.com/watch?v=27KeYk-5vJw&list=PL0Zuz27SZ-6PRCpm9clX0WiBEMB70FWwd&index=6
+
 2. Think about Navbar. widescreen = side navbar, mobile = bottom navbar. 
     Logo -> Home (Routines)
     Routines onclick/hover opens container that has a list of the current Routines + Add routine option.

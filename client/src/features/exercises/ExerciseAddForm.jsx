@@ -160,11 +160,11 @@ const ExerciseAddForm = () => {
                     </div>
 
                     <div className="add_exercise_input__div">
-                        <label id='add_exercise_order__label' htmlFor="add_exercise_order__input" className="add_exercise__label">Order</label>
+                        {/* <label id='add_exercise_order__label' htmlFor="add_exercise_order__input" className="add_exercise__label">Order</label>
                         <input type="number" id='add_exercise_order__input' className='add_exercise_order__input' name='add_exercise_order__input'
                             value={order}
                             onChange={(e) => {setOrder(e.target.value)}}
-                        />
+                        /> */}
 
                         <FormInput
                             required = {false}
@@ -205,7 +205,9 @@ const ExerciseAddForm = () => {
                         />
                     </div>
 
-                    <button type='submit' className='add_set__button cursor_pointer' name='add_exercise__button' disabled={isLoading}>Add Exercise</button>
+                    <div className="add_exercise_input__div">
+                        <button type='submit' className='add_exercise__button cursor_pointer' name='add_exercise__button' disabled={isLoading}>Add Exercise</button>
+                    </div>
 
                     <p className="add_set_msg__p" id='add_exercise_msg__p' ref={msgRef}>{msg}</p>
                 </form>

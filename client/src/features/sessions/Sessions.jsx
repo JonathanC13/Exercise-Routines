@@ -1,7 +1,7 @@
 import React from 'react'
 import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
 import { useGetSessionsQuery } from './sessionsApiSlice'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import Session from './Session'
 import { useDispatch } from 'react-redux'
 import { sessionAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
@@ -19,7 +19,7 @@ const createSessionComps = (routineId, sessionIds) => {
 }
 
 const Sessions = () => {
-
+    const navigate = useNavigate()
     const { routineId } = useParams()
     const dispatch = useDispatch()
 
@@ -46,6 +46,10 @@ const Sessions = () => {
 
     const addSessionHandler = () => {
         dispatch(sessionAddFormOpenChanged({ addFormOpen: true, addFormType: 'sessionAddForm', routine: routine }))
+    }
+
+    const toRoutines = () => {
+        navigate('/routines')
     }
 
     let content = ''
@@ -75,6 +79,7 @@ const Sessions = () => {
   return (
     <section className='sessions__section'>
         {content}
+        <button onClick={toRoutines}>to Routines</button>
     </section>
   )
 }

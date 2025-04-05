@@ -5,13 +5,13 @@ const url = 'http://localhost:5000/api/v1/' // import.meta.env.REACT_APP_BE_URL 
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)
-    console.log('0, ', result)
+    // console.log('0, ', result)
     if (result.error && result.error.status === 401) {
-      console.log('1, ', result.error)
+      // console.log('1, ', result.error)
       // try to get a new token
       const refreshResult = await baseQuery('/auth/refreshToken', api, extraOptions)
       if (refreshResult.data?.token) {
-        console.log('2, ', refreshResult)
+        // console.log('2, ', refreshResult)
         // store the new token
         api.dispatch(accessTokenSet({accessToken: refreshResult.data.token}))
         // retry the initial query

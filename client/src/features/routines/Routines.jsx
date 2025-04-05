@@ -22,6 +22,7 @@ const createRoutineComps = (sortedRoutines, isFetching) => {
 
 const Routines = () => {
 
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
 
@@ -65,6 +66,10 @@ const Routines = () => {
       return sortedRoutines
     }, [routines])
 
+    const toHome = () => {
+      navigate('/')
+    }
+
     let content = null
 
     if (isLoading) {
@@ -79,6 +84,7 @@ const Routines = () => {
       content = <div className={containerClassname}>
           { routineComps }
           <button onClick={refetch}>manual refetch</button>
+          <button onClick={toHome}>to Home</button>
         </div>
       // console.log(content)
     } else if (isError) {

@@ -204,7 +204,9 @@ const SetAddForm = () => {
                     ></FormInput>
                 </div>
 
-                <button type='submit' className='add_set__button cursor_pointer' name='add_set__button' disabled={isLoading}>Add Set</button>
+                <div className="add_set_input__div">
+                    <button type='submit' className='add_set__button cursor_pointer' name='add_set__button' disabled={isLoading}>Add Set</button>
+                </div>
 
                 <p className="add_set_msg__p" id='add_set_msg__p' ref={msgRef}>{msg}</p>
             </form>
