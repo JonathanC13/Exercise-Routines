@@ -86,8 +86,8 @@ const refreshToken = async(req, res) => {
     // generate new access token
     const accessToken = userDocument.generateJWT()
     // console.log('generated new access token: ', accessToken)
-
-    res.status(StatusCodes.OK).json({token: accessToken})
+    res.status(StatusCodes.OK).json({user: {name: userDocument.getName(), email: userDocument.getEmail(), id: userDocument.getId()}, token: accessToken})
+    // res.status(StatusCodes.OK).json({token: accessToken})
 }
 
 const logout = async(req, res) => {

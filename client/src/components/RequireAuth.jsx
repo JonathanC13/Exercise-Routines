@@ -5,10 +5,10 @@ const RequireAuth = () => {
     const location = useLocation()
     // get from store the auth info.
     const auth = useSelector(state => state.auth)
-    console.log(auth)
+    // console.log('req: ', auth)
     // show the children if user exists, else go to login page.
     return (
-        auth?.credentials?.email
+        auth?.credentials?.token
             ? <Outlet />
             :
             <Navigate to='/login' state={{from: location}} replace></Navigate>

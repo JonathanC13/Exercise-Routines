@@ -20,6 +20,7 @@ import RequireAuth from './components/RequireAuth'
 import store from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
+import PersistentLogin from './components/PersistentLogin'
 
 function App() {
 
@@ -37,14 +38,16 @@ function App() {
                 </Route>
 
                 {/* protected routes valid logged in users. */}
-                <Route element={<RequireAuth />}>
-                  <Route path="routines">
-                    <Route index element={<Routines />}></Route>
-                    {/* <Route path=":routineId" element={<Routine />}></Route> */}
-                    <Route path=":routineId/sessions">
-                      <Route index element={<Sessions />}></Route>
-                      <Route path=":sessionId" element={<SessionPage />}></Route>
-                      {/* Route for exercises within the session */}
+                <Route element={<PersistentLogin></PersistentLogin>}>
+                  <Route element={<RequireAuth />}>
+                    <Route path="routines">
+                      <Route index element={<Routines />}></Route>
+                      {/* <Route path=":routineId" element={<Routine />}></Route> */}
+                      <Route path=":routineId/sessions">
+                        <Route index element={<Sessions />}></Route>
+                        <Route path=":sessionId" element={<SessionPage />}></Route>
+                        {/* Route for exercises within the session */}
+                      </Route>
                     </Route>
                   </Route>
                 </Route>
