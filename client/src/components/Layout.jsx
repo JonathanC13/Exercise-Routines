@@ -1,22 +1,18 @@
 import React from 'react'
-import { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router'
+import NavBar from '../features/navbars/Navbar';
+import { Outlet } from 'react-router-dom';
+import SideNavbar from '../features/navbars/ScreenNavbar';
 
 const Layout = () => {
-    let navigate = useNavigate();
 
-    // useEffect(() => {
-    //     if (false) {
-    //         navigate('/login')
-    //     } else {
-    //         navigate('/register')
-    //     }
-    // }, [])
-    
+    // put navdata into a redux slice
+    const navData = {home: {to: '/', text: 'Home'}}
 
   return (
     <section className="Layout__section">
         <Outlet />
+        <NavBar></NavBar>
+        <SideNavbar></SideNavbar>
     </section>
   )
 }

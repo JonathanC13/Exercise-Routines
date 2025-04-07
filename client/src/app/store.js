@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { composeWithDevTools } from '@redux-devtools/extension';
 import authReducer from '../features/auth/authSlice'
+import navbarReducer from '../features/navbars/navbarSlice'
 import { apiSlice } from './api/apiSlice'
 // import { apiAuthSlice } from './api/apiAuthSlice';
 import { authApiSlice } from '../features/auth/authApiSlice'
@@ -13,6 +14,7 @@ const composedEnhancer = composeWithDevTools({
 export default configureStore({
   reducer: {
     auth: authReducer,
+    nav: navbarReducer,
     addFormModals: addFormModalsReducer,
     [apiSlice.reducerPath]: apiSlice.reducer,
     // [apiAuthSlice.reducerPath]: apiAuthSlice.reducer,

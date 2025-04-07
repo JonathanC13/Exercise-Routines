@@ -6,7 +6,6 @@ import Routine from './Routine'
 import classnames from 'classnames'
 import { routineAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 import { useNavigate } from 'react-router-dom'
-import { loggedOut } from '../auth/authSlice'
 
 const createRoutineComps = (sortedRoutines, isFetching) => {
   const comps = sortedRoutines.map((routine) => {
@@ -71,11 +70,6 @@ const Routines = () => {
       navigate('/')
     }
 
-    const logOutHandler = () => {
-      dispatch(loggedOut())
-      navigate('/login')
-    }
-
     let content = null
 
     if (isLoading) {
@@ -91,7 +85,6 @@ const Routines = () => {
           { routineComps }
           <button onClick={refetch}>manual refetch</button>
           <button onClick={toHome}>to Home</button>
-          <button onClick={logOutHandler}>log out</button>
         </div>
       // console.log(content)
     } else if (isError) {

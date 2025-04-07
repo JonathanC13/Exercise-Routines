@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FaEye, FaEyeSlash, FaCircleInfo } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendLoginMutation } from './authApiSlice'
-import { authMessageSet, credentialsSet, loggedOut } from './authSlice'
+import { authMessageSet, credentialsSet } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import FormInput from '../../components/FormInput'
 
@@ -96,11 +96,6 @@ const Login = () => {
         } finally {
             form.classList.remove('disabled')
         }
-    }
-
-    const logOutHandler = () => {
-        dispatch(loggedOut())
-        navigate('/login')
     }
 
   return (

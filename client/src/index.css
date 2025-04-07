@@ -1503,3 +1503,43 @@ body {
   border-radius: var(--ADD-BTN-BORDER-RAD);
 }
 /* /SET ADD FORM */
+
+/* NAVBAR */
+.navbar__nav {
+  display: none;
+  flex-grow: 1;
+  height: 100%;
+}
+/* /NAVBAR */
+
+/* SCREEN NAVBAR */
+.screen-navbar__container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.screen-navbar_content {
+  width: 100%;
+  height: 100%;
+  background-color: #1A936F;
+}
+/* /SCREEN NAVBAR */
+
+/* MEDIA QUERIES */
+@media (max-width: 600px) { 
+  /* equal to or narrower, apply */
+  .navbar__nav {
+    display: none;
+  }
+}
+
+@media (min-width: 600px) {
+  .screen-nav__section,
+  .screen-nav-btn__div {
+    display: none;
+  }
+
+  .navbar__nav {
+    display: flex;
+  }
+}
