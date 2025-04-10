@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    screenNavOpen: false
+    screenNavOpen: false,
+    
 }
 
 export const navbarSlice = createSlice({

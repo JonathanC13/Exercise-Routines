@@ -31,7 +31,7 @@ const NavBar = () => {
 
   return (
     <div className="navbar">
-      <div className="navbar__div nav-logo">
+      <div className="nav-logo">
         <a className='nav-logo__a logo cursor_pointer' href="/">
             <img src={navLogo} alt="logo" />
         </a>
@@ -41,10 +41,9 @@ const NavBar = () => {
           {createNavItems(navData)}
         </ul>
       </nav>
-      <div className="navbar__div"></div>
       <div className="screen-nav-btn__div">
-        <button onClick={openScreenNavHandler}>
-          <FaBars/>
+        <button className='cursor_pointer screen-nav__btn' onClick={openScreenNavHandler}>
+          <FaBars className='hamburger'/>
         </button>
       </div>
     </div>

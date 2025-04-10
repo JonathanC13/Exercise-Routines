@@ -10,9 +10,9 @@ const Layout = () => {
 
   return (
     <section className="Layout__section">
-        <Outlet />
         <NavBar></NavBar>
         <SideNavbar></SideNavbar>
+        <Outlet />
     </section>
   )
 }

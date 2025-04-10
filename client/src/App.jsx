@@ -21,42 +21,40 @@ import PersistentLogin from './components/PersistentLogin'
 function App() {
 
   return (
-    <div className="App">
-      <div className='background-image'>
-        <Provider store={store}>
-          <BrowserRouter>
-              <Routes>
-                {/* Public */}
-                {/* <Route index element={<Home />}></Route> */}
-                <Route path='/' element={<Layout/>}>
-                  <Route element={<AuthLayout />}>
-                    <Route path="login" element={<Login />} />
-                    <Route path="register" element={<Register />} />
-                  </Route>
+    <div className="App background-image">
+      <Provider store={store}>
+        <BrowserRouter>
+            <Routes>
+              {/* Public */}
+              {/* <Route index element={<Home />}></Route> */}
+              <Route path='/' element={<Layout/>}>
+                <Route element={<AuthLayout />}>
+                  <Route path="login" element={<Login />} />
+                  <Route path="register" element={<Register />} />
+                </Route>
 
-                  {/* protected routes valid logged in users. */}
-                  <Route element={<PersistentLogin></PersistentLogin>}>
-                    <Route element={<RequireAuth />}>
-                      <Route path="routines">
-                        <Route index element={<Routines />}></Route>
-                        {/* <Route path=":routineId" element={<Routine />}></Route> */}
-                        <Route path=":routineId/sessions">
-                          <Route index element={<Sessions />}></Route>
-                          <Route path=":sessionId" element={<SessionPage />}></Route>
-                          {/* Route for exercises within the session */}
-                        </Route>
+                {/* protected routes valid logged in users. */}
+                <Route element={<PersistentLogin></PersistentLogin>}>
+                  <Route element={<RequireAuth />}>
+                    <Route path="routines">
+                      <Route index element={<Routines />}></Route>
+                      {/* <Route path=":routineId" element={<Routine />}></Route> */}
+                      <Route path=":routineId/sessions">
+                        <Route index element={<Sessions />}></Route>
+                        <Route path=":sessionId" element={<SessionPage />}></Route>
+                        {/* Route for exercises within the session */}
                       </Route>
                     </Route>
                   </Route>
-
-                  {/* catach all */}
-                  <Route path='*' element={<Missing/>}></Route>
                 </Route>
-              </Routes>
-          </BrowserRouter>
-          <AddFormModals></AddFormModals>
-        </Provider>
-      </div>
+
+                {/* catach all */}
+                <Route path='*' element={<Missing/>}></Route>
+              </Route>
+            </Routes>
+        </BrowserRouter>
+        <AddFormModals></AddFormModals>
+      </Provider>
     </div>
   )
 }
