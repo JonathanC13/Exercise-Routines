@@ -32,6 +32,7 @@ img {
   /* COLOUR */
   --NAVBAR-BG-COLOR: #8BBEB2;
   --NAVBAR-HOVER-COLOR: #7daba0;
+  --NAVBAR-TEXT-HOVER-COLOR: #465f59;
   --AUTH-LAYOUT-BG-COLOR: #fff;
   --AUTH-OPTIONS-ACTIVE-COLOR: #8BBEB2;
   --FORM-INPUT-COLOR: #2E2836;
@@ -39,6 +40,8 @@ img {
   --FORM-INPUT-INCORRECT-COLOR: red;
   --LOGIN-BUTTON-COLOR: #1a936f;
   --LOGIN-BUTTON-HOVER-COLOR: rgba(26, 147, 111, 0.85);
+  --LOGOUT-BUTTON-COLOR: #0D0630;
+  --LOGOUT-BUTTON-HOVER-COLOR: rgba(13, 6, 48, 0.85);
   --ROUTINE-TITLE-BG-COLOR: #2E2836;
   --ROUTINE-UNDERLINE-COLOR: #2E2836;
   --BG-COLOR: #efefef;
@@ -98,6 +101,7 @@ img {
   --ADD-FORM-MODAL-PADDING: 1rem 1rem;
   --LOGIN-REG-FORM-FORM-PADDING: 1rem 1rem;
   --LOGIN-REG-INPUT-PADDING: 0rem 1rem;
+  --AUTH-BUTTON-PADDING: 0.5rem 1rem;
 
   /* GAP */
   --ROUTINES-SEC-GAP: 1rem;
@@ -546,13 +550,27 @@ body {
   background-color: var(--LOGIN-BUTTON-COLOR);
   color: white;
   font-size: 1rem;
-  padding: 0.5rem 1rem;
+  padding: var(--AUTH-BUTTON-PADDING);
   border: none;
   border-radius: var(--AUTH-BUTTON-RAD);
 }
 
 .login__button:hover {
   background-color: var(--LOGIN-BUTTON-HOVER-COLOR);
+}
+
+
+.logout__button {
+  background-color: var(--LOGOUT-BUTTON-COLOR);
+  color: white;
+  font-size: 1rem;
+  padding: var(--AUTH-BUTTON-PADDING);
+  border: none;
+  border-radius: var(--AUTH-BUTTON-RAD);
+}
+
+.logout__button:hover {
+  background-color: var(--LOGOUT-BUTTON-HOVER-COLOR);
 }
 
 .auth-msg__p {
@@ -1553,7 +1571,8 @@ body {
 }
 
 .screen-nav__btn:hover {
-  background-color: var(--NAVBAR-HOVER-COLOR);
+  color: var(--NAVBAR-TEXT-HOVER-COLOR);
+  /* background-color: var(--NAVBAR-HOVER-COLOR); */
   
 }
 
@@ -1574,6 +1593,8 @@ body {
   top: 0;
   left: 0;
   display: flex;
+  align-items: center;
+  justify-content: center;
   flex-flow: column nowrap;
 }
 
@@ -1582,17 +1603,66 @@ body {
   opacity: 1;
 }
 
-.screen-nav__div {
+.auth-option__div {
+  width: 100%;
+  padding: 2rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 
+.auth-option__button {
+  background-color: var(--LOGIN-BUTTON-COLOR);
+  padding: var(--AUTH-BUTTON-PADDING);
+  border: none;
+  border-radius: var(--AUTH-BUTTON-RAD);
+}
+
+.auth-option__button:hover {
+  background-color: var(--LOGIN-BUTTON-HOVER-COLOR);
+} */
+
+.screen-nav-content__div {
   flex-grow: 1;
+  width: 90%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: flex-end;
-  padding: 0.5rem 0;
+}
+
+.screen-nav-item__div:first-child {
+  border-top: 1.5px dashed var(--NAVBAR-HOVER-COLOR);
+}
+
+.screen-nav-item__div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 0;
+}
+
+.screen-nav-item__p,
+.screen-nav-item__icon {
+  font-size: 1.5rem;
+}
+
+.screen-nav-item__div:hover :is(.screen-nav-item__p, .screen-nav-item__icon) {
+  color: var(--NAVBAR-TEXT-HOVER-COLOR);
+}
+
+/* .screen-nav-item__div:hover {
+  background-color: var(--NAVBAR-HOVER-COLOR);
+} */
+
+.screen-nav__div {
+  width: 100%;
+  border-top: 1.5px dashed var(--NAVBAR-HOVER-COLOR);
 }
 
 .screen-nav__footer {
-  border-top: 2px dashed var(--NAVBAR-HOVER-COLOR);
+  border-top: 1.5px dashed var(--NAVBAR-HOVER-COLOR);
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -1609,7 +1679,8 @@ body {
 }
 
 .screen-nav-close__btn:hover {
-  background-color: var(--NAVBAR-HOVER-COLOR);
+  color: var(--NAVBAR-TEXT-HOVER-COLOR);
+  /* background-color: var(--NAVBAR-HOVER-COLOR); */
 }
 /* /SCREEN NAVBAR */
 

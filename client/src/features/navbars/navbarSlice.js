@@ -2,7 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     screenNavOpen: false,
-    
+    categories: {
+        'routines': {
+            allURL: '/routines',
+            targetURL: '/routines/${id}/sessions/'
+        }
+    },
+    currentCategory: ''
 }
 
 export const navbarSlice = createSlice({
@@ -13,6 +19,10 @@ export const navbarSlice = createSlice({
             const { displayState } = action.payload
             state.screenNavOpen = displayState 
         },
+        currentCategorySet: (state, action) => {
+            const { category } = action.payload
+            state.currentCategory = category 
+        }
     }
 })
 
