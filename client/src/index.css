@@ -1631,16 +1631,16 @@ body {
   justify-content: flex-end;
 }
 
-.screen-nav-item__div:first-child {
-  border-top: 1.5px dashed var(--NAVBAR-HOVER-COLOR);
-}
-
 .screen-nav-item__div {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 0;
+}
+
+.screen-nav-item__div:first-child {
+  border-top: 1.5px dashed var(--NAVBAR-HOVER-COLOR);
 }
 
 .screen-nav-item__p,

@@ -4,8 +4,13 @@ const initialState = {
     screenNavOpen: false,
     categories: {
         'routines': {
-            allURL: '/routines',
-            targetURL: '/routines/${id}/sessions/'
+            'parent': {
+                title: 'All routines',
+                URL: '/routines'
+            },
+            'children': {
+                URL: '/routines/${id}/sessions/'
+            }
         }
     },
     currentCategory: ''

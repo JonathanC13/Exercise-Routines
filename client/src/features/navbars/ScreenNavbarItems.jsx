@@ -1,11 +1,12 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ScreenNavbarItem from './ScreenNavbarItem'
+import ScreenNavbarLinkItems from './ScreenNavbarLinkItems'
 
 const createScreenNavbarItemComps = (categories) => {
     const comps = []
 
-    for (let key of Object.keys(categories)) {
+    for (let key of Object.keys(categories, link)) {
         
         comps.push(<ScreenNavbarItem
             key={key}
@@ -22,8 +23,10 @@ const ScreenNavbarItems = () => {
     let content = '' 
     switch (currentCategory) {
         case '':
-            content = createScreenNavbarItemComps(categories)
+            content = createScreenNavbarItemComps(categories, null)
             break
+        case 'routines':
+            content = <ScreenNavbarLinkItems currentCategory={currentCategory} />
         default:
             content = ''
             break

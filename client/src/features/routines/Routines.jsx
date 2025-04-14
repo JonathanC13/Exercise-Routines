@@ -44,6 +44,7 @@ const Routines = () => {
       {
         pollingInterval: 100000, //60000
         refetchOnFocus: true,
+        skipPollingIfUnfocused: true,
         refetchOnMountOrArgChange: true
       }
     )
