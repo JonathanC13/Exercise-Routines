@@ -1,10 +1,9 @@
 import React from 'react'
-import navLogo from '../../assets/logoipsum-331.svg'
 import { useSelector, useDispatch } from 'react-redux'
-import { screenNavDispaySet } from './navbarSlice'
-import { FaXmark } from 'react-icons/fa6'
+import { categoriesHiddenSet, screenNavDispaySet } from './navbarSlice'
 import { useNavigate } from 'react-router-dom'
 import ScreenNavbarItems from './ScreenNavbarItems'
+import ScreenNavFooter from './ScreenNavFooter'
 
 const ScreenNavbar = () => {
     const navigate = useNavigate()
@@ -14,10 +13,6 @@ const ScreenNavbar = () => {
 
     const screenNavClasses = 'screen-nav__section' + (screenNavOpen ? ' screen-nav__section-show':'')
 
-    const closeScreenNavHandler = () => {
-        dispatch(screenNavDispaySet({displayState: false}))
-    }
-
     const authOptionHandler = (action) => {
         closeScreenNavHandler()
         switch(action) {
@@ -25,6 +20,8 @@ const ScreenNavbar = () => {
                 navigate('/login')
                 break
             case 'logout':
+                dispatch(categoriesHiddenSet({hidden: false}))
+                dispatch(screenNavDispaySet({dispalyState: false}))
                 dispatch(userSendLogOut())
                 navigate('/')
                 break
@@ -47,21 +44,13 @@ const ScreenNavbar = () => {
   return (
         <section className={screenNavClasses}>
             <div className='screen-nav-content__div'>
+                {/* {auth?.token ? <ScreenNavbarItems></ScreenNavbarItems> : <></>} */}
                 <ScreenNavbarItems></ScreenNavbarItems>
-                <div className="screen-nav__div">
-                    {authOption}
-                </div>
             </div>
-            <div className="screen-nav__footer">
-                <div className="nav-logo">
-                    <a className='nav-logo__a logo cursor_pointer' href="/">
-                        <img src={navLogo} alt="logo" />
-                    </a>
-                </div>
-                <button className='screen-nav-close__btn cursor_pointer' onClick={closeScreenNavHandler}>
-                    <FaXmark className='x-mark'></FaXmark>
-                </button>
+            <div className="screen-nav__div">
+                {authOption}
             </div>
+            <ScreenNavFooter></ScreenNavFooter>
         </section>
     )
 }

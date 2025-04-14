@@ -11,9 +11,11 @@ const initialState = {
             'children': {
                 URL: '/routines/${id}/sessions/'
             }
-        }
+        },
+        'placeholder' : {}
     },
-    currentCategory: ''
+    currentCategory: '',
+    categoriesHidden: false
 }
 
 export const navbarSlice = createSlice({
@@ -27,10 +29,14 @@ export const navbarSlice = createSlice({
         currentCategorySet: (state, action) => {
             const { category } = action.payload
             state.currentCategory = category 
+        },
+        categoriesHiddenSet: (state, action) => {
+            const { hidden } = action.payload
+            state.categoriesHidden = hidden 
         }
     }
 })
 
-export const { screenNavDispaySet } = navbarSlice.actions
+export const { screenNavDispaySet, currentCategorySet, categoriesHiddenSet } = navbarSlice.actions
 
 export default navbarSlice.reducer
