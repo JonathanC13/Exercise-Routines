@@ -4,14 +4,20 @@ import { categoriesHiddenSet, screenNavDispaySet } from './navbarSlice'
 import { useNavigate } from 'react-router-dom'
 import ScreenNavbarItems from './ScreenNavbarItems'
 import ScreenNavFooter from './ScreenNavFooter'
+import { loggedOut } from '../auth/authSlice'
 
 const ScreenNavbar = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const {screenNavOpen} = useSelector((state) => state.nav)
-    const {auth} = useSelector((state) => state.auth.credentials)
+    const auth = useSelector((state) => state.auth.credentials)
 
     const screenNavClasses = 'screen-nav__section' + (screenNavOpen ? ' screen-nav__section-show':'')
+
+    const closeScreenNavHandler = () => {
+        dispatch(categoriesHiddenSet({hidden: false}))
+        dispatch(screenNavDispaySet({dispalyState: false}))
+    }
 
     const authOptionHandler = (action) => {
         closeScreenNavHandler()
@@ -20,9 +26,7 @@ const ScreenNavbar = () => {
                 navigate('/login')
                 break
             case 'logout':
-                dispatch(categoriesHiddenSet({hidden: false}))
-                dispatch(screenNavDispaySet({dispalyState: false}))
-                dispatch(userSendLogOut())
+                dispatch(loggedOut())
                 navigate('/')
                 break
             default:
@@ -44,8 +48,7 @@ const ScreenNavbar = () => {
   return (
         <section className={screenNavClasses}>
             <div className='screen-nav-content__div'>
-                {/* {auth?.token ? <ScreenNavbarItems></ScreenNavbarItems> : <></>} */}
-                <ScreenNavbarItems></ScreenNavbarItems>
+                {auth?.token ? <ScreenNavbarItems></ScreenNavbarItems> : <></>}
             </div>
             <div className="screen-nav__div">
                 {authOption}

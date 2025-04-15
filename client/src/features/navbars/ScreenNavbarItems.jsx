@@ -22,7 +22,9 @@ const ScreenNavbarItems = () => {
 
     let content = <>
         <div className={'screen-nav-content-categories__div' + (categoriesHidden ? ' screen-nav-content-categories__div-hidden':'') }>
-            {createScreenNavbarItemComps(categories)}
+            <div className='screen-nav-items__div'>
+                {createScreenNavbarItemComps(categories)}
+            </div>
         </div>
         <div className={'screen-nav-content-group__div' + (categoriesHidden ? ' screen-nav-content-group__div-show':'') }>
             <ScreenNavbarLinkItems />

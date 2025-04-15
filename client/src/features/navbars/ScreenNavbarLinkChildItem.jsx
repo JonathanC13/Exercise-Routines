@@ -1,19 +1,19 @@
-// import React from 'react'
-// import { Link } from 'react-router'
+import React from 'react'
+import { Link } from 'react-router'
 
-// const ScreenNavbarLinkChildItem = ( { info=null, urlTemplate='' } ) => {
+const ScreenNavbarLinkChildItem = ( { info=null, urlTemplate='' } ) => {
+    console.log(info)
+    if (!info) {
+        return <></>
+    }
 
-//     if (!id) {
-//         return <></>
-//     }
+    const linkTo = urlTemplate.replace('${id}', info?.id)
 
-//     const linkTo = urlTemplate.replace('${id}', info?.id)
+  return (
+    <div className='screen-nav-link-child-item__div'>
+        <Link to={linkTo}>{info?.name}</Link>
+    </div>
+  )
+}
 
-//   return (
-//     <div className='screen-nav-link-child-item__div'>
-//         <Link to={linkTo}>{info?.name}</Link>
-//     </div>
-//   )
-// }
-
-// export default ScreenNavbarLinkChildItem
+export default ScreenNavbarLinkChildItem

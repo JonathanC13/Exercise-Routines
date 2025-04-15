@@ -12,7 +12,9 @@ const Layout = () => {
     <section className="Layout__section">
         <NavBar></NavBar>
         <SideNavbar></SideNavbar>
-        <Outlet />
+        <div className='content__div'>
+          <Outlet />
+        </div>
     </section>
   )
 }
