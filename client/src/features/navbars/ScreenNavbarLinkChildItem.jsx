@@ -1,18 +1,18 @@
 import React from 'react'
-import { Link } from 'react-router'
 
-const ScreenNavbarLinkChildItem = ( { info=null, urlTemplate='' } ) => {
-    console.log(info)
+const ScreenNavbarLinkChildItem = ( { info=null, urlTemplate='', gotoDestinationHandler = () => {} } ) => {
+    // console.log(info)
     if (!info) {
         return <></>
     }
 
     const linkTo = urlTemplate.replace('${id}', info?.id)
+    console.log(linkTo)
 
   return (
-    <div className='screen-nav-link-child-item__div'>
-        <Link to={linkTo}>{info?.name}</Link>
-    </div>
+    <li className='link-items-sub__li cursor_pointer' onClick={() => gotoDestinationHandler(linkTo)}>
+      {info?.name}
+    </li>
   )
 }
 

@@ -1,24 +1,28 @@
 import React from 'react'
 // import { useMemo } from 'react'
 import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router'
 import { FaDoorOpen } from 'react-icons/fa6'
 import ScreenNavbarLinkChildItem from './ScreenNavbarLinkChildItem'
+import { currentCategorySet, categoriesHiddenSet, screenNavDispaySet, screenNavClosed } from './navbarSlice'
 
-const createChildLinkItems = (sortedRoutines, urlTemplate) => {
+const createChildLinkItems = (sortedRoutines, urlTemplate, gotoDestinationHandler) => {
     const comps = sortedRoutines.map((e) => {
         return <ScreenNavbarLinkChildItem
-            key={e.id}
-            info={e}
-            urlTemplate={urlTemplate}
-        ></ScreenNavbarLinkChildItem>
+                    key={e.id}
+                    info={e}
+                    urlTemplate={urlTemplate}
+                    gotoDestinationHandler={gotoDestinationHandler}
+                ></ScreenNavbarLinkChildItem>
     })
     return comps
 
 }
 
 const ScreenNavbarLinkItems = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const auth = useSelector((state) => state.auth)
     const { currentCategory, categories } = useSelector((state) => state.nav)
@@ -58,34 +62,32 @@ const ScreenNavbarLinkItems = () => {
     // return sortedRoutines
         // }, [routines])
 
+    const gotoDestinationHandler = (targetURL) => {
+        navigate(targetURL)
+
+        dispatch(screenNavClosed())
+    }
+
   return (
     <section className='screen-nav-link-items__section'>
         <div className='screen-nav-link-item'>
             <h1 className='screen-nav-link-item__h1'>{currentCategory}</h1>
 
             <ul className='link-items-main__ul'>
-                <li className='link-items-main__li'>
-                    <FaDoorOpen className='link-item-parent-icon__icon'></FaDoorOpen>
-                    <Link className='link-item-parent__title' to={categoryInfo[currentCategory]?.parent?.URL}>{categoryTitle}</Link>
-                </li>
-                <ul className='link-items-sub__ul'>
-
-                </ul>
-            </ul>
-
-            {/* to remove, and fit into list above */}
-            <div className='screen-nav-link-item__div'>
-                <div className='screen-nav-link-item-content__div'>
+                <li className='link-items-main__li cursor_pointer' onClick={() => gotoDestinationHandler(categoryInfo?.parent?.URL)}>
+                    {/* <Link className='link-item-parent__title' to={categoryInfo[currentCategory]?.parent?.URL}>
+                        <FaDoorOpen className='link-item-parent-icon__icon'></FaDoorOpen>
+                        <h2>{categoryInfo[currentCategory]?.parent.title}</h2>
+                    </Link> */}
                     <div className='link-item-parent-icon__div'>
                         <FaDoorOpen className='link-item-parent-icon__icon'></FaDoorOpen>
                     </div>
-
-                    <div className='screen-nav-link-item-content-links__div'>
-                        <Link className='link-item-parent__title' to={categoryInfo[currentCategory]?.parent?.URL}>{categoryTitle}</Link>
-                        {createChildLinkItems(sortedRoutines, categoryInfo[currentCategory]?.children?.URL)}
-                    </div>
-                </div>
-            </div>
+                    <h2 className='screen-nav-link-item__h2'>{categoryInfo?.parent?.title}</h2>
+                </li>
+                <ul className='link-items-sub__ul'>
+                    {createChildLinkItems(sortedRoutines, categoryInfo?.children?.URL, gotoDestinationHandler)}
+                </ul>
+            </ul>
 
         </div>
     </section>

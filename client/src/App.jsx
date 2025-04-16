@@ -27,14 +27,14 @@ function App() {
             <Routes>
               {/* Public */}
               {/* <Route index element={<Home />}></Route> */}
-              <Route path='/' element={<Layout/>}>
-                <Route element={<AuthLayout />}>
-                  <Route path="login" element={<Login />} />
-                  <Route path="register" element={<Register />} />
-                </Route>
+              <Route element={<PersistentLogin></PersistentLogin>}>
+                <Route path='/' element={<Layout/>}>
+                  <Route element={<AuthLayout />}>
+                    <Route path="login" element={<Login />} />
+                    <Route path="register" element={<Register />} />
+                  </Route>
 
-                {/* protected routes valid logged in users. */}
-                <Route element={<PersistentLogin></PersistentLogin>}>
+                  {/* protected routes valid logged in users. */}
                   <Route element={<RequireAuth />}>
                     <Route path="routines">
                       <Route index element={<Routines />}></Route>

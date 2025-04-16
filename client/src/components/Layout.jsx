@@ -10,11 +10,11 @@ const Layout = () => {
 
   return (
     <section className="Layout__section">
-        <NavBar></NavBar>
         <SideNavbar></SideNavbar>
         <div className='content__div'>
           <Outlet />
         </div>
+        <NavBar></NavBar>
     </section>
   )
 }

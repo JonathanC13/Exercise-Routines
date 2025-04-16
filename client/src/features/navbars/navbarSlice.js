@@ -33,10 +33,15 @@ export const navbarSlice = createSlice({
         categoriesHiddenSet: (state, action) => {
             const { hidden } = action.payload
             state.categoriesHidden = hidden 
+        },
+        screenNavClosed: (state, action) => {
+            state.currentCategory = ''
+            state.categoriesHidden = false
+            state.screenNavOpen = false
         }
     }
 })
 
-export const { screenNavDispaySet, currentCategorySet, categoriesHiddenSet } = navbarSlice.actions
+export const { screenNavDispaySet, currentCategorySet, categoriesHiddenSet, screenNavClosed } = navbarSlice.actions
 
 export default navbarSlice.reducer

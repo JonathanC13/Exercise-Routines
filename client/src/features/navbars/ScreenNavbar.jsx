@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { categoriesHiddenSet, screenNavDispaySet } from './navbarSlice'
+import { currentCategorySet, categoriesHiddenSet, screenNavDispaySet, screenNavClosed } from './navbarSlice'
 import { useNavigate } from 'react-router-dom'
 import ScreenNavbarItems from './ScreenNavbarItems'
 import ScreenNavFooter from './ScreenNavFooter'
@@ -15,8 +15,7 @@ const ScreenNavbar = () => {
     const screenNavClasses = 'screen-nav__section' + (screenNavOpen ? ' screen-nav__section-show':'')
 
     const closeScreenNavHandler = () => {
-        dispatch(categoriesHiddenSet({hidden: false}))
-        dispatch(screenNavDispaySet({dispalyState: false}))
+        dispatch(screenNavClosed())
     }
 
     const authOptionHandler = (action) => {
@@ -33,7 +32,7 @@ const ScreenNavbar = () => {
                 break
         }
     }
-
+    
     const authOption = auth?.token ?
         <div className='auth-option__div'>
             <button className='logout__button cursor_pointer' onClick={() => authOptionHandler('logout')}>Log out</button>

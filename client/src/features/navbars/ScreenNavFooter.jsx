@@ -2,18 +2,19 @@ import React, { useDebugValue } from 'react'
 import navLogo from '../../assets/logoipsum-331.svg'
 import { FaXmark, FaChevronLeft } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
-import { screenNavDispaySet, categoriesHiddenSet } from './navbarSlice'
+import { currentCategorySet, screenNavDispaySet, categoriesHiddenSet, screenNavClosed } from './navbarSlice'
 
 const ScreenNavFooter = () => {
     const dispatch = useDispatch()
     const { categoriesHidden } = useSelector((state) => state.nav)
 
     const screenNavBackHandler = () => {
+        dispatch(currentCategorySet({category: ''}))
         dispatch(categoriesHiddenSet({hidden: false}))
     }
 
     const closeScreenNavHandler = () => {
-        dispatch(screenNavDispaySet({displayState: false}))
+        dispatch(screenNavClosed())
     }
 
   return (
