@@ -11,8 +11,7 @@ const initialState = {
             'children': {
                 URL: '/routines/${id}/sessions/'
             }
-        },
-        'placeholder' : {}
+        }
     },
     currentCategory: '',
     categoriesHidden: false

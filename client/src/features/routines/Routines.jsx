@@ -84,8 +84,8 @@ const Routines = () => {
 
       content = <div className={containerClassname}>
           { routineComps }
-          <button onClick={refetch}>manual refetch</button>
-          <button onClick={toHome}>to Home</button>
+          {/* <button onClick={refetch}>manual refetch</button>
+          <button onClick={toHome}>to Home</button> */}
         </div>
       // console.log(content)
     } else if (isError) {

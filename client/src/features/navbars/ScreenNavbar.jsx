@@ -4,7 +4,7 @@ import { currentCategorySet, categoriesHiddenSet, screenNavDispaySet, screenNavC
 import { useNavigate } from 'react-router-dom'
 import ScreenNavbarItems from './ScreenNavbarItems'
 import ScreenNavFooter from './ScreenNavFooter'
-import { loggedOut } from '../auth/authSlice'
+import { useUserSendLogOutMutation } from '../auth/authApiSlice'
 
 const ScreenNavbar = () => {
     const navigate = useNavigate()
@@ -12,20 +12,33 @@ const ScreenNavbar = () => {
     const {screenNavOpen} = useSelector((state) => state.nav)
     const auth = useSelector((state) => state.auth.credentials)
 
+    const [logOut, {isLoadingLogOut}] = useUserSendLogOutMutation()
+
     const screenNavClasses = 'screen-nav__section' + (screenNavOpen ? ' screen-nav__section-show':'')
 
     const closeScreenNavHandler = () => {
         dispatch(screenNavClosed())
     }
 
-    const authOptionHandler = (action) => {
+    const authOptionHandler = async(action) => {
         closeScreenNavHandler()
         switch(action) {
             case 'login':
                 navigate('/login')
                 break
             case 'logout':
-                dispatch(loggedOut())
+                try {
+                    const response = await logOut().unwrap()
+                        .then((payload) => {
+                        })
+                        .catch((error) => {
+                        })
+        
+                } catch (err) {
+                    setMsg('Log out failed!')
+                    msgRef.current.focus()
+                } finally {
+                }
                 navigate('/')
                 break
             default:

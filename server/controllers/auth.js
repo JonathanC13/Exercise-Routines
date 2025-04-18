@@ -96,7 +96,7 @@ const logout = async(req, res) => {
     const cookies = req.cookies
 
     if (!cookies?.jwt) {
-        console.log('no jwt')
+        // console.log('no jwt')
         res.status(StatusCodes.NO_CONTENT).json()   // successful and 204 = no content
         return
     }
@@ -106,7 +106,7 @@ const logout = async(req, res) => {
     const userDocument = await UserModel.findOne({refreshToken: refreshJWT})
 
     if (!userDocument) {
-        console.log('no user')
+        // console.log('no user')
         // have cookie, but no associated user. Need to remove the cookie
         res.clearCookie('jwt', { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None', secure: true }) // for prod: secure: true // To clear the exact cookie, need to provide the same options as when it was created. // deprecated maxAge: 24 * 60 * 60 * 1000. Don't need to include
         res.status(StatusCodes.NO_CONTENT).json()   // successful and 204 = no content
@@ -116,8 +116,8 @@ const logout = async(req, res) => {
     // remove refresh token from user
     userDocument.refreshToken = ''
     try {
-        const saveResponse = userDocument.save()
-        console.log(saveResponse)
+        const saveResponse = await userDocument.save()
+        // console.log(saveResponse)
         res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true }) // for prod: secure: true        // deprecated maxAge: 24 * 60 * 60 * 1000. Don't need to include
     } catch (error) {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({'message': 'Server error!'})

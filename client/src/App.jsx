@@ -47,10 +47,11 @@ function App() {
                     </Route>
                   </Route>
                 </Route>
-
-                {/* catach all */}
-                <Route path='*' element={<Missing/>}></Route>
               </Route>
+
+              {/* catach all */}
+              <Route path='*' element={<Missing/>}></Route>
+              
             </Routes>
         </BrowserRouter>
         <AddFormModals></AddFormModals>

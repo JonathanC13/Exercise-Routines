@@ -11,6 +11,8 @@ const PersistentLogin = () => {
     const {token, isError, error, isFetching, refetch, isLoadingRefresh} = useRefreshToken()
 
     useEffect(() => {
+        let isMounted = true
+
         const verifyRefreshToken = () => {
             refetch()
         }
@@ -18,6 +20,11 @@ const PersistentLogin = () => {
         if (!auth?.token) {
             verifyRefreshToken()
         }
+
+        const cleanUp = () => {
+            isMounted = false
+        }
+        return cleanUp
     }, [])
 
     // useEffect(() => {
@@ -32,10 +39,7 @@ const PersistentLogin = () => {
         {isLoadingRefresh || isFetching ?
             <p>Is loading</p>
             :
-            isError ?
-                <p>{error}</p>
-                :
-                <Outlet></Outlet>
+            <Outlet></Outlet>
         }
     </>
   )

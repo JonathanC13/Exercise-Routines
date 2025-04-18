@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect, useRef } from 'react'
 import { FaEye, FaEyeSlash, FaCircleInfo } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
-import { useUserSendLoginMutation } from './authApiSlice'
+import { useUserSendLoginMutation, useUserSendLogOutMutation } from './authApiSlice'
 import { authMessageSet, credentialsSet } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import FormInput from '../../components/FormInput'
@@ -30,6 +30,7 @@ const Login = () => {
 
     // authApiSlice
     const [login, {isLoading}] = useUserSendLoginMutation()
+    const [logOut, {isLoadingLogOut}] = useUserSendLogOutMutation()
 
     // controlled inputs
     const [email, setEmail] = useState('')
@@ -39,15 +40,32 @@ const Login = () => {
     const [showSpinner, setShowSpinner] = useState(false)
 
     useEffect(() => {
+        if (loggedInCredentials?.token) {
+            logOutHandler()
+        }
+        
         emailRef.current.focus()
     }, [])
-
-
 
     const resetControlledInputs = () => {
         setEmail('')
         setPassword('')
         setShowPassword(false)
+    }
+
+    const logOutHandler = async() => {
+        try {
+            const response = await logOut().unwrap()
+                .then((payload) => {
+                })
+                .catch((error) => {
+                })
+
+        } catch (err) {
+            setMsg('Log out failed!')
+            msgRef.current.focus()
+        } finally {
+        }
     }
 
     const loginFormSubmitHandler = async(e) => {
