@@ -65,6 +65,14 @@ const ExerciseAddForm = () => {
         setValidDescription(checkValidDescription(description))
     }, [description])
 
+    const validateNumber = (val, cb) => {
+        if (isNaN(Number(val))) {
+            return
+        } else {
+            cb(val)
+        }
+    }
+
     const addExerciseFormHandler = async(e) => {
         e.preventDefault()
 
@@ -143,7 +151,7 @@ const ExerciseAddForm = () => {
                         <FormInput
                             required = {true}
                             labelId = 'add_exercise_name__label'
-                            labelText = 'Name*'
+                            labelText = 'Name'
                             inputType = 'text'
                             inputId = 'add_exercise_name__input'
                             onFocusCB = {(e) => {setNameFocus(true)}}
@@ -170,13 +178,14 @@ const ExerciseAddForm = () => {
                             required = {false}
                             labelId = 'add_exercise_order__label'
                             labelText = 'Order'
-                            inputType = 'number'
+                            inputType = 'text'
                             inputId = 'add_exercise_order__input'
                             onFocusCB = {(e) => {}}
                             onBlurCB = {(e) => {}}
                             inputRef = {null}
                             inputValueState = {order}
-                            inputOnChangeCB = {setOrder}
+                            inputOnChangeCB = {validateNumber}
+                            inputValueSetter = {setOrder}
                             aria = {false}
                         ></FormInput>
                     </div>

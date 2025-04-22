@@ -144,6 +144,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
       setReadMore(!descOverLimit)
     }, [routineDescription])
 
+    const validateNumber = (val, cb) => {
+      if (isNaN(Number(val))) {
+          return
+      } else {
+          cb(val)
+      }
+    }
+
     const routineFormSubmitHandler = async(e) => {
       e.preventDefault()
       setRoutineMessage('')
@@ -294,7 +302,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
               <label htmlFor='routine_order__input' className='info_label info_text_padding'>Order:</label>
               <input id='routine_order__input' className='info_text_padding routine_order__input'
                 value={routineOrder}
-                onChange={(e) => setRoutineOrder(e.target.value)}
+                onChange={(e) => validateNumber(e.target.value, setRoutineOrder)}
               />
             </div>
             <div className='routine_desc__div'>

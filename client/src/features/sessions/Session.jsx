@@ -104,6 +104,14 @@ const Session = ( { sessionId = null }) => {
 
     // /Read more
 
+    const validateNumber = (val) => {
+        if (isNaN(Number(val))) {
+            return
+        } else {
+            setOrder(val)
+        }
+    }
+
     const sessionFormSubmitHandler = async(e) => {
         e.preventDefault()
 
@@ -252,7 +260,7 @@ const Session = ( { sessionId = null }) => {
                             <label htmlFor='session_order__input' className='info_label info_text_padding'>Order:</label>
                             <input id='session_order__input' className='info_text_padding session_order__input'
                                 value={order}
-                                onChange={(e) => setOrder(e.target.value)}
+                                onChange={(e) => validateNumber(e.target.value)}
                             />
                         </div>
                         <div className='session_desc__div'>

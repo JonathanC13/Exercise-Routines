@@ -12,6 +12,7 @@ const FormInput = ({
     inputRef = null,
     inputValueState,
     inputOnChangeCB,
+    inputValueSetter,
     inputOptionComp = <></>,
     aria = false,
     ariaValidState = true,
@@ -71,16 +72,16 @@ const FormInput = ({
 
         
     }
-
+    
     const inputOnBlurHandler = (e) => {
         const inputElem = e.currentTarget
         const label = document.getElementById(labelId)
         const outerDiv = document.getElementById(outerDivId)
-        
+        // console.log(inputElem)
         if (label) {
             label.classList.remove('form-input__focus-color')
-            
-            if (inputElem.value === '') {
+            // console.log(inputValueState)
+            if (inputValueState === '') {
                 label.classList.remove('form-input__focus')
             }
 
@@ -101,7 +102,7 @@ const FormInput = ({
   return (
     <div id={outerDivId} className="form-input_outer__div">
         <div className="form-input_inner__div">
-            <label id={labelId} htmlFor={inputId} className="form__label">{labelText}</label>
+            <label id={labelId} htmlFor={inputId} className="form__label">{labelText} {required ? <span className='color--red'>*</span> : ''}</label>
             <div className='form-input_input__div'>
                 <input 
                     {...(required ? {required} : {}) }
@@ -118,7 +119,7 @@ const FormInput = ({
                     }}
                     {...(inputRef ? {ref: inputRef} : {})}
                     value={inputValueState}
-                    onChange={(e) => {inputOnChangeCB(e.target.value)}}
+                    onChange={(e) => {inputOnChangeCB(e.target.value, inputValueSetter)}}
                     {...ariaAttr}
                 />
                 {inputOptionComp}

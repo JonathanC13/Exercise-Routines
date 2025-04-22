@@ -44,6 +44,14 @@ const SetAddForm = () => {
         };
     }, []);
 
+    const validateNumber = (val, cb) => {
+        if (isNaN(Number(val))) {
+            return
+        } else {
+            cb(val)
+        }
+    }
+
     const addSetFormHandler = async(e) => {
         e.preventDefault()
 
@@ -127,13 +135,14 @@ const SetAddForm = () => {
                         required = {false}
                         labelId = 'add_set_order__label'
                         labelText = 'Order'
-                        inputType = 'number'
+                        inputType = 'text'
                         inputId = 'add_set_order__input'
                         onFocusCB = {(e) => {}}
                         onBlurCB = {(e) => {}}
                         inputRef = {orderRef}
                         inputValueState = {exSetOrder}
-                        inputOnChangeCB = {setExSetOrder}
+                        inputOnChangeCB = {validateNumber}
+                        inputValueSetter = {setExSetOrder}
                         aria = {false}
                     ></FormInput>
                 </div>
@@ -193,13 +202,14 @@ const SetAddForm = () => {
                         required = {false}
                         labelId = 'add_set_rest__label'
                         labelText = 'Rest (seconds)'
-                        inputType = 'number'
+                        inputType = 'text'
                         inputId = 'add_set_rest__input'
                         onFocusCB = {(e) => {}}
                         onBlurCB = {(e) => {}}
                         inputRef = {null}
                         inputValueState = {exSetRest}
-                        inputOnChangeCB = {setExSetRest}
+                        inputOnChangeCB = {validateNumber}
+                        inputValueSetter = {setExSetRest}
                         aria = {false}
                     ></FormInput>
                 </div>

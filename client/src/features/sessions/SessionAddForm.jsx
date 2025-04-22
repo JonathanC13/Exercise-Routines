@@ -61,6 +61,14 @@ const SessionAddForm = () => {
         setValidDescription(checkValidDescription(description))
     }, [description])
 
+    const validateNumber = (val) => {
+        if (isNaN(Number(val))) {
+            return
+        } else {
+            setOrder(val)
+        }
+    }
+
     const addSessionHandler = async(e) => {
         e.preventDefault()
 
@@ -137,7 +145,7 @@ const SessionAddForm = () => {
                     <FormInput
                         required = {true}
                         labelId = 'add_session_name__label'
-                        labelText = 'Name*'
+                        labelText = 'Name'
                         inputType = 'text'
                         inputId = 'add_session_name__input'
                         onFocusCB = {(e) => {setNameFocus(true)}}
@@ -163,13 +171,14 @@ const SessionAddForm = () => {
                         required = {false}
                         labelId = 'add_session_order__label'
                         labelText = 'Order'
-                        inputType = 'number'
+                        inputType = 'text'
                         inputId = 'add_session_order__input'
                         onFocusCB = {(e) => {}}
                         onBlurCB = {(e) => {}}
                         inputRef = {null}
                         inputValueState = {order}
-                        inputOnChangeCB = {setOrder}
+                        inputOnChangeCB = {validateNumber}
+                        inputValueSetter = {setOrder}
                         aria = {false}
                         ariaValidState = {true}
                         ariaDescribedby = ''

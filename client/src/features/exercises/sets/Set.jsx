@@ -1,13 +1,21 @@
 import React from 'react'
-import { useState, useEffect, memo } from 'react'
+import { useState, useEffect, memo, useRef } from 'react'
 import { FaTrashCan } from 'react-icons/fa6'
 import { useUpdateExerciseMutation } from '../exerciseApiSlice'
+import { useParams } from 'react-router-dom'
 
-const Set = ( { sets = [], setId = null } ) => {
+const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null } ) => {
+
+    const { routineId } = useParams()
+
+    const orderRef = useRef()
+    const msgRef = useRef()
     
     const set = sets.find((set) => {
         return set.id === setId
     })
+
+    const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
     
     const [edit, setEdit] = useState(false)
     const [exSetOrder, setExSetOrder] = useState(set?.order ?? '')
@@ -28,13 +36,17 @@ const Set = ( { sets = [], setId = null } ) => {
             setExSetOrder(set.order)
             setExSetWeight(set.weight)
             setExSetReps(set.repsOrDuration)
-            setExSetRest(set.restTimeSeconds)
+            setExSetRest(set.restTimeSeconds ?? '')
         }
     }
 
     const exSetFormId = `set_form_${setId}`
 
     useEffect(() => {
+        if (edit) {
+            orderRef.current.focus()
+        }
+
         if (set) {
             const form = document.getElementById(exSetFormId)
             const exSetOrderInput = form.querySelector('#set_order');
@@ -56,9 +68,17 @@ const Set = ( { sets = [], setId = null } ) => {
         }
     }, [edit])
 
+    const validateNumber = (val, cb) => {
+        if (isNaN(Number(val))) {
+            return
+        } else {
+            cb(val)
+        }
+    }
+
     const exSetFormSubmitHandler = async(e) => {
         e.preventDefault();
-        exSetMessage('')
+        setExSetMessage('')
         const action = e.nativeEvent.submitter.value;
         const form = e.currentTarget
         switch (action) {
@@ -104,16 +124,27 @@ const Set = ( { sets = [], setId = null } ) => {
                         })
                     }
                     // console.log(payload)
-                    const response = await updateExerciseRequestHandler(payload)
-                    // console.log(response)
-                    if (response?.error) {
-                        resetInfo()
-                        exSetMessage(response.error?.data?.message ?? 'Error')
-                        return
-                    }
-                    exSetMessage('Success!')
+                    const response = await updateExercise({ routineId, sessionId: sessionId, exerciseId: exerciseId, body: payload }).unwrap()
+                        .then((payload) => {
+                            // setExerciseMessage('Success!');
+                            // console.log('res', payload)
+                        })
+                        .catch((error) => {
+                            // console.log('1', error)
+                            msgRef.current.focus()
+                            if (!error?.data) {
+                                setExSetMessage('No Server Response!');
+                            } else if (error?.data) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setExSetMessage(message)
+                            } else {
+                                setExSetMessage('Edit exercise failed!')
+                            }
+                        })
                 } catch (error) {
-                    exSetMessage(error?.data?.message ?? 'Error')
+                    // console.log(error)
+                    setExSetMessage(error?.data?.message ?? 'Error')
+                    msgRef.current.focus()
                 } finally {
                     form.classList.remove('disabled')
                 }
@@ -128,15 +159,24 @@ const Set = ( { sets = [], setId = null } ) => {
                 }
 
                 try {
-                    const response = await updateExerciseRequestHandler(payload)
-
-                    if (response?.error) {
-                        exSetMessage(response.error?.data?.message ?? 'Error')
-                        return
-                    }
-                    exSetMessage('Success!')
+                    const response = await updateExercise({ routineId, sessionId: sessionId, exerciseId: exerciseId, body: payload }).unwrap()
+                        .then((payload) => {
+                            // setExerciseMessage('Success!');
+                        })
+                        .catch((error) => {
+                            msgRef.current.focus()
+                            if (!error?.data) {
+                                setExSetMessage('No Server Response!');
+                            } else if (error?.data) {
+                                const message = error?.data?.message ?? 'Error!'
+                                setExSetMessage(message)
+                            } else {
+                                setExSetMessage('Edit exercise failed!')
+                            }
+                        })
                 } catch (error) {
-                    exSetMessage(error?.data?.message ?? 'Error')
+                    setExSetMessage(error?.data?.message ?? 'Error')
+                    msgRef.current.focus()
                 } finally {
                     form.classList.remove('disabled')
                 
@@ -177,8 +217,9 @@ const Set = ( { sets = [], setId = null } ) => {
                 <div className="order_info">
                     <label className='set_desc_order__label' htmlFor='set_order'><span className='center_text_vert'>Order:</span></label>
                     <input className='set_order_value__input' id="set_order" name="set_order" disabled
+                        ref={orderRef}
                         value={exSetOrder}
-                        onChange={e => setExSetOrder(e.target.value)}
+                        onChange={e => validateNumber(e.target.value, setExSetOrder)}
                     ></input>
                 </div>
                 <div className="set_complete__div">
@@ -207,13 +248,13 @@ const Set = ( { sets = [], setId = null } ) => {
                         <label className='set_desc_title__label' htmlFor='set_rest'>Rest (sec)</label>
                         <input className='set_desc_value__input' id="set_rest" name="set_rest" disabled
                             value={exSetRest}
-                            onChange={e => setExSetRest(e.target.value)}
+                            onChange={e => validateNumber(e.target.value, setExSetRest)}
                         ></input>
                     </div>
                 </div>
             </div>
             { setOptionButtons }
-            <p id='set_msg__p'>{exSetMessage}</p>
+            <p id='set_msg__p' ref={msgRef}>{exSetMessage}</p>
         </form>
     }
 

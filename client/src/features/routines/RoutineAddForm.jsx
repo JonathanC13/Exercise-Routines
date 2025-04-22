@@ -61,6 +61,14 @@ const RoutineAddForm = () => {
         setValidDescription(checkValidDescription(description))
     }, [description])
 
+    const validateNumber = (val, cb) => {
+        if (isNaN(Number(val))) {
+            return
+        } else {
+            cb(val)
+        }
+    }
+
     const addRoutineHandler = async(e) => {
         e.preventDefault()
 
@@ -130,7 +138,7 @@ const RoutineAddForm = () => {
                 <FormInput
                     required = {true}
                     labelId = 'add_routine_name__label'
-                    labelText = 'Name*'
+                    labelText = 'Name'
                     inputType = 'text'
                     inputId = 'add_routine_name__input'
                     onFocusCB = {(e) => setNameFocus(true)}
@@ -151,18 +159,19 @@ const RoutineAddForm = () => {
                     value={order}
                     onChange={(e) => {setOrder(e.target.value)}}
                 /> */}
-
+                {/* inputType = 'Number' */}
                 <FormInput
                     required = {false}
                     labelId = 'add_routine_order__label'
                     labelText = 'Order'
-                    inputType = 'Number'
+                    inputType = 'text' 
                     inputId = 'add_routine_order__input'
                     onFocusCB = {(e) => {}}
                     onBlurCB = {(e) => {}}
                     inputRef = {null}
                     inputValueState = {order}
-                    inputOnChangeCB = {setOrder}
+                    inputOnChangeCB = {validateNumber}
+                    inputValueSetter = {setOrder}
                     aria = {false}
                     ariaValidState = {true}
                     ariaDescribedby = ''
