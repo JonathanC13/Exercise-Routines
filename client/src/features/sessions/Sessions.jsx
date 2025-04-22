@@ -1,10 +1,11 @@
 import React from 'react'
 import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
 import { useGetSessionsQuery } from './sessionsApiSlice'
-import { useParams, useNavigate } from 'react-router'
+import { useParams, useNavigate, Link, useLocation } from 'react-router'
 import Session from './Session'
 import { useDispatch } from 'react-redux'
 import { sessionAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
+import { FaBackwardStep } from 'react-icons/fa6'
 
 const createSessionComps = (routineId, sessionIds) => {
     const comps = sessionIds.map((sessionId) => {
@@ -19,9 +20,11 @@ const createSessionComps = (routineId, sessionIds) => {
 }
 
 const Sessions = () => {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const { routineId } = useParams()
     const dispatch = useDispatch()
+    const location = useLocation()
+    const from = location.state?.from.pathname ?? '/'
 
     const { routine } = useGetRoutinesQuery('routinesList',
         {
@@ -48,9 +51,9 @@ const Sessions = () => {
         dispatch(sessionAddFormOpenChanged({ addFormOpen: true, addFormType: 'sessionAddForm', routine: routine }))
     }
 
-    const toRoutines = () => {
-        navigate('/routines')
-    }
+    // const toRoutines = () => {
+    //     navigate('/routines')
+    // }
 
     let content = ''
 
@@ -60,8 +63,11 @@ const Sessions = () => {
         const { ids, entities } = sessions
         content = <>
             <div className='sessions_routine_title__div'>
-              <h1 className='info_label_routine info_text_padding'>Routine:</h1>
-              <h1 className='info_value info_text_padding'>{routine.name}</h1>
+                <Link to={from} className='info_label_routine__link info_text_padding cursor_pointer'>
+                    <FaBackwardStep className='backward-step__svg'></FaBackwardStep>
+                    Routine:
+                </Link>
+                <h1 className='info_value info_text_padding'>{routine.name}</h1>
             </div>
             <div className="sessions_title__div">
                 <h1 className='sessions_title__h1'>Sessions</h1>
@@ -79,7 +85,7 @@ const Sessions = () => {
   return (
     <section className='sessions__section'>
         {content}
-        <button onClick={toRoutines}>to Routines</button>
+        {/* <button onClick={toRoutines}>to Routines</button> */}
     </section>
   )
 }

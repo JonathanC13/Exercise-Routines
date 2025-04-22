@@ -2,7 +2,7 @@ import React from 'react'
 // import { selectRoutineById } from './routinesApiSlice'
 import { memo, useState, useEffect, useRef } from 'react'
 import { useGetRoutinesQuery, useUpdateRoutineMutation, useDeleteRoutineMutation } from './routinesApiSlice'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate, Link } from 'react-router'
 import { useSelector } from 'react-redux'
 import classnames from 'classnames'
 import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
@@ -39,6 +39,8 @@ const checkValidDescription = (description) => {
 }
 
 const Routine = ( { routineId = null, isFetching = true } ) => {
+
+    const location = useLocation()
     // console.log(`${routineId} has rendered!`)
     const auth = useSelector(state => state.auth)
 
@@ -112,13 +114,13 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     const [readMore, setReadMore] = useState(false)
     const descMaxLength = 100
 
-    let navigate = useNavigate()
-
-    const routineClickHandler = (routineIdParam) => {
-      if (!isFetching) {
-        navigate(`/routines/${routineIdParam}/sessions/`)
-      }
-    }
+    // let navigate = useNavigate()
+    const link = `/routines/${routineId}/sessions/`
+    // const routineClickHandler = (routineIdParam) => {
+    //   if (!isFetching) {
+    //     navigate(`/routines/${routineIdParam}/sessions/`)
+    //   }
+    // }
 
     const toggleReadMoreHandler = (event) => {
       event.stopPropagation()
@@ -281,7 +283,10 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
               :
               <h1 id='routine_name__h1' className='routine__h1'>{routineName}</h1>
               }
-            <div className="door_open_svg__div cursor_pointer" onClick={() => {routineClickHandler(routineId)}}> <FaDoorOpen/></div>
+            <Link to={link} state={{from: location}} className="door_open_svg__link cursor_pointer">
+              <FaDoorOpen className='fa-door-open__svg'/>
+            </Link>
+            {/* <button className="door_open_svg__btn cursor_pointer" onClick={() => {routineClickHandler(routineId)}}> <FaDoorOpen className='fa-door-open__svg'/></button> */}
           </div>
           
           <section className="routine_info__div">

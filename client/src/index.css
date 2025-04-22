@@ -30,6 +30,7 @@ img {
   --ROUTINE-FOOTER-FONT-SIZE: 0.66rem;
 
   /* COLOUR */
+  --NAV-ICON-BTN-COLOR: #EE7B30;
   --NAVBAR-BG-COLOR: #8BBEB2;
   --NAVBAR-HOVER-COLOR: #7daba0;
   --SCREEN-NAV-H1-COLOR: #027BCE;
@@ -46,6 +47,8 @@ img {
   --LOGOUT-BUTTON-COLOR: #0D0630;
   --LOGOUT-BUTTON-HOVER-COLOR: rgba(13, 6, 48, 0.85);
   --ROUTINE-TITLE-BG-COLOR: #2E2836;
+  --ROUTINE-TITLE-BG-HOVER-COLOR: rgba(46, 40, 54, 0.85);
+  --ROUTINE-TITLE-BG-20-TINT-COLOR: #58535e;
   --ROUTINE-UNDERLINE-COLOR: #2E2836;
   --BG-COLOR: #efefef;
   --ROUTINE-BG-COLOR: #ffffff;
@@ -59,6 +62,7 @@ img {
   --SESSION-INFO-DESC-BG-COLOR: #efefef;
   --READMORE-BORD-COLOR: #BE8A60;
   --EDIT-BUTTON-COLOR: #1a936f;
+  --EDIT-BUTTON-HOVER-COLOR: rgba(26, 147, 111, 0.85);
   --SESSION-TITLE-FONT-COLOR: #FFF;
   --SESSION-TITLE-BG-COLOR: #6A2E35;
   --EXERCISE-TITLE-BG-COLOR: #BE8A60;
@@ -87,6 +91,7 @@ img {
   /* PADDING */
   --AUTH-SECT-PADDING: 1rem 2rem;
   --INFO-PADDING: 0.25rem 0.5rem;
+  --GENERAL-PADDING: 1rem 0rem;
   --ROUTINES-SEC-TB-PADDING: 1rem 0rem;
   --SESSIONS-SEC-TB-PADDING: 1rem 0rem;
   --EXERCISES-SEC-TB-PADDING: 1rem 0rem;
@@ -158,6 +163,12 @@ body {
   width: 100%;
   height: 100vh;
   background-color: var(--BG-COLOR);
+
+  background-image: url('/samuel-girven-fqMu99l8sqo-unsplash.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 #root {
@@ -176,15 +187,17 @@ body {
   display: flex;
   flex-flow: column nowrap;
   position: relative;
-  overflow-y: scroll;
+  overflow-y: hidden;
+  /* padding: var(--GENERAL-PADDING); */
 }
 
-.background-image {
+/* .background-image {
   background-image: url('/samuel-girven-fqMu99l8sqo-unsplash.jpg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
-}
+  background-attachment: fixed;
+} */
 
 .info_label {
   font-weight: bold;
@@ -196,6 +209,13 @@ body {
 .info_value {
   font-size: 1rem;
   word-break: break-word;
+
+  color: white;
+  padding: var(--INFO-PADDING);
+  border-radius: var(--INFO-DIV-BORDER-RAD);
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
 }
 
 .info_text_padding {
@@ -231,6 +251,18 @@ body {
   padding: var(--EDIT-BTN-PADDING);
   background-color: var(--EDIT-BUTTON-COLOR);
   color:var(--BG-COLOR);
+}
+
+:is(.routine_edit__button,
+.routine_save__button,
+.session_edit__button,
+.session_save__button,
+.exercise_edit__button,
+.exercise_save__button,
+.set_edit__button,
+.set_save__button):hover
+{
+  background-color: var(--EDIT-BUTTON-HOVER-COLOR);
 }
 
 .routine_cancel__button,
@@ -316,6 +348,15 @@ body {
 .missing__link:hover {
   background-color: var(--NAVBAR-HOVER-COLOR);
 }
+
+.routines_title__div,
+.sessions_title__div {
+  width: min-content;
+  padding: var(--INFO-PADDING);
+  border-radius: var(--INFO-DIV-BORDER-RAD);
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
 /* /GENERAL */
 
 /* FORM GENERAL */
@@ -683,14 +724,7 @@ body {
   align-items: center;
   justify-content: flex-start;
   gap: var(--ROUTINES-SEC-GAP);
-  padding: var(--ROUTINES-SEC-TB-PADDING);
-}
-
-.routines_title__div {
-  width: min-content;
-  padding: var(--INFO-PADDING);
-  border-radius: var(--INFO-DIV-BORDER-RAD);
-  background-color: rgba(0, 0, 0, 0.75);
+  padding-top: 1rem;
 }
 
 .routines__h1 {
@@ -732,6 +766,8 @@ body {
   display: flex;
   flex-flow: column nowrap;
   gap: var(--ROUTINES-SEC-GAP);
+  overflow-y: scroll;
+  padding-bottom: 1rem;
 }
 
 .routines__div.disabled {
@@ -764,13 +800,26 @@ body {
   font-size: 1.5rem;
 }
 
-.info_label_routine {
+.info_label_routine__link {
+  text-decoration: none;
   color: #ffffff;
   font-size: 1rem;
   font-weight: bold;
   background-color: var(--ROUTINE-TITLE-BG-COLOR);
   border-radius: var(--INFO-DIV-BORDER-RAD);
   margin-right: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-style: none;
+}
+
+.info_label_routine__link:hover {
+  background-color: var(--ROUTINE-TITLE-BG-HOVER-COLOR);
+}
+
+.info_label_routine__link .backward-step__svg {
+  color: var(--NAV-ICON-BTN-COLOR);
 }
 
 .add_routine_input__div {
@@ -935,11 +984,23 @@ body {
   padding: var(--ROUTINE-INFO-PADDING);
 }
 
-.door_open_svg__div {
+.door_open_svg__link {
+  font-size: 1rem;
   align-self: stretch;
-  color: #fff;
   display: flex;
   align-items: center;
+  border-style: none;
+  padding: 0.2rem 0.2rem;
+  background-color: transparent;
+  border-radius: 0.2rem;
+}
+
+.door_open_svg__link:hover {
+  background-color: var(--ROUTINE-TITLE-BG-20-TINT-COLOR);
+}
+
+.fa-door-open__svg {
+  color: var(--NAV-ICON-BTN-COLOR);
 }
 
 .routine_desc__div {
@@ -969,13 +1030,21 @@ body {
 /* SESSIONS */
 .sessions__section {
   width: 100%;
+  height: 100%;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   justify-content: flex-start;
   gap: var(--SESSIONS-SEC-GAP);
-  padding: var(--SESSIONS-SEC-TB-PADDING);
+  padding-top: 1rem;
 }
+/* 
+.session__form {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+} */
 
 .info_label_session {
   color: #ffffff;
@@ -988,7 +1057,6 @@ body {
 
 .sessions_routine_title__div {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-flow: row nowrap;
   justify-content: flex-start;
@@ -1005,7 +1073,6 @@ body {
 
 .sessions_title__div {
   width: min-content;
-  height: 100%;
 }
 
 .sessions_title__h1 {
@@ -1013,6 +1080,7 @@ body {
   font-weight: bolder;
   display: flex;
   justify-content: center;
+  color: white;
 }
 
 .sessions_title_underline {
@@ -1027,6 +1095,8 @@ body {
   display: flex;
   flex-flow: column nowrap;
   gap: var(--SESSIONS-SEC-GAP);
+  overflow-y: scroll;
+  padding-bottom: 1rem;
 }
 
 .sessions_add__button {
@@ -1034,6 +1104,10 @@ body {
   padding: var(--ADD-BTN-PADDING);
   color:var(--BG-COLOR);
   border-radius: var(--ADD-BTN-BORDER-RAD);
+}
+
+.sessions_add__button:hover {
+  background-color: var(--ADD-BUTTON-HOVER-COLOR);
 }
 
 .add_session__button {
@@ -1092,7 +1166,7 @@ body {
 /* SESSION */
 .session__section {
   width: 100%;
-  height: 100%;
+  height: min-content;
   border-radius: var(--SESSION-SEC-BORDER-RAD);
   background-color: var(--SESSION-BG-COLOR);
   box-shadow: var(--SESSION-SEC-SHADOW);
@@ -1243,6 +1317,10 @@ body {
   padding: var(--ADD-BTN-PADDING);
   color:var(--BG-COLOR);
   border-radius: var(--ADD-BTN-BORDER-RAD);
+}
+
+.exercises_add__button:hover {
+  background-color: var(--ADD-BUTTON-HOVER-COLOR);
 }
 /* /EXERCISES */
 
@@ -1402,6 +1480,10 @@ body {
   background-color: var(--ADD-BUTTON-COLOR);
   color:var(--BG-COLOR);
   border-radius: var(--ADD-BTN-BORDER-RAD);
+}
+
+.sets_add__button:hover {
+  background-color: var(--ADD-BUTTON-HOVER-COLOR);
 }
 /* /SETS */
 

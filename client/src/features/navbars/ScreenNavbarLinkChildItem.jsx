@@ -7,7 +7,7 @@ const ScreenNavbarLinkChildItem = ( { info=null, urlTemplate='', gotoDestination
     }
 
     const linkTo = urlTemplate.replace('${id}', info?.id)
-    console.log(linkTo)
+    // console.log(linkTo)
 
   return (
     <li className='link-items-sub__li cursor_pointer' onClick={() => gotoDestinationHandler(linkTo)}>
