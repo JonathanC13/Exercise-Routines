@@ -1,10 +1,12 @@
 import React from 'react'
 import { useState, useEffect, memo, useRef } from 'react'
 import { FaTrashCan } from 'react-icons/fa6'
-import { useUpdateExerciseMutation } from '../exerciseApiSlice'
+// import { useUpdateExerciseMutation } from '../exerciseApiSlice'
 import { useParams } from 'react-router-dom'
+import TimerBox from '../../timerBox/TimerBox'
 
-const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null } ) => {
+const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, exerciseUpdateFunc = () => {} } ) => {
+    // console.log('set rerender')
 
     const { routineId } = useParams()
 
@@ -15,7 +17,7 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null } )
         return set.id === setId
     })
 
-    const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
+    // const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
     
     const [edit, setEdit] = useState(false)
     const [exSetOrder, setExSetOrder] = useState(set?.order ?? '')
@@ -76,6 +78,67 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null } )
         }
     }
 
+    const buildSetBody = () => {
+        return { 
+            'sets': sets.map((set) => {
+                if (set.id === setId) {
+                    const newObj = {}
+                    for (let [key, val] of Object.entries(set)) {
+                        switch(key) {
+                            case ('order'):
+                                newObj.order = exSetOrder
+                                break
+                            case ('weight'):
+                                newObj.weight = exSetWeight
+                                break
+                            case ('repsOrDuration'):
+                                newObj.repsOrDuration = exSetReps
+                                break
+                            case ('restTimeSeconds'):
+                                newObj.restTimeSeconds = exSetRest
+                                break
+                            default:
+                                newObj[key] = val
+                                break
+                        }
+                    }
+                    return newObj
+                }
+                return set
+            })
+        }
+    }
+
+    const toggleCompleted = async(completed) => {
+
+        const body = {'sets': sets.map((set) => {
+                if (set.id === setId) {
+                    const newObj = {}
+                    for (let [key, val] of Object.entries(set)) {
+                        switch(key) {
+                            case ('completed'):
+                                newObj.completed = completed
+                                break
+                            default:
+                                newObj[key] = val
+                                break
+                        }
+                    }
+                    return newObj
+                }
+                return set
+            })
+        }
+
+        await exerciseUpdateFunc(body)
+    }
+
+    const updateSetFunc = async() => {
+        const body = buildSetBody()
+                
+        await exerciseUpdateFunc(body)
+    }
+
     const exSetFormSubmitHandler = async(e) => {
         e.preventDefault();
         setExSetMessage('')
@@ -94,99 +157,29 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null } )
                 setEdit(false)
                 form.classList.add('disabled')
 
-                try {
-                    const payload = { 
-                        'sets': sets.map((set) => {
-                            if (set.id === setId) {
-                                const newObj = {}
-                                for (let [key, val] of Object.entries(set)) {
-                                    switch(key) {
-                                        case ('order'):
-                                            newObj.order = exSetOrder
-                                            break
-                                        case ('weight'):
-                                            newObj.weight = exSetWeight
-                                            break
-                                        case ('repsOrDuration'):
-                                            newObj.repsOrDuration = exSetReps
-                                            break
-                                        case ('restTimeSeconds'):
-                                            newObj.restTimeSeconds = exSetRest
-                                            break
-                                        default:
-                                            newObj.key = val
-                                            break
-                                    }
-                                }
-                                return newObj
-                            }
-                            return set
-                        })
-                    }
-                    // console.log(payload)
-                    const response = await updateExercise({ routineId, sessionId: sessionId, exerciseId: exerciseId, body: payload }).unwrap()
-                        .then((payload) => {
-                            // setExerciseMessage('Success!');
-                            // console.log('res', payload)
-                        })
-                        .catch((error) => {
-                            // console.log('1', error)
-                            msgRef.current.focus()
-                            if (!error?.data) {
-                                setExSetMessage('No Server Response!');
-                            } else if (error?.data) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setExSetMessage(message)
-                            } else {
-                                setExSetMessage('Edit exercise failed!')
-                            }
-                        })
-                } catch (error) {
-                    // console.log(error)
-                    setExSetMessage(error?.data?.message ?? 'Error')
-                    msgRef.current.focus()
-                } finally {
-                    form.classList.remove('disabled')
-                }
+                await updateSetFunc()
+
+                form.classList.remove('disabled')
                 
                 break
             case 'delete':
                 setEdit(false)
                 form.classList.add('disabled')
 
-                const payload = {
+                const payloadDel = {
                     'sets': sets.filter((set) => {return set.id !== setId})
                 }
 
-                try {
-                    const response = await updateExercise({ routineId, sessionId: sessionId, exerciseId: exerciseId, body: payload }).unwrap()
-                        .then((payload) => {
-                            // setExerciseMessage('Success!');
-                        })
-                        .catch((error) => {
-                            msgRef.current.focus()
-                            if (!error?.data) {
-                                setExSetMessage('No Server Response!');
-                            } else if (error?.data) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setExSetMessage(message)
-                            } else {
-                                setExSetMessage('Edit exercise failed!')
-                            }
-                        })
-                } catch (error) {
-                    setExSetMessage(error?.data?.message ?? 'Error')
-                    msgRef.current.focus()
-                } finally {
-                    form.classList.remove('disabled')
-                
-                }
-            
+                await exerciseUpdateFunc(payloadDel)
+
+                form.classList.remove('disabled')
+
                 break
             default:
                 break
         }
     }
+
 
     let content = ''
 
@@ -223,7 +216,11 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null } )
                     ></input>
                 </div>
                 <div className="set_complete__div">
-                    <span className='set_complete__box'>L  l</span>
+                    <TimerBox
+                        timerSeconds={exSetRest}
+                        completedInit={set?.completed}
+                        updateCallback={toggleCompleted}
+                    ></TimerBox>
                     {/* complete check has animation of timed filling based on rest number in seconds. box always on right*/}
                     {/* below is edit button, will change edit state = true and will load setEditForm from this component */}
                 </div>

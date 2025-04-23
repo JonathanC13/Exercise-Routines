@@ -112,6 +112,52 @@ const Session = ( { sessionId = null }) => {
         }
     }
 
+    const sessionUpdateFunc = async(body) => {
+        try {
+            
+            const response = await updateSession({routineId: routineId, sessionId: sessionId, body: body}).unwrap()
+                .then((payload) => {})
+                .catch((error) => {
+                    msgRef.current.focus()
+                    if (!error?.data) {
+                        setMsg('No server response!')
+                    } else if (error?.data?.message) {
+                        const message = error?.data?.message ?? 'Error!'
+                        setMsg(message)
+                    } else {
+                        setMsg('Update session failed!')
+                    }
+                })
+        } catch (error) {
+            setMsg('Update session failed!')
+            msgRef.current.focus()
+        } 
+        // finally {
+        //     form.classList.remove('disabled')
+        // }
+    }
+
+    const sessionDeleteFunc = async(body) => {
+        try {
+            const response = await deleteSession({routineId: routineId, sessionId: sessionId}).unwrap()
+                .then((payload) => {})
+                .catch((error) => {
+                    msgRef.current.focus()
+                    if (error?.data) {
+                        setMsg('No server response!')
+                    } else if (error?.data?.message) {
+                        const message = error?.data?.message ?? 'Error!'
+                        setMsg(message)
+                    } else {
+                        setMsg('Update session failed!')
+                    }
+                })
+        } catch (error) {
+            setMsg('Delete session failed!')
+            msgRef.current.focus()
+        }
+    }
+
     const sessionFormSubmitHandler = async(e) => {
         e.preventDefault()
 
@@ -140,60 +186,26 @@ const Session = ( { sessionId = null }) => {
 
                 setEdit(false)
                 form.classList.add('disabled')
-                
-                try {
-                    const body = { 
-                        'name': name ?? '',
-                        'order': order ?? 0,
-                        'description': desc ?? ''
-                    }
-                    
-                    const response = await updateSession({routineId: routineId, sessionId: sessionId, body: body}).unwrap()
-                        .then((payload) => {})
-                        .catch((error) => {
-                            msgRef.current.focus()
-                            if (!error?.data) {
-                                setMsg('No server response!')
-                            } else if (error?.data?.message) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setMsg(message)
-                            } else {
-                                setMsg('Update session failed!')
-                            }
-                        })
-                } catch (error) {
-                    setMsg('Update session failed!')
-                    msgRef.current.focus()
-                } finally {
-                    form.classList.remove('disabled')
+
+                const body = { 
+                    'name': name ?? '',
+                    'order': order ?? 0,
+                    'description': desc ?? ''
                 }
+                
+                await sessionUpdateFunc(body)
+
+                form.classList.remove('disabled')
                 
                 break
             case 'delete':
                 setEdit(false)
                 form.classList.add('disabled')
 
-                try {
-                    const response = await deleteSession({routineId: routineId, sessionId: sessionId}).unwrap()
-                        .then((payload) => {})
-                        .catch((error) => {
-                            msgRef.current.focus()
-                            if (error?.data) {
-                                setMsg('No server response!')
-                            } else if (error?.data?.message) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setMsg(message)
-                            } else {
-                                setMsg('Update session failed!')
-                            }
-                        })
-                } catch (error) {
-                    setMsg('Delete session failed!')
-                    msgRef.current.focus()
-                } finally {
-                    form.classList.remove('disabled')
-                }
-            
+                await sessionDeleteFunc()
+                
+                form.classList.remove('disabled')
+                
                 break
             default:
                 break

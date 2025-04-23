@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { exSetAddFormOpenChanged } from '../../modals/addFormModals/addFormModalsSlice'
 import { useParams } from 'react-router'
 
-const createSetComps = (sessionId, exerciseId, sets) => {
+const createSetComps = (sessionId, exerciseId, sets, exerciseUpdateFunc) => {
     const comps = sets.map((set) => {
         return <Set
             key={set.id}
@@ -12,13 +12,14 @@ const createSetComps = (sessionId, exerciseId, sets) => {
             exerciseId={exerciseId}
             sets={sets}
             setId={set.id}
+            exerciseUpdateFunc={exerciseUpdateFunc}
         ></Set>
     })
 
     return comps
 }
 
-const Sets = ( { exercise = {} } ) => {
+const Sets = ( { exercise = {}, exerciseUpdateFunc = () => {} } ) => {
 
     const { routineId } = useParams()
 
@@ -43,7 +44,7 @@ const Sets = ( { exercise = {} } ) => {
                     <span className='info_label info_text_padding'>Sets:</span>
                 </div>
                 <section className="set_items__section">
-                    { createSetComps(exercise.sessionId, exercise.id, sets) }
+                    { createSetComps(exercise.sessionId, exercise.id, sets, exerciseUpdateFunc) }
                     <section className="sets_add__section">
                         <button className="sets_add__button cursor_pointer" onClick={(e) => openSetAddFormHandler(e)}>Add Set</button>
                     </section>

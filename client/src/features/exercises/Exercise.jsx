@@ -93,6 +93,54 @@ const Exercise = ( { exercise = null } ) => {
 
     // console.log('re-render: ', exercise.id)
 
+    const exerciseUpdateFunc = async(body) => {
+        try {
+                    
+            // console.log(payload)
+            const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body: body }).unwrap()
+                .then((payload) => {
+                    // setExerciseMessage('Success!');
+                })
+                .catch((error) => {
+                    msgRef.current.focus()
+                    if (!error?.data) {
+                        setExerciseMessage('No Server Response!');
+                    } else if (error?.data) {
+                        const message = error?.data?.message ?? 'Error!'
+                        setExerciseMessage(message)
+                    } else {
+                        setExerciseMessage('Edit exercise failed!')
+                    }
+                })
+        } catch (error) {
+            setExerciseMessage('Edit exercise failed!')
+            msgRef.current.focus()
+        }
+    }
+
+    const exerciseDeleteFunc = async() => {
+        try {
+            const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
+                .then((payload) => {
+                    // setExerciseMessage('Success!');
+                })
+                .catch((error) => {
+                    msgRef.current.focus()
+                    if (!error?.data) {
+                        setExerciseMessage('No Server Response!');
+                    } else if (error?.data) {
+                        const message = error?.data?.message ?? 'Error!'
+                        setExerciseMessage(message)
+                    } else {
+                        setExerciseMessage('Delete exercise failed!')
+                    }
+                })
+        } catch (error) {
+            setExerciseMessage('Delete exercise failed!')
+            msgRef.current.focus()
+        } 
+    }
+
     const exerciseFormSubmitHandler = async(e) => {
         e.preventDefault()
         setExerciseMessage('')
@@ -119,65 +167,24 @@ const Exercise = ( { exercise = null } ) => {
 
                 setEdit(false)
                 form.classList.add('disabled')
-                
-                try {
-                    const body = { 
-                        'name': exerciseName ?? '',
-                        'muscleType': exerciseMuscleType ?? '',
-                        'order': exerciseOrder === '' ? 0 : exerciseOrder ?? 0,
-                        'description': exerciseDesc ?? ''
-                    }
-                    // console.log(payload)
-                    const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body }).unwrap()
-                        .then((payload) => {
-                            // setExerciseMessage('Success!');
-                        })
-                        .catch((error) => {
-                            msgRef.current.focus()
-                            if (!error?.data) {
-                                setExerciseMessage('No Server Response!');
-                            } else if (error?.data) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setExerciseMessage(message)
-                            } else {
-                                setExerciseMessage('Edit exercise failed!')
-                            }
-                        })
-                } catch (error) {
-                    setExerciseMessage('Edit exercise failed!')
-                    msgRef.current.focus()
-                } finally {
-                    form.classList.remove('disabled')
+
+                const body = { 
+                    'name': exerciseName ?? '',
+                    'muscleType': exerciseMuscleType ?? '',
+                    'order': exerciseOrder === '' ? 0 : exerciseOrder ?? 0,
+                    'description': exerciseDesc ?? ''
                 }
                 
+                await exerciseUpdateFunc(body)
+                
+                form.classList.remove('disabled')
+
                 break
             case 'delete':
                 setEdit(false)
                 form.classList.add('disabled')
 
-                try {
-                    const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
-                        .then((payload) => {
-                            // setExerciseMessage('Success!');
-                        })
-                        .catch((error) => {
-                            msgRef.current.focus()
-                            if (!error?.data) {
-                                setExerciseMessage('No Server Response!');
-                            } else if (error?.data) {
-                                const message = error?.data?.message ?? 'Error!'
-                                setExerciseMessage(message)
-                            } else {
-                                setExerciseMessage('Delete exercise failed!')
-                            }
-                        })
-                } catch (error) {
-                    setExerciseMessage('Delete exercise failed!')
-                    msgRef.current.focus()
-                } finally {
-                    form.classList.remove('disabled')
-                
-                }
+                await exerciseDeleteFunc()
             
                 break
             default:
@@ -291,6 +298,7 @@ const Exercise = ( { exercise = null } ) => {
                 </form>
                 <Sets
                     exercise={exercise}
+                    exerciseUpdateFunc={exerciseUpdateFunc}
                 ></Sets>
                 
 

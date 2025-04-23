@@ -63,7 +63,8 @@ const Sessions = () => {
         const { ids, entities } = sessions
         content = <>
             <div className='sessions_routine_title__div'>
-                <Link to={from} className='info_label_routine__link info_text_padding cursor_pointer'>
+                {/* <Link to={from} className='info_label_routine__link info_text_padding cursor_pointer'> */}
+                <Link to='/routines' className='info_label_routine__link info_text_padding cursor_pointer'>
                     <FaBackwardStep className='backward-step__svg'></FaBackwardStep>
                     Routine:
                 </Link>

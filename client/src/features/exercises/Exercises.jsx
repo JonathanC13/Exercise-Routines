@@ -17,7 +17,7 @@ const createExerciseComps = (exercises) => {
     return comps
 }
 
-const Exercises = ( {session = {}} ) => {
+const Exercises = ( {session = {}, sessionUpdateFunc = () => {}} ) => {
 
     const { routineId } = useParams()
 
