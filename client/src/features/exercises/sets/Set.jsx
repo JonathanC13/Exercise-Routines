@@ -24,6 +24,7 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
     const [exSetWeight, setExSetWeight] = useState(set?.weight ?? '')
     const [exSetReps, setExSetReps] = useState(set?.repsOrDuration ?? '')
     const [exSetRest, setExSetRest] = useState(set?.restTimeSeconds ?? '')
+    // const [exSetCompleted, setExSetCompleted] = useState(set?.completed ?? false)
     const [exSetMessage, setExSetMessage] = useState('')
 
     // useEffect(() => {
@@ -97,6 +98,9 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
                             case ('restTimeSeconds'):
                                 newObj.restTimeSeconds = exSetRest
                                 break
+                            // case ('completed'):
+                            //     newObj.completed = exSetCompleted
+                            //     break
                             default:
                                 newObj[key] = val
                                 break
@@ -109,7 +113,13 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
         }
     }
 
-    const toggleCompleted = async(completed) => {
+    const updateSetFunc = async() => {
+        const body = buildSetBody()
+        // console.log(body)
+        await exerciseUpdateFunc(body)
+    }
+    
+    const updateSetCompletedFunc = async(completed) => {
 
         const body = {'sets': sets.map((set) => {
                 if (set.id === setId) {
@@ -130,12 +140,6 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
             })
         }
 
-        await exerciseUpdateFunc(body)
-    }
-
-    const updateSetFunc = async() => {
-        const body = buildSetBody()
-                
         await exerciseUpdateFunc(body)
     }
 
@@ -219,7 +223,7 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
                     <TimerBox
                         timerSeconds={exSetRest}
                         completedInit={set?.completed}
-                        updateCallback={toggleCompleted}
+                        updateCallback={updateSetCompletedFunc}
                     ></TimerBox>
                     {/* complete check has animation of timed filling based on rest number in seconds. box always on right*/}
                     {/* below is edit button, will change edit state = true and will load setEditForm from this component */}

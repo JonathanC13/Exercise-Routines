@@ -1,13 +1,17 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { FaCheck } from 'react-icons/fa6'
+import { FaCheck, FaHourglassStart } from 'react-icons/fa6'
 import useInterval from '../../hooks/useInterval'
 // import TimerComp from './TimerComp'
 
 const TimerBox = ( { timerSeconds = 0, completedInit = false, updateCallback = () => {}} ) => {
+    
     const [completed, setCompleted] = useState(completedInit ?? false)
     const [delay, setDelay] = useState(null)
     const [timeRemaining, setTimeRemaining] = useState(timerSeconds ?? 0)
+    // console.log('rerender ', completed)
+
+    const timerRemainingBgHeight = {height: (1 - (timeRemaining / timerSeconds)) * 100 + '%'}
 
     // console.log('timer rerender: ',timeRemaining, delay)
     useEffect(() => {
@@ -22,9 +26,9 @@ const TimerBox = ( { timerSeconds = 0, completedInit = false, updateCallback = (
         setTimeRemaining(timeRemaining - 1);
     }, delay);
 
-    useEffect(() => {
-        updateCallback(completed)
-    }, [completed])
+    // useEffect(() => {
+    //     updateCallback(completed)
+    // }, [completed])
 
     const timerBoxUpdateHandler = (newCompleted) => {
         setCompleted(newCompleted)
@@ -34,6 +38,7 @@ const TimerBox = ( { timerSeconds = 0, completedInit = false, updateCallback = (
         } else {
             setDelay(null)
         }
+        updateCallback(newCompleted)
     }
 
     const reset = () => {
@@ -46,19 +51,20 @@ const TimerBox = ( { timerSeconds = 0, completedInit = false, updateCallback = (
 
   return (
     <>
-        <button onClick={reset}>reset</button>
-        <button onClick={pause}>pause</button>
+        {/* <button onClick={reset}>reset</button>
+        <button onClick={pause}>pause</button> */}
         <button className='timer-box__button cursor_pointer' onClick={() => {timerBoxUpdateHandler(!completed)}}>
             {completed && delay === null ?
                 <div className='timer-box-complete'>
                     <FaCheck></FaCheck>
                 </div>
-                :
-                timeRemaining
-                // <TimerComp
-                //     timerSeconds={timerSeconds}
-                //     timerBoxUpdateHandler={timerBoxUpdateHandler}
-                // ></TimerComp>
+                : (completed && delay !== null) ?
+                    <div className='timer-box-counting'>
+                        <div className='timer-box-counting-number__div'>{timeRemaining}</div>
+                        <div className='timer-box-counting-bg__div' style={timerRemainingBgHeight}></div>
+                    </div>
+                    :
+                    <FaHourglassStart></FaHourglassStart>
             }
         </button>
     </>

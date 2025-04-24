@@ -3,7 +3,7 @@ import { memo, useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
 import Sets from './sets/Sets.jsx'
-import { FaTrashCan, FaCircleInfo } from 'react-icons/fa6'
+import { FaTrashCan, FaCircleInfo, FaCheck } from 'react-icons/fa6'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -21,11 +21,11 @@ const Exercise = ( { exercise = null } ) => {
 
     const [edit, setEdit] = useState(false)
     const [exerciseName, setExerciseName] = useState(exercise?.name ?? '')
-    const [validExerciseName, setValidExerciseName] = useState(exercise?.name ? checkValidName(exercise.name) : false)
+    const [validExerciseName, setValidExerciseName] = useState(exercise?.name ? checkValidName(exerciseName) : false)
     const [exerciseNameFocus, setExerciseNameFocus] = useState(false)
     const [exerciseOrder, setExerciseOrder] = useState(exercise?.order ?? '')
     const [exerciseDesc, setExerciseDesc] = useState(exercise?.description ?? '')
-    const [validExerciseDesc, setValidExerciseDesc] = useState(exercise?.description ? checkValidDescription(exercise.description) : false)
+    const [validExerciseDesc, setValidExerciseDesc] = useState(exercise?.description ? checkValidDescription(exerciseDesc) : false)
     const [exerciseDescFocus, setExerciseDescFocus] = useState(false)
     const [exerciseMuscleType, setExerciseMuscleType] = useState(exercise?.muscleType ?? '')
     const [exerciseCompleted, setExerciseCompleted] = useState(exercise?.completed ?? '')
@@ -94,6 +94,7 @@ const Exercise = ( { exercise = null } ) => {
     // console.log('re-render: ', exercise.id)
 
     const exerciseUpdateFunc = async(body) => {
+        setExerciseMessage('');
         try {
                     
             // console.log(payload)
@@ -102,10 +103,11 @@ const Exercise = ( { exercise = null } ) => {
                     // setExerciseMessage('Success!');
                 })
                 .catch((error) => {
+                    // console.log('11, ', error)
                     msgRef.current.focus()
                     if (!error?.data) {
                         setExerciseMessage('No Server Response!');
-                    } else if (error?.data) {
+                    } else if (error?.data) {       
                         const message = error?.data?.message ?? 'Error!'
                         setExerciseMessage(message)
                     } else {
@@ -113,12 +115,14 @@ const Exercise = ( { exercise = null } ) => {
                     }
                 })
         } catch (error) {
+            // console.log('22, ', error)
             setExerciseMessage('Edit exercise failed!')
             msgRef.current.focus()
         }
     }
 
     const exerciseDeleteFunc = async() => {
+        setExerciseMessage('');
         try {
             const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
                 .then((payload) => {
@@ -192,6 +196,28 @@ const Exercise = ( { exercise = null } ) => {
         }
     }
 
+    const completedHandler = async(e) => {
+        const button = e.currentTarget
+
+        // const completed = !exerciseCompleted
+        // if (completed) {
+        //     button.classList.add('exercise-completed__complete')
+        // } else {
+        //     button.classList.remove('exercise-completed__complete')
+        // }
+        setExerciseCompleted(!exerciseCompleted)
+
+        const body = { 
+            'name': exerciseName ?? '',
+            'muscleType': exerciseMuscleType ?? '',
+            'order': exerciseOrder === '' ? 0 : exerciseOrder ?? 0,
+            'description': exerciseDesc ?? '',
+            'completed': !exerciseCompleted
+        }
+        
+        await exerciseUpdateFunc(body)
+    }
+
     let content = ''
     
     if (exercise?.id) {
@@ -217,32 +243,38 @@ const Exercise = ( { exercise = null } ) => {
                         Edit Exercise
                     </button>
                 </div>
+
+        const completedButtonClasses = 'cursor_pointer exercise-completed__button' + (exerciseCompleted ? ' exercise-completed__complete' : '')
         
         content =
             <div className="exercise_info__div">
                 <form id={exerciseFormId} onSubmit={(e) => exerciseFormSubmitHandler(e)} className='exercise_info__form'>
                     <div className='ex_form_info__div'>
-                        
-                        { edit ? 
-                            <>
-                                <label htmlFor='exercise_name__ta' className='info_label info_text_padding offscreen'>Name:</label>
-                                <textarea id='exercise_name__ta' className='exercise_name__ta'
-                                    ref={nameRef}
-                                    onFocus={() => setExerciseNameFocus(true)}
-                                    onBlur={() => setExerciseNameFocus(false)}
-                                    aria-invalid={validExerciseName ? "false" : "true"}
-                                    aria-describedby="nameNote"
-                                    value={ exerciseName }
-                                    onChange={(e) => {return setExerciseName(e.target.value)}}
-                                ></textarea>
-                                <p id="nameNote" className={exerciseNameFocus && exerciseName && !validExerciseName ? "instructions" : "offscreen"}>
-                                    <FaCircleInfo /><br/>
-                                    Please enter a name that is 1 to 50 characters.
-                                </p>
-                            </>
-                            :
-                            <h1 className='exercise_name__h1'>{ exerciseName }</h1>
-                        }
+                        <div className='ex_form_title__div'>
+                            { edit ? 
+                                <>
+                                    <label htmlFor='exercise_name__ta' className='info_label info_text_padding offscreen'>Name:</label>
+                                    <textarea id='exercise_name__ta' className='exercise_name__ta'
+                                        ref={nameRef}
+                                        onFocus={() => setExerciseNameFocus(true)}
+                                        onBlur={() => setExerciseNameFocus(false)}
+                                        aria-invalid={validExerciseName ? "false" : "true"}
+                                        aria-describedby="nameNote"
+                                        value={ exerciseName }
+                                        onChange={(e) => {return setExerciseName(e.target.value)}}
+                                    ></textarea>
+                                    <p id="nameNote" className={exerciseNameFocus && exerciseName && !validExerciseName ? "instructions" : "offscreen"}>
+                                        <FaCircleInfo /><br/>
+                                        Please enter a name that is 1 to 50 characters.
+                                    </p>
+                                </>
+                                :
+                                <h1 className='exercise_name__h1'>{ exerciseName }</h1>
+                            }
+                            <button className={completedButtonClasses} onClick={completedHandler}>
+                                <FaCheck></FaCheck>
+                            </button>
+                        </div>
                         
                     </div>
 

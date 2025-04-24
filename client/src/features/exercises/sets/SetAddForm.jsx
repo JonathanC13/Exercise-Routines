@@ -79,7 +79,10 @@ const SetAddForm = () => {
                 try {
                 
                     const response = await updateExercise({ routineId, sessionId, exerciseId: exercise.id, body: body }).unwrap()
-                        .then((payload) => {closeAddFormHandler()})
+                        .then((payload) => {
+                            // console.log('success')
+                            closeAddFormHandler()
+                        })
                         .catch((error) => {
                             msgRef.current.focus()
                             if (!error?.data) {
