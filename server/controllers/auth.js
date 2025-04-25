@@ -50,7 +50,8 @@ const login = async(req, res) => {
 
     // send refresh token in a httpOnly cookie
     res.cookie('jwt', refreshToken, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000, sameSite: 'None', secure: true}) // for prod: secure: true
-    res.status(StatusCodes.OK).json({user: {name: response.getName(), email: response.getEmail(), id: response.getId()}, token: token})
+    const info = response.getUserInfo()
+    res.status(StatusCodes.OK).json({user: {name: info.name, email: info.email, id: info.id , preferredTheme: info.preferredTheme}, token: token})
 }
 
 const refreshToken = async(req, res) => {
@@ -86,7 +87,8 @@ const refreshToken = async(req, res) => {
     // generate new access token
     const accessToken = userDocument.generateJWT()
     // console.log('generated new access token: ', accessToken)
-    res.status(StatusCodes.OK).json({user: {name: userDocument.getName(), email: userDocument.getEmail(), id: userDocument.getId()}, token: accessToken})
+    const info = userDocument.getUserInfo()
+    res.status(StatusCodes.OK).json({user: {name: info.name, email: info.email, id: info.id , preferredTheme: info.preferredTheme}, token: accessToken})
     // res.status(StatusCodes.OK).json({token: accessToken})
 }
 

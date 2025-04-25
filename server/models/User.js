@@ -57,6 +57,15 @@ UserSchema.methods.getId = function() {
     return this._id.toString()
 }
 
+UserSchema.methods.getUserInfo = function() {
+    return {
+        id: this._id.toString(),
+        name: this.name,
+        email: this.email,
+        preferredTheme: this.preferredTheme
+    }
+}
+
 UserSchema.methods.generateJWT = function() {
     return jwt.sign({userId:this._id, name:this.name}, process.env.JWT_SECRET, {expiresIn: process.env.JWT_LIFETIME})
 }

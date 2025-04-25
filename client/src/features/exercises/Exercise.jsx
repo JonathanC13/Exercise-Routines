@@ -28,8 +28,9 @@ const Exercise = ( { exercise = null } ) => {
     const [validExerciseDesc, setValidExerciseDesc] = useState(exercise?.description ? checkValidDescription(exerciseDesc) : false)
     const [exerciseDescFocus, setExerciseDescFocus] = useState(false)
     const [exerciseMuscleType, setExerciseMuscleType] = useState(exercise?.muscleType ?? '')
-    const [exerciseCompleted, setExerciseCompleted] = useState(exercise?.completed ?? '')
+    const [exerciseCompleted, setExerciseCompleted] = useState(exercise?.completed ?? false)
     const [exerciseMessage, setExerciseMessage] = useState('')
+    
 
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
     const [deleteExercise, { isLoadingDelete }] = useDeleteExerciseMutation()
@@ -100,6 +101,7 @@ const Exercise = ( { exercise = null } ) => {
             // console.log(payload)
             const response = await updateExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id, body: body }).unwrap()
                 .then((payload) => {
+                    // console.log(payload)
                     // setExerciseMessage('Success!');
                 })
                 .catch((error) => {
@@ -196,8 +198,9 @@ const Exercise = ( { exercise = null } ) => {
         }
     }
 
-    const completedHandler = async(e) => {
+    const completedToggleHandler = async(e) => {
         const button = e.currentTarget
+        const newCompeletedState = !exerciseCompleted
 
         // const completed = !exerciseCompleted
         // if (completed) {
@@ -205,14 +208,28 @@ const Exercise = ( { exercise = null } ) => {
         // } else {
         //     button.classList.remove('exercise-completed__complete')
         // }
-        setExerciseCompleted(!exerciseCompleted)
+        setExerciseCompleted(newCompeletedState)
 
         const body = { 
             'name': exerciseName ?? '',
             'muscleType': exerciseMuscleType ?? '',
             'order': exerciseOrder === '' ? 0 : exerciseOrder ?? 0,
             'description': exerciseDesc ?? '',
-            'completed': !exerciseCompleted
+            'completed': newCompeletedState,
+            // 'sets': exercise.sets.map((set) => {
+            //     const newObj = {}
+            //     for (let [key, val] of Object.entries(set)) {
+            //         switch(key) {
+            //             case ('completed'):
+            //                 newObj.completed = newCompeletedState
+            //                 break
+            //             default:
+            //                 newObj[key] = val
+            //                 break
+            //         }
+            //     }
+            //     return newObj
+            // })
         }
         
         await exerciseUpdateFunc(body)
@@ -245,6 +262,7 @@ const Exercise = ( { exercise = null } ) => {
                 </div>
 
         const completedButtonClasses = 'cursor_pointer exercise-completed__button' + (exerciseCompleted ? ' exercise-completed__complete' : '')
+        // const completedButtonClasses = 'exercise-completed__button' + (exerciseCompleted ? ' exercise-completed__complete' : '')
         
         content =
             <div className="exercise_info__div">
@@ -271,7 +289,8 @@ const Exercise = ( { exercise = null } ) => {
                                 :
                                 <h1 className='exercise_name__h1'>{ exerciseName }</h1>
                             }
-                            <button className={completedButtonClasses} onClick={completedHandler}>
+                            <button className={completedButtonClasses} onClick={completedToggleHandler}>
+                            {/* <div className={completedButtonClasses}> */}
                                 <FaCheck></FaCheck>
                             </button>
                         </div>

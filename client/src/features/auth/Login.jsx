@@ -86,7 +86,8 @@ const Login = () => {
                         name: payload?.user?.name,
                         email: payload?.user?.email,
                         id: payload?.user?.id,
-                        token: payload?.token
+                        preferredTheme: payload?.user?.preferredTheme,
+                        token: payload?.token,
                     }
                     dispatch(credentialsSet(credentials))
                     // clear form
@@ -95,6 +96,7 @@ const Login = () => {
                     navigate(from, { replace: true })
                 })
                 .catch((error) => {
+                    // console.log(error)
                     if (!error?.data) {
                         setMsg('No server response!')
                     // } else if (error?.data?.status === 409) {

@@ -11,10 +11,11 @@ export const authSlice = createSlice({
     initialState: initialState,
     reducers: {
         credentialsSet: (state, action) => {
-            const { name, email, token } = action.payload
+            const { name, email, token, preferredTheme } = action.payload
             state.credentials.name = name  // allowed mutating logic due to immer inside createSlice
             state.credentials.email = email
             state.credentials.token = token
+            state.credentials.preferredTheme = preferredTheme
         },
         accessTokenSet: (state, action) => {
             const { accessToken } = action.payload

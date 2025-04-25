@@ -33,7 +33,9 @@ const useRefreshToken = () => {
                 name: data?.user?.name,
                 email: data?.user?.email,
                 id: data?.user?.id,
-                token: data?.token
+                preferredTheme: data?.user?.preferredTheme,
+                token: data?.token,
+                
             }
             dispatch(credentialsSet(credentials))
             console.log('new token: ', data?.token)

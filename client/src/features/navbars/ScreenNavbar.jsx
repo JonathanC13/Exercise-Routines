@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom'
 import ScreenNavbarItems from './ScreenNavbarItems'
 import ScreenNavFooter from './ScreenNavFooter'
 import { useUserSendLogOutMutation } from '../auth/authApiSlice'
+import AccountSettings from '../accountSettings/AccountSettings'
+
 
 const ScreenNavbar = () => {
     const navigate = useNavigate()
@@ -48,7 +50,13 @@ const ScreenNavbar = () => {
     
     const authOption = auth?.token ?
         <div className='auth-option__div'>
-            <button className='logout__button cursor_pointer' onClick={() => authOptionHandler('logout')}>Log out</button>
+            <div className='account__div'></div>
+            <div className='account__div'>
+                <button className='logout__button cursor_pointer' onClick={() => authOptionHandler('logout')}>Log out</button>
+            </div>
+            <div className='account__div'>
+                <AccountSettings></AccountSettings>
+            </div>
         </div>
         :
         <div className='auth-option__div'>
