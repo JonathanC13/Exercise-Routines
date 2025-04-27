@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     credentials: {},
-    authMessage: ''
-    // save JWT into cookies later, for now just in var for current session
+    persistLogin: JSON.parse(localStorage.getItem('persistLogin') || false),
+    authMessage: '',
 }
 
 export const authSlice = createSlice({
@@ -11,19 +11,30 @@ export const authSlice = createSlice({
     initialState: initialState,
     reducers: {
         credentialsSet: (state, action) => {
-            const { name, email, token, preferredTheme } = action.payload
+            const { name, email, token, preferredTheme, persistLogin } = action.payload
             state.credentials.name = name  // allowed mutating logic due to immer inside createSlice
             state.credentials.email = email
             state.credentials.token = token
             state.credentials.preferredTheme = preferredTheme
+            
+        },
+        persistLoginSet: (state, action) => {
+            const { persistLogin } = action.payload
+            state.persistLogin = persistLogin
+
+            // local storage
+            localStorage.setItem('persistLogin', persistLogin)
         },
         accessTokenSet: (state, action) => {
             const { accessToken } = action.payload
-            console.log('old token: ', state.credentials.token, ' / new token: ', accessToken)
+            // console.log('old token: ', state.credentials.token, ' / new token: ', accessToken)
             state.credentials.token = accessToken
         },
         loggedOut: (state, action) => {
             state.credentials = {}
+            state.persistLogin = false
+
+            localStorage.setItem('persistLogin', false)
         },
         authMessageSet: (state, action) => {
             state.authMessage = action.payload.message
@@ -31,7 +42,7 @@ export const authSlice = createSlice({
     }
 })
 
-export const { credentialsSet, accessTokenSet, loggedOut, authMessageSet } = authSlice.actions
+export const { credentialsSet, persistLoginSet, accessTokenSet, loggedOut, authMessageSet } = authSlice.actions
 
 export default authSlice.reducer
 

@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react'
 import { FaEye, FaEyeSlash, FaCircleInfo } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendLoginMutation, useUserSendLogOutMutation } from './authApiSlice'
-import { authMessageSet, credentialsSet } from './authSlice'
+import { authMessageSet, credentialsSet, persistLoginSet } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import FormInput from '../../components/FormInput'
 
@@ -37,7 +37,7 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [showPassword, setShowPassword] = useState(false)
     const [msg, setMsg] = useState('')
-    const [showSpinner, setShowSpinner] = useState(false)
+    const [persistLogin, setPersistLogin] = useState(false)
 
     useEffect(() => {
         if (loggedInCredentials?.token) {
@@ -90,6 +90,9 @@ const Login = () => {
                         token: payload?.token,
                     }
                     dispatch(credentialsSet(credentials))
+
+                    dispatch(persistLoginSet({persistLogin}))
+
                     // clear form
                     resetControlledInputs()
                     // navigate to dashboard
@@ -138,7 +141,7 @@ const Login = () => {
                 <FormInput
                     required = {true}
                     labelId = 'login-email__label'
-                    labelText = 'Email*'
+                    labelText = 'Email'
                     inputType = 'text'
                     inputId = 'login-email__input'
                     onFocusCB = {(e) => {}}
@@ -167,7 +170,7 @@ const Login = () => {
                 <FormInput
                     required = {true}
                     labelId = 'login-password__label'
-                    labelText = 'Password*'
+                    labelText = 'Password'
                     inputType = {showPassword ? "text" : "password"}
                     inputId = 'login-password__input'
                     onFocusCB = {(e) => {}}
@@ -178,6 +181,13 @@ const Login = () => {
                     inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword)}
                     aria = {false}
                 ></FormInput>
+            </div>
+            <div className="login__persist__div">
+                <label className='persistChkBox__label' htmlFor="persistChkBox"> Persist login: </label>
+                <input className='persistChkBox__input cursor_pointer' type="checkbox" id="persistChkBox" name="persistChkBox" value="persistVal"
+                    checked={persistLogin}
+                    onChange={(e) => setPersistLogin(e.currentTarget.checked)}
+                />
             </div>
             <div className="login-button__div">
                 <button className="login__button cursor_pointer" type="submit" disabled={isLoading}>

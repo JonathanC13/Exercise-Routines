@@ -49,4 +49,4 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useUserSendLoginMutation, useUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice
+export const { useUserSendLoginMutation, useLazyUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice

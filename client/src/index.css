@@ -659,6 +659,19 @@ body {
   /* max-width: 456px; */
 }
 
+.login__persist__div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+
+.persistChkBox__label,
+.persistChkBox__input {
+  font-size: 1rem;
+}
+
 .login-button__div {
   width: 100%;
   display: flex;

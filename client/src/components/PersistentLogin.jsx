@@ -3,21 +3,24 @@ import { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import useRefreshToken from '../hooks/useRefreshToken'
 import { useSelector, useDispatch } from 'react-redux'
+// import { persistLoginSet } from '../features/auth/authSlice'
 
 const PersistentLogin = () => {
 
     const dispatch = useDispatch()
-    const auth = useSelector(state => state.auth.credentials)
-    const {token, isError, error, isFetching, refetch, isLoadingRefresh} = useRefreshToken()
+    const {credentials, persistLogin} = useSelector(state => state.auth)
+    const {trigger, token, isError, error, isFetching, isLoadingRefresh} = useRefreshToken()
 
     useEffect(() => {
         let isMounted = true
 
         const verifyRefreshToken = () => {
-            refetch()
+            trigger()
         }
-        // console.log('p: ', auth)
-        if (!auth?.token) {
+
+        console.log(persistLogin, credentials)
+        // console.log('p: ', credentials)
+        if (persistLogin && !credentials?.token) {
             verifyRefreshToken()
         }
 
@@ -30,13 +33,13 @@ const PersistentLogin = () => {
     // useEffect(() => {
     //     console.log(`isLoadingRefresh ${isLoadingRefresh}`)
     //     console.log(`token: ${token}`)
-    //     console.log('persistent: ', auth)
+    //     console.log('persistent: ', credentials)
     // }, [isLoadingRefresh])
 
     // console.log(isLoadingRefresh, ' ', isFetching)
   return (
     <>
-        {isLoadingRefresh || isFetching ?
+        {persistLogin && (isLoadingRefresh || isFetching) ?
             <p>Is loading</p>
             :
             <Outlet></Outlet>

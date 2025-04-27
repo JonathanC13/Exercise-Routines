@@ -1,4 +1,4 @@
-import { useUserRefreshTokenQuery } from "../features/auth/authApiSlice"
+import { useLazyUserRefreshTokenQuery } from "../features/auth/authApiSlice"
 import { credentialsSet } from '../features/auth/authSlice'
 import { useSelector, useDispatch } from "react-redux"
 import { useState, useEffect } from 'react'
@@ -8,7 +8,7 @@ const useRefreshToken = () => {
     const dispatch = useDispatch()
     const [isLoadingRefresh, setIsLoadingRefresh] = useState(true)
 
-    const {
+    const [trigger, {
           data,
           refetch,
           isLoading,
@@ -16,7 +16,7 @@ const useRefreshToken = () => {
           isSuccess,
           isError,
           error
-        } = useUserRefreshTokenQuery()
+        }] = useLazyUserRefreshTokenQuery()
 
     // useEffect(() => {
     //     if (isFetching) {
@@ -45,7 +45,7 @@ const useRefreshToken = () => {
         }
     }, [isFetching, setIsLoadingRefresh])
 
-    return {token: data?.token, isError, error, isFetching, refetch, isLoadingRefresh} 
+    return {trigger, token: data?.token, isError, error, isFetching, refetch, isLoadingRefresh} 
 }
 
 export default useRefreshToken
