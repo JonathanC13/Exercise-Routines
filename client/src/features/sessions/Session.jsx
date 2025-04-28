@@ -1,9 +1,10 @@
 import React from 'react'
 import { memo, useState, useEffect, useRef } from 'react'
 import { useGetSessionsQuery, useUpdateSessionMutation, useDeleteSessionMutation } from './sessionsApiSlice'
-import { useParams } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import Exercises from '../exercises/Exercises'
 import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
+import { Link } from 'react-router'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -13,7 +14,8 @@ const checkValidDescription = (description) => {
     return description.length >= 0 && description.length <= 500
 }
 
-const Session = ( { sessionId = null }) => {
+const Session = ( { sessionId = null, haveLink = false }) => {
+    const navigate = useNavigate()
 
     const { routineId } = useParams()
 
@@ -40,6 +42,8 @@ const Session = ( { sessionId = null }) => {
     const [descFocus, setDescFocus] = useState(false)
     const [edit, setEdit] = useState(false)
     const [msg, setMsg] = useState('')
+
+    const link = `/routines/${routineId}/sessions/${sessionId}`
 
     useEffect(() => {
         if (session?.id) {
@@ -205,6 +209,10 @@ const Session = ( { sessionId = null }) => {
                 await sessionDeleteFunc()
                 
                 form.classList.remove('disabled')
+
+                if (!haveLink) {
+                    navigate(`/routines/${routineId}/sessions/`)
+                }
                 
                 break
             default:
@@ -242,6 +250,7 @@ const Session = ( { sessionId = null }) => {
 
         content = 
             <div className="session__div">
+                {/* {haveLink ? <Link to={link}>single page</Link> : <></>} */}
                 <form id={sessionFormId} className='session__form' onSubmit={sessionFormSubmitHandler}>
                     <div className='session_name__div'>
                         { edit ? 
@@ -263,14 +272,20 @@ const Session = ( { sessionId = null }) => {
                             </>
                             :
                             <h1 id='session_name__h1' className='session__h1'>{name}</h1>
-                            }
-                        {/* <div className="door_open_svg__div cursor_pointer" onClick={() => {sessionClickHandler(session.id)}}> <FaDoorOpen/></div> */}
+                        }
+                        {haveLink ? 
+                            <Link to={link} className="door_open_svg_sess__link cursor_pointer">
+                                <FaDoorOpen className='fa-door-open_sess__svg'/>
+                            </Link>
+                            :
+                            <></>
+                        }
                     </div>
 
                     <div className='session_info__div'>
                         <div className='session__div_info'>
                             <label htmlFor='session_order__input' className='info_label info_text_padding'>Order:</label>
-                            <input id='session_order__input' className='info_text_padding session_order__input'
+                            <input id='session_order__input' className='info_text_padding session_order__input' disabled
                                 value={order}
                                 onChange={(e) => validateNumber(e.target.value)}
                             />

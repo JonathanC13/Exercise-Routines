@@ -13,6 +13,7 @@ const createSessionComps = (routineId, sessionIds) => {
             key={ sessionId }
             routineId={ routineId }
             sessionId={ sessionId }
+            haveLink={true}
         ></Session>
     })
 

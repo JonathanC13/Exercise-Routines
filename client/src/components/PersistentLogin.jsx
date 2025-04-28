@@ -18,7 +18,7 @@ const PersistentLogin = () => {
             trigger()
         }
 
-        console.log(persistLogin, credentials)
+        // console.log(persistLogin, credentials)
         // console.log('p: ', credentials)
         if (persistLogin && !credentials?.token) {
             verifyRefreshToken()

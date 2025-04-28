@@ -49,7 +49,7 @@ img {
   --LOGOUT-BUTTON-HOVER-COLOR: rgba(13, 6, 48, 0.85);
   --ROUTINE-TITLE-BG-COLOR: #2E2836;
   --ROUTINE-TITLE-BG-HOVER-COLOR: rgba(46, 40, 54, 0.85);
-  --ROUTINE-TITLE-BG-20-TINT-COLOR: #58535e;
+  --ROUTINE-TITLE-BG-20-SHADE-COLOR: #58535e;
   --ROUTINE-UNDERLINE-COLOR: #2E2836;
   --BG-COLOR: #efefef;
   --ROUTINE-BG-COLOR: #ffffff;
@@ -66,6 +66,7 @@ img {
   --EDIT-BUTTON-HOVER-COLOR: rgba(26, 147, 111, 0.85);
   --SESSION-TITLE-FONT-COLOR: #FFF;
   --SESSION-TITLE-BG-COLOR: #6A2E35;
+  --SESSION-TITLE-BG-20-SHADE-COLOR: #55252a;
   --EXERCISE-TITLE-BG-COLOR: #BE8A60;
   --EXERCISE-UNDERLINE-COLOR: #BE8A60;
   --SET-COLOR: #E1AA7D;
@@ -1057,7 +1058,7 @@ body {
 }
 
 .door_open_svg__link:hover {
-  background-color: var(--ROUTINE-TITLE-BG-20-TINT-COLOR);
+  background-color: var(--ROUTINE-TITLE-BG-20-SHADE-COLOR);
 }
 
 .fa-door-open__svg {
@@ -1234,6 +1235,25 @@ body {
 /* /SESSION ADD FORM */
 
 /* SESSION */
+.door_open_svg_sess__link {
+  font-size: 1rem;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  border-style: none;
+  padding: 0.2rem 0.2rem;
+  background-color: transparent;
+  border-radius: 0.2rem;
+}
+
+.door_open_svg_sess__link:hover {
+  background-color: var(--SESSION-TITLE-BG-20-SHADE-COLOR);
+}
+
+.fa-door-open_sess__svg {
+  color: var(--NAV-ICON-BTN-COLOR);
+}
+
 .session__section {
   width: 100%;
   height: min-content;
@@ -1275,9 +1295,9 @@ body {
   background-color: var(--SESSION-TITLE-BG-COLOR);
   padding: var(--SESSION-INFO-DIV-PADDING);
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: row nowrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: var(--ADD-FORM-GAP)
 }
 
@@ -1286,6 +1306,10 @@ body {
   font-size: 1.5rem;
   flex: 1 1 auto;
   word-break: break-word;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .session_name__ta {
