@@ -352,9 +352,11 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     }
 
   return (
-    <section className='routine__section'>
-        { content }
-    </section>
+    <div className="routine_section__div">
+      <section className='routine__section'>
+          { content }
+      </section>
+    </div>
   )
 }
 
