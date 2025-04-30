@@ -1,5 +1,5 @@
 import { apiSlice } from "../../app/api/apiSlice"
-import { loggedOut } from "./authSlice"
+import { loggedOut, credentialsSet } from "./authSlice"
 
 // Define our single API slice object
 export const authApiSlice = apiSlice.injectEndpoints({
@@ -45,8 +45,27 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: {...registerInfo}
             })
         }),
+        userSendInfoUpdate: builder.mutation({
+            query: (updateInfo) => ({
+                method: 'PATCH',
+                url: `/auth/updateUser/${updateInfo.id}`,
+                body: updateInfo.body
+            }),
+            async onQueryStarted(arg, {dispatch, queryFulfilled}) {
+                // callback for query
+                try {
+                    const {data} = await queryFulfilled
+                    // console.log(data.user)
+
+                    dispatch(credentialsSet(data.user))
+                    dispatch(authApiSlice.util.resetApiState()) // clear the cache of this request
+                } catch (err) {
+                    console.log(err)
+                }
+            }
+        })
       })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useUserSendLoginMutation, useLazyUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation } = authApiSlice
+export const { useUserSendLoginMutation, useLazyUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation, useUserSendInfoUpdateMutation } = authApiSlice

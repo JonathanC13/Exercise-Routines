@@ -129,4 +129,48 @@ const logout = async(req, res) => {
     res.status(StatusCodes.NO_CONTENT).json()
 }
 
-module.exports = { login, register, refreshToken, logout }
+const updateUser = async(req, res) => {
+
+    const {
+        params: { userId }
+    } = req
+
+    const body = req.body
+
+    if (!userId) {
+        throw new BadRequestError('Missing user Id!')
+    }
+
+    const userDoc = await UserModel.findById(userId)
+
+    if (!userDoc) {
+        throw new NotFoundError('User not found!')
+    }
+
+    const restricted = new Set(['emailLowercase', 'password', 'createdAt', 'updatedAt', 'refreshToken'])
+
+    try {
+        for (let [key, val] of Object.entries(userDoc.toObject())) {
+            if (restricted.has(key) || !Object.hasOwn(body, key)) {
+                continue
+            }
+
+            userDoc[key] = body[key]
+
+            if (key === 'email') {
+                userDoc['emailLowercase'] = req.body['email'].toLowerCase()
+            }
+        }
+        const response = await userDoc.save()
+
+        res.status(StatusCodes.OK).json({user: {name: response.name, email: response.email, id: response.id , preferredTheme: response.preferredTheme}})
+
+    } catch (err) {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({'message': 'Server error!'})
+        return
+    }
+
+    
+}
+
+module.exports = { login, register, refreshToken, logout, updateUser }
