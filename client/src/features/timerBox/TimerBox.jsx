@@ -2,9 +2,12 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { FaCheck, FaHourglassStart } from 'react-icons/fa6'
 import useInterval from '../../hooks/useInterval'
+import { useSelector } from 'react-redux'
 // import TimerComp from './TimerComp'
 
 const TimerBox = ( { timerSeconds = 0, completedInit = false, updateCallback = () => {}} ) => {
+
+    const theme = useSelector(state => state.auth.preferredTheme)
     
     const [completed, setCompleted] = useState(completedInit ?? false)
     const [delay, setDelay] = useState(null)
@@ -53,7 +56,7 @@ const TimerBox = ( { timerSeconds = 0, completedInit = false, updateCallback = (
     <>
         {/* <button onClick={reset}>reset</button>
         <button onClick={pause}>pause</button> */}
-        <button className='timer-box__button cursor_pointer' onClick={() => {timerBoxUpdateHandler(!completed)}}>
+        <button className={`cursor_pointer timer-box__button timer-box__button--color-${theme}`} onClick={() => {timerBoxUpdateHandler(!completed)}}>
             {completed && delay === null ?
                 <div className='timer-box-complete'>
                     <FaCheck></FaCheck>

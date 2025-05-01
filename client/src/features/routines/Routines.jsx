@@ -25,6 +25,7 @@ const Routines = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
+    const theme = useSelector(state => state.auth.preferredTheme)
 
     const addRoutineHandler = () => {
       // open set state to open routine add form modal
@@ -97,10 +98,12 @@ const Routines = () => {
       content = <h2 className="routines-error__h2">{error?.data?.message ?? 'Error with server.'}</h2>
     }
 
+    const h1Class = 'routines__h1 routines__h1--color-' + theme
+
   return (
     <section className='routines__section'>
       <div className='routines_title__div'>
-        <h1 className='routines__h1'>Routines</h1>
+        <h1 className={h1Class}>Routines</h1>
         <div className="routines_title_underline"></div>
       </div>
       <button className='cursor_pointer routines_add__button' onClick={addRoutineHandler}>Add Routine</button>

@@ -5,6 +5,7 @@ import { useParams, useNavigate } from 'react-router'
 import Exercises from '../exercises/Exercises'
 import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
 import { Link } from 'react-router'
+import { useSelector } from 'react-redux'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -16,6 +17,8 @@ const checkValidDescription = (description) => {
 
 const Session = ( { sessionId = null, haveLink = false }) => {
     const navigate = useNavigate()
+
+    const theme = useSelector(state => state.auth.preferredTheme)
 
     const { routineId } = useParams()
 
@@ -271,7 +274,7 @@ const Session = ( { sessionId = null, haveLink = false }) => {
                                 </p>
                             </>
                             :
-                            <h1 id='session_name__h1' className='session__h1'>{name}</h1>
+                                <h1 id='session_name__h1' className={`session__h1 session__h1--color-${theme}`}>{name}</h1>
                         }
                         {haveLink ? 
                             <Link to={link} className="door_open_svg_sess__link cursor_pointer">
@@ -282,10 +285,10 @@ const Session = ( { sessionId = null, haveLink = false }) => {
                         }
                     </div>
 
-                    <div className='session_info__div'>
+                    <div className={`session_info__div session_info__div--color-${theme}`}>
                         <div className='session__div_info'>
                             <label htmlFor='session_order__input' className='info_label info_text_padding'>Order:</label>
-                            <input id='session_order__input' className='info_text_padding session_order__input' disabled
+                            <input id='session_order__input' className={`info_text_padding session_order__input session_order__input--color-${theme}`} disabled
                                 value={order}
                                 onChange={(e) => validateNumber(e.target.value)}
                             />
@@ -309,7 +312,7 @@ const Session = ( { sessionId = null, haveLink = false }) => {
                                         </p>
                                     </>
                                     :
-                                    <div id='session_info_desc__div' className='session_info_desc__div info_text_padding'>
+                                    <div id='session_info_desc__div' className={`info_text_padding session_info_desc__div session_info_desc__div--color-${theme}`}>
                                     { description }
                                     { descOverLimit && 
                                         <div className="desc_footer__div">

@@ -2,7 +2,7 @@ import React from 'react'
 // import { useGetSessionsQuery } from '../sessions/sessionsApiSlice'
 import { useParams } from 'react-router'
 import Exercise from './Exercise'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { exerciseAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 
 const createExerciseComps = (exercises) => {
@@ -23,6 +23,7 @@ const Exercises = ( {session = {}, sessionUpdateFunc = () => {}} ) => {
 
     const exercises = session ? session.exercises ?? [] : []
     const dispatch = useDispatch()
+    const theme = useSelector(state => state.auth.preferredTheme)
 
     const openExercisesAddFormHandler = (e) => {
         const rootDoc = document.getElementById('root')
@@ -38,7 +39,7 @@ const Exercises = ( {session = {}, sessionUpdateFunc = () => {}} ) => {
         content = 
         <>
             <div className="exercises_title__div">
-                <h1 className='exercises_title__h1'>Exercises</h1>
+                <h1 className={`exercises_title__h1 exercises_title__h1--color-${theme}`}>Exercises</h1>
                 <div className='exercises_title_underline'></div>
             </div>
             <section className="exercises_add__section">
@@ -49,7 +50,7 @@ const Exercises = ( {session = {}, sessionUpdateFunc = () => {}} ) => {
     }
 
   return (
-    <section className='exercises__section'>
+    <section className={`exercises__section exercises__section--color-${theme}`}>
         { content }
     </section>
   )

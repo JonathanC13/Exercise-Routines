@@ -1,6 +1,6 @@
 import React from 'react'
 import Set from './Set'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { exSetAddFormOpenChanged } from '../../modals/addFormModals/addFormModalsSlice'
 import { useParams } from 'react-router'
 
@@ -24,6 +24,7 @@ const Sets = ( { exercise = {}, exerciseUpdateFunc = () => {} } ) => {
     const { routineId } = useParams()
 
     const dispatch = useDispatch()
+    const theme = useSelector(state => state.auth.preferredTheme)
     const sets = exercise.sets || []
 
     const openSetAddFormHandler = (e) => {
@@ -43,9 +44,9 @@ const Sets = ( { exercise = {}, exerciseUpdateFunc = () => {} } ) => {
                 <div className='info__div'>
                     <span className='info_label info_text_padding'>Sets:</span>
                 </div>
-                <section className="set_items__section">
+                <section className={`set_items__section set_items__section--color-${theme}`}>
                     { createSetComps(exercise.sessionId, exercise.id, sets, exerciseUpdateFunc) }
-                    <section className="sets_add__section">
+                    <section className={`sets_add__section sets_add__section--color-${theme}`}>
                         <button className="sets_add__button cursor_pointer" onClick={(e) => openSetAddFormHandler(e)}>Add Set</button>
                     </section>
                 </section>

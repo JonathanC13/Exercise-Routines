@@ -43,6 +43,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
     const location = useLocation()
     // console.log(`${routineId} has rendered!`)
     const auth = useSelector(state => state.auth)
+    const theme = useSelector(state => state.auth.preferredTheme)
 
     const routineNameRef = useRef()
     const msgRef = useRef()
@@ -268,6 +269,12 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
         // cursor_pointer: !isFetching
       })
 
+      const h1Classes = 'routine__h1 routine_name__h1--color-' + theme
+      const routineInfoSectionClasses = 'routine_info__section routine_info__section--color-' + theme
+      const routineFooterSpanClasses = 'routine_footer__span routine_footer__span--color-' + theme
+      const routineInfoDescDivClasses = 'info_text_padding routine_info_desc__div routine_info_desc__div--color-' + theme
+      const routineOrderInputClasses = 'info_text_padding routine_order__input routine_order__input--color-' + theme
+
       content = 
         <form id={routineFormId} className={containerClassname} onSubmit={routineFormSubmitHandler}>
           <div className='routine_name__div'>
@@ -289,7 +296,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                 </p>
               </div>
               :
-              <h1 id='routine_name__h1' className='routine__h1'>{routineName}</h1>
+              <h1 id='routine_name__h1' className={h1Classes}>{routineName}</h1>
               }
             <Link to={link} state={{from: location}} className="door_open_svg__link cursor_pointer">
               <FaDoorOpen className='fa-door-open__svg'/>
@@ -297,10 +304,10 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
             {/* <button className="door_open_svg__btn cursor_pointer" onClick={() => {routineClickHandler(routineId)}}> <FaDoorOpen className='fa-door-open__svg'/></button> */}
           </div>
           
-          <section className="routine_info__div">
+          <section className={routineInfoSectionClasses}>
             <div className='routine__div_info'>
               <label htmlFor='routine_order__input' className='info_label info_text_padding'>Order:</label>
-              <input id='routine_order__input' className='info_text_padding routine_order__input'
+              <input id='routine_order__input' className={routineOrderInputClasses}
                 value={routineOrder}
                 onChange={(e) => validateNumber(e.target.value, setRoutineOrder)}
               />
@@ -325,7 +332,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                     </p>
                   </>
                 :
-                <div id='routine_info_desc__div' className='routine_info_desc__div info_text_padding'>
+                <div id='routine_info_desc__div' className={routineInfoDescDivClasses}>
                   { description }
                   { descOverLimit && 
                       <div className="desc_footer__div">
@@ -338,8 +345,8 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
             </div>
             <div className='routine__div_footer'>
               <div className="routine_footer__timestamps">
-                <span className='routine_footer__span'>Updated on: {formatDisplayDate(routineUpdatedAt)}</span>
-                <span className='routine_footer__span'>Created on: {formatDisplayDate(routineCreatedAt)}</span>
+                <span className={routineFooterSpanClasses}>Updated on: {formatDisplayDate(routineUpdatedAt)}</span>
+                <span className={routineFooterSpanClasses}>Created on: {formatDisplayDate(routineCreatedAt)}</span>
               </div>
             </div>
 

@@ -4,6 +4,7 @@ import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
 import Sets from './sets/Sets.jsx'
 import { FaTrashCan, FaCircleInfo, FaCheck } from 'react-icons/fa6'
+import { useSelector } from 'react-redux'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -15,6 +16,8 @@ const checkValidDescription = (description) => {
 
 const Exercise = ( { exercise = null } ) => {
     const { routineId } = useParams()
+
+    const theme = useSelector(state => state.auth.preferredTheme)
 
     const nameRef = useRef()
     const msgRef = useRef()
@@ -261,7 +264,7 @@ const Exercise = ( { exercise = null } ) => {
                     </button>
                 </div>
 
-        const completedButtonClasses = 'cursor_pointer exercise-completed__button' + (exerciseCompleted ? ' exercise-completed__complete' : '')
+        const completedButtonClasses = 'cursor_pointer exercise-completed__button exercise-completed__button--color-' + theme + (exerciseCompleted ? ' exercise-completed__complete' : '')
         // const completedButtonClasses = 'exercise-completed__button' + (exerciseCompleted ? ' exercise-completed__complete' : '')
         
         content =
@@ -287,7 +290,7 @@ const Exercise = ( { exercise = null } ) => {
                                     </p>
                                 </>
                                 :
-                                <h1 className='exercise_name__h1'>{ exerciseName }</h1>
+                                <h1 className={`exercise_name__h1 exercise_name__h1--color-${theme}`}>{ exerciseName }</h1>
                             }
                             <button className={completedButtonClasses} onClick={completedToggleHandler}>
                             {/* <div className={completedButtonClasses}> */}
@@ -299,7 +302,7 @@ const Exercise = ( { exercise = null } ) => {
 
                     <div className='ex_form_info__div'>
                         <label htmlFor='exercise_muscType__input' className='info_label info_text_padding'>Muscle Type:</label>
-                        <input id='exercise_muscType__input' className='exercise_form__inputs'
+                        <input id='exercise_muscType__input' className={`exercise_form__inputs exercise_form__inputs--color-${theme}`}
                             value={ exerciseMuscleType }
                             onChange={(e) => {return setExerciseMuscleType(e.target.value)}}
                         ></input>
@@ -307,7 +310,7 @@ const Exercise = ( { exercise = null } ) => {
 
                     <div className='ex_form_info__div'>
                         <label htmlFor='exercise_order__input' className='info_label info_text_padding'>Order:</label>
-                        <input id='exercise_order__input' className='exercise_form__inputs'
+                        <input id='exercise_order__input' className={`exercise_form__inputs exercise_form__inputs--color-${theme}`}
                             value={ exerciseOrder }
                             onChange={(e) => {return setExerciseOrder(e.target.value)}}
                         ></input>
@@ -333,7 +336,7 @@ const Exercise = ( { exercise = null } ) => {
                                 </p>
                             </>
                             :
-                            <div id='exercise_desc__div' className='routine_info_desc__div info_text_padding'>
+                            <div id='exercise_desc__div' className={`info_text_padding routine_info_desc__div routine_info_desc__div--color-${theme}`}>
                                 { description }
                                 { descOverLimit && 
                                     <div className="desc_footer__div">
@@ -363,7 +366,7 @@ const Exercise = ( { exercise = null } ) => {
     }
 
   return (
-    <section className='exercise__section'>
+    <section className={`exercise__section exercise__section--color-${theme}`}>
         {content}
     </section>
   )
