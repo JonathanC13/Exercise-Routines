@@ -14,7 +14,7 @@ const checkValidDescription = (description) => {
     return description.length >= 0 && description.length <= 500
 }
 
-const SessionAddForm = () => {
+const SessionAddForm = ({theme = 'light'}) => {
 
     const nameRef = useRef()
     const msgRef = useRef()
@@ -120,10 +120,10 @@ const SessionAddForm = () => {
     if (routine) {
         content = 
             <form onSubmit={(e) => {addSessionHandler(e)}} className="add_session__form">
-                <h1 className="add_session__h1">Add Session</h1>
+                <h1 className={`add_session__h1 add_session__h1--color-${theme}`}>Add Session</h1>
                 <div className='add_form_assoc__div'>
                     <p className='info_label_routine info_text_padding'>Routine:</p>
-                    <p className='info_value info_text_padding'>{routine.name}</p>
+                    <p className={`info_text_padding info_value info_value--color-${theme}`}>{routine.name}</p>
                 </div>
 
                 <div className="add_session_input__div">
@@ -158,6 +158,7 @@ const SessionAddForm = () => {
                         ariaDescribedby = 'nameNote'
                         ariaInfoCond = {nameFocus && name && !validName}
                         ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                        theme={theme}
                     ></FormInput>
                 </div>
                 <div className="add_session_input__div">
@@ -184,11 +185,12 @@ const SessionAddForm = () => {
                         ariaDescribedby = ''
                         ariaInfoCond = {false}
                         ariaInfoText = ''
+                        theme={theme}
                     ></FormInput>
                 </div>
                 <div className="add_session_input__div">
-                    <label htmlFor="add_session_desc__ta" className="add_session__label">Description</label>
-                    <textarea className="add_session_desc__ta" id="add_session_desc__ta" name="add_session_desc__ta" rows='2'
+                    <label htmlFor="add_session_desc__ta" className={`add_session__label add_session__label--color-${theme}`}>Description</label>
+                    <textarea className={`add_session_desc__ta add_session_desc__ta--color-${theme}`} id="add_session_desc__ta" name="add_session_desc__ta" rows='2'
                         onFocus={() => setDescriptionFocus(true)}
                         onBlur={() => setDescriptionFocus(false)}
                         aria-invalid={validDescription ? "false" : "true"}

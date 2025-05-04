@@ -14,7 +14,7 @@ const checkValidDescription = (description) => {
     return description.length >= 0 && description.length <= 500
 }
 
-const RoutineAddForm = () => {
+const RoutineAddForm = ( {theme = 'light'}) => {
 
     const dispatch = useDispatch()
 
@@ -118,7 +118,7 @@ const RoutineAddForm = () => {
 
     let content = 
         <form onSubmit={(e) => {addRoutineHandler(e)}} className="add_routine__form">
-            <h1 className="add_routine__h1">Add Routine</h1>
+            <h1 className={`add_routine__h1 add_routine__h1--color-${theme}`}>Add Routine</h1>
             <div className="add_routine_input__div">
                 {/* <label htmlFor="add_routine_name__input" className="add_routine__label">Name</label>
                 <input required type="text" className="add_routine_name__input" id="add_routine_name__input"
@@ -151,6 +151,7 @@ const RoutineAddForm = () => {
                     ariaDescribedby = 'nameNote'
                     ariaInfoCond = {nameFocus && name && !validName}
                     ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="add_routine_input__div">
@@ -177,11 +178,12 @@ const RoutineAddForm = () => {
                     ariaDescribedby = ''
                     ariaInfoCond = {false}
                     ariaInfoText = ''
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="add_routine_input__div">
-                <label htmlFor="add_routine_desc__ta" className="add_routine__label">Description</label>
-                <textarea className="add_routine_desc__ta" id="add_routine_desc__ta" name="add_routine_desc__ta" rows='2'
+                <label htmlFor="add_routine_desc__ta" className={`add_routine__label add_routine__label--color-${theme}`}>Description</label>
+                <textarea className={`add_routine_desc__ta add_routine_desc__ta--color-${theme}`} id="add_routine_desc__ta" name="add_routine_desc__ta" rows='2'
                     onFocus={() => setDescriptionFocus(true)}
                     onBlur={() => setDescriptionFocus(false)}
                     aria-invalid={validDescription ? "false" : "true"}

@@ -15,7 +15,7 @@ const checkValidDescription = (description) => {
     return description.length >= 0 && description.length <= 500
 }
 
-const ExerciseAddForm = () => {
+const ExerciseAddForm = ({theme = 'light'}) => {
 
     const nameRef = useRef()
     const msgRef = useRef()
@@ -164,6 +164,7 @@ const ExerciseAddForm = () => {
                             ariaDescribedby = 'nameNote'
                             ariaInfoCond = {nameFocus && name && !validName}
                             ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                            theme={theme}
                         ></FormInput>
                     </div>
 
@@ -187,6 +188,7 @@ const ExerciseAddForm = () => {
                             inputOnChangeCB = {validateNumber}
                             inputValueSetter = {setOrder}
                             aria = {false}
+                            theme={theme}
                         ></FormInput>
                     </div>
 

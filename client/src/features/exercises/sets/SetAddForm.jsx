@@ -6,7 +6,7 @@ import { addFormClosed } from '../../modals/addFormModals/addFormModalsSlice'
 import { useUpdateExerciseMutation } from '../exerciseApiSlice'
 import FormInput from '../../../components/FormInput'
 
-const SetAddForm = () => {
+const SetAddForm = ({theme = 'light'}) => {
 
     const orderRef = useRef()
     const msgRef = useRef()
@@ -147,6 +147,7 @@ const SetAddForm = () => {
                         inputOnChangeCB = {validateNumber}
                         inputValueSetter = {setExSetOrder}
                         aria = {false}
+                        theme={theme}
                     ></FormInput>
                 </div>
 
@@ -169,6 +170,7 @@ const SetAddForm = () => {
                         inputValueState = {exSetWeight}
                         inputOnChangeCB = {setExSetWeight}
                         aria = {false}
+                        theme={theme}
                     ></FormInput>
                 </div>
 
@@ -191,6 +193,7 @@ const SetAddForm = () => {
                         inputValueState = {exSetReps}
                         inputOnChangeCB = {setExSetReps}
                         aria = {false}
+                        theme={theme}
                     ></FormInput>
                 </div>
 
@@ -214,6 +217,7 @@ const SetAddForm = () => {
                         inputOnChangeCB = {validateNumber}
                         inputValueSetter = {setExSetRest}
                         aria = {false}
+                        theme={theme}
                     ></FormInput>
                 </div>
 

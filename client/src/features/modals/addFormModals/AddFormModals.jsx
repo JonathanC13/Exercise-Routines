@@ -15,6 +15,7 @@ const AddFormModals = () => {
     const modalBgDiv = useRef(null)
 
     const { addFormOpen, addFormType } = useSelector(state => state.addFormModals)
+    const theme = useSelector(state => state.auth.preferredTheme)
 
     useEffect(() => {
         if (modalBgDiv.current !== null) {
@@ -35,16 +36,16 @@ const AddFormModals = () => {
         let formContent = ''
         switch (addFormType) {
             case 'routineAddForm':
-                formContent = <RoutineAddForm></RoutineAddForm>
+                formContent = <RoutineAddForm theme={theme}></RoutineAddForm>
                 break;
             case 'sessionAddForm':
-                formContent = <SessionAddForm></SessionAddForm>
+                formContent = <SessionAddForm theme={theme}></SessionAddForm>
                 break;
             case 'exerciseAddForm':
-                formContent = <ExerciseAddForm></ExerciseAddForm>
+                formContent = <ExerciseAddForm theme={theme}></ExerciseAddForm>
                 break;
             case 'setAddForm':
-                formContent = <SetAddForm></SetAddForm>
+                formContent = <SetAddForm theme={theme}></SetAddForm>
                 break;
             default:
                 // formContent = <p>No matching add form.</p>
@@ -53,9 +54,9 @@ const AddFormModals = () => {
         
         content = 
             <div className="modal_bg__div" ref={modalBgDiv}>
-                <section className="add_form_modal__section">
+                <section className={`add_form_modal__section add_form_modal__section--color-${theme}`}>
                     <div className="add_form_modal_x__div">
-                        <button type='button' className='add_form_modal_x__button cursor_pointer' name='close_modal__button' onClick={closeAddFormHandler}>
+                        <button type='button' className={`cursor_pointer add_form_modal_x__button add_form_modal_x__button--color-${theme}`} name='close_modal__button' onClick={closeAddFormHandler}>
                             <FaXmark></FaXmark>
                         </button>
                     </div>

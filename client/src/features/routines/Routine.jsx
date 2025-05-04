@@ -280,8 +280,8 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
           <div className='routine_name__div'>
             { edit ? 
               <div className='routine_name_input__div'>
-                <label className='offscreen' htmlFor="routine_name__ta">Name:</label>
-                <textarea type="text" id='routine_name__ta' className='routine_name__ta'
+                <label className="offscreen" htmlFor="routine_name__ta">Name:</label>
+                <textarea type="text" id='routine_name__ta' className={`routine_name__ta routine_name__ta--color-${theme}`}
                   ref={routineNameRef}
                     onFocus={() => setRoutineNameFocus(true)}
                     onBlur={() => setRoutineNameFocus(false)}
@@ -318,7 +318,7 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
                 edit ?
                   <>
                     
-                    <textarea id='routine_desc__ta' className='routine_desc__ta' rows={4}
+                    <textarea id='routine_desc__ta' className={`routine_desc__ta routine_desc__ta--color-${theme}`} rows={4}
                       onFocus={() => {setRoutineDescriptionFocus(true)}}
                       onBlur={() => {setRoutineDescriptionFocus(false)}}
                       aria-invalid={validRoutineDescription ? "false" : "true"}

@@ -259,7 +259,7 @@ const Session = ( { sessionId = null, haveLink = false }) => {
                         { edit ? 
                             <>
                                 <label className='offscreen' htmlFor="session_name__ta">Name:</label>
-                                <textarea type="text" id='session_name__ta' className='session_name__ta'
+                                <textarea type="text" id='session_name__ta' className={`session_name__ta session_name__ta--color-${theme}`}
                                     ref={nameRef}
                                     onFocus={() => setNameFocus(true)}
                                     onBlur={() => setNameFocus(false)}
@@ -298,7 +298,7 @@ const Session = ( { sessionId = null, haveLink = false }) => {
                             {
                                 edit ?
                                     <>                                   
-                                        <textarea id='session_desc__ta' className='session_desc__ta' rows={4}
+                                        <textarea id='session_desc__ta' className={`session_desc__ta session_desc__ta--color-${theme}`} rows={4}
                                             onFocus={() => setDescFocus(true)}
                                             onBlur={() => setDescFocus(false)}
                                             aria-invalid={validDesc ? "false" : "true"}
