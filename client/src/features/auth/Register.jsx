@@ -21,8 +21,8 @@ const checkValidPassword = (password) => {
     return password.length >= 6
 }
 
-const createShowPasswordComp = (showPassword, setShowPassword) => {
-    return <button type="button" className="show-password__button cursor_pointer" onClick={() => {setShowPassword(!showPassword)}}>
+const createShowPasswordComp = (showPassword, setShowPassword, theme) => {
+    return <button type="button" className={`cursor_pointer show-password__button show-password__button--color-${theme}`} onClick={() => {setShowPassword(!showPassword)}}>
         {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
     </button>
 }
@@ -30,6 +30,7 @@ const createShowPasswordComp = (showPassword, setShowPassword) => {
 const Register = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const theme = useSelector((state) => state.auth.preferredTheme)
 
     const nameRef = useRef()
     const msgRef = useRef()
@@ -164,7 +165,7 @@ const Register = () => {
 
   return (
     <section className="register__section">
-        <form className="register__form" onSubmit={registerFormSubmitHandler}>
+        <form className={`register__form register__form--color-${theme}`} onSubmit={registerFormSubmitHandler}>
             <div className="register__form__div">
                 {/* <label htmlFor="register-name__input" className="register-name__label form__label">Name*</label>
                 <input required type="text" className="register-name__input" id="register-name__input"
@@ -183,7 +184,7 @@ const Register = () => {
                 <FormInput
                     required = {true}
                     labelId = 'register-name__label'
-                    labelText = 'Name*'
+                    labelText = 'Name'
                     inputType = 'text'
                     inputId = 'register-name__input'
                     onFocusCB = {(e) => setNameFocus(true)}
@@ -196,6 +197,7 @@ const Register = () => {
                     ariaDescribedby = 'nameNote'
                     ariaInfoCond = {nameFocus && name && !nameValid}
                     ariaInfoText = 'Please enter a name that is 1 to 50 characters.'
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="register__form__div">
@@ -215,7 +217,7 @@ const Register = () => {
                 <FormInput
                     required = {true}
                     labelId = 'register-email__label'
-                    labelText = 'Email*'
+                    labelText = 'Email'
                     inputType = 'text'
                     inputId = 'register-email__input'
                     onFocusCB = {(e) => setEmailFocus(true)}
@@ -228,6 +230,7 @@ const Register = () => {
                     ariaDescribedby = 'emailNote'
                     ariaInfoCond = {emailFocus && email && !emailValid}
                     ariaInfoText = 'Please provide a valid email.'
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="register__form__div">
@@ -255,7 +258,7 @@ const Register = () => {
                 <FormInput
                     required = {true}
                     labelId = 'register-password__label'
-                    labelText = 'Password*'
+                    labelText = 'Password'
                     inputType = {showPassword ? "text" : "password"}
                     inputId = 'register-password__input'
                     onFocusCB = {(e) => setPasswordFocus(true)}
@@ -263,12 +266,13 @@ const Register = () => {
                     inputRef = {null}
                     inputValueState = {password}
                     inputOnChangeCB = {setPassword}
-                    inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword)}
+                    inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword, theme)}
                     aria = {true}
                     ariaValidState = {passwordValid}
                     ariaDescribedby = 'passwordNote'
                     ariaInfoCond = {passwordFocus && password && !passwordValid}
                     ariaInfoText = 'Please provide a password that is 6 or more characters.'
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="register__form__div">
@@ -290,7 +294,7 @@ const Register = () => {
                 <FormInput
                     required = {true}
                     labelId = 'register-conf-password__label'
-                    labelText = 'Confirm password*'
+                    labelText = 'Confirm password'
                     inputType = {showPassword ? "text" : "password"}
                     inputId = 'register-conf-password__input'
                     onFocusCB = {(e) => setConfPasswordFocus(true)}
@@ -303,6 +307,7 @@ const Register = () => {
                     ariaDescribedby = 'confPasswordNote'
                     ariaInfoCond = {confPasswordFocus && confPassword && !confPasswordValid}
                     ariaInfoText = 'Passwords do not match.'
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="register-button__div">

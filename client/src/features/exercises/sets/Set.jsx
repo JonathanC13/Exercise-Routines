@@ -215,7 +215,7 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
             <div className="set_header__div">
                 <div className="order_info">
                     <label className='set_desc_order__label' htmlFor='set_order'><span className={`center_text_vert center_text_vert--color-${theme}`}>Order:</span></label>
-                    <input className='set_order_value__input' id="set_order" name="set_order" disabled
+                    <input className={`set_order_value__input set_order_value__input--color-${theme}`} id="set_order" name="set_order" disabled
                         ref={orderRef}
                         value={exSetOrder}
                         onChange={e => validateNumber(e.target.value, setExSetOrder)}
@@ -235,21 +235,21 @@ const Set = ( { sessionId = null, exerciseId = null, sets = [], setId = null, ex
                 <div className="set_desc__div">
                     <div className="set_desc_itm__div">
                         <label className={`set_desc_title__label set_desc_title__label--color-${theme}`} htmlFor='set_weight'>Weight</label>
-                        <input className='set_desc_value__input' id="set_weight" name="set_weight" disabled
+                        <input className={`set_desc_value__input set_desc_value__input--color-${theme}`} id="set_weight" name="set_weight" disabled
                             value={exSetWeight}
                             onChange={e => setExSetWeight(e.target.value)}
                         ></input>
                     </div>
                     <div className="set_desc_itm__div">
                         <label className={`set_desc_title__label set_desc_title__label--color-${theme}`} htmlFor='set_reps'>Reps/Dur</label>
-                        <input className='set_desc_value__input' id="set_reps" name="set_reps" disabled
+                        <input className={`set_desc_value__input set_desc_value__input--color-${theme}`} id="set_reps" name="set_reps" disabled
                             value={exSetReps}
                             onChange={e => setExSetReps(e.target.value)}
                         ></input>
                     </div>
                     <div className="set_desc_itm__div">
                         <label className={`set_desc_title__label set_desc_title__label--color-${theme}`} htmlFor='set_rest'>Rest (sec)</label>
-                        <input className='set_desc_value__input' id="set_rest" name="set_rest" disabled
+                        <input className={`set_desc_value__input set_desc_value__input--color-${theme}`} id="set_rest" name="set_rest" disabled
                             value={exSetRest}
                             onChange={e => validateNumber(e.target.value, setExSetRest)}
                         ></input>

@@ -120,10 +120,10 @@ const SetAddForm = ({theme = 'light'}) => {
     if (exercise) {
         content = 
             <form className="add_set__form" onSubmit={addSetFormHandler}>
-                <h1 className="add_set__h1">Add Set</h1>
+                <h1 className={`add_set__h1 add_set__h1--color-${theme}`}>Add Set</h1>
                 <div className='add_form_assoc__div'>
                     <p className='info_label_exercise info_text_padding'>Exercise:</p>
-                    <p className='info_value info_text_padding'>{exercise.name}</p>
+                    <p className={`info_value info_value--color-${theme} info_text_padding`}>{exercise.name}</p>
                 </div>
 
                 <div className="add_set_input__div">

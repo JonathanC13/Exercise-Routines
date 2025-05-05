@@ -126,10 +126,10 @@ const ExerciseAddForm = ({theme = 'light'}) => {
       if (session) {
           content = 
                 <form className="add_exercise__form" onSubmit={addExerciseFormHandler}>
-                    <h1 className="add_exercise__h1">Add Exerecise</h1>
+                    <h1 className={`add_exercise__h1 add_exercise__h1--color-${theme}`}>Add Exerecise</h1>
                     <div className='add_form_assoc__div'>
                         <p className='info_label_session info_text_padding'>Session:</p>
-                        <p className='info_value info_text_padding'>{session.name}</p>
+                        <p className={`info_value info_value--color-${theme} info_text_padding`}>{session.name}</p>
                     </div>
 
                     <div className="add_exercise_input__div">
@@ -193,8 +193,8 @@ const ExerciseAddForm = ({theme = 'light'}) => {
                     </div>
 
                     <div className="add_exercise_input__div">
-                        <label id='add_exercise_desc__label' htmlFor="add_exercise_desc__input" className="add_exercise__label">Description</label>
-                        <textarea id='add_exercise_desc__input' className='add_exercise_desc__input' name='add_exercise_desc__input' rows="2"
+                        <label id='add_exercise_desc__label' htmlFor="add_exercise_desc__input" className={`add_exercise__label add_exercise__label--color-${theme}`}>Description</label>
+                        <textarea id='add_exercise_desc__input' className={`add_exercise_desc__input add_exercise_desc__input--color-${theme}`} name='add_exercise_desc__input' rows="2"
                             onFocus={() => setDescriptionFocus(true)}
                             onBlur={() => setDescriptionFocus(false)}
                             aria-invalid={validDescription ? "false" : "true"}
@@ -209,8 +209,8 @@ const ExerciseAddForm = ({theme = 'light'}) => {
                     </div>
 
                     <div className="add_exercise_input__div">
-                        <label id='add_exercise_muscleType__label' htmlFor="add_exercise_muscleType__input" className="add_exercise__label">Muscle Type</label>
-                        <input type="text" id='add_exercise_muscleType__input' className='add_exercise_muscleType__input' name='add_exercise_muscleType__input'
+                        <label id='add_exercise_muscleType__label' htmlFor="add_exercise_muscleType__input" className={`add_exercise__label add_exercise__label--color-${theme}`}>Muscle Type</label>
+                        <input type="text" id='add_exercise_muscleType__input' className={`add_exercise_muscleType__input add_exercise_muscleType__input--color-${theme}`} name='add_exercise_muscleType__input'
                             value={muscleType}
                             onChange={(e) => {setMuscleType(e.target.value)}}
                         />

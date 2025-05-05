@@ -275,7 +275,7 @@ const Exercise = ( { exercise = null } ) => {
                             { edit ? 
                                 <>
                                     <label htmlFor='exercise_name__ta' className='info_label info_text_padding offscreen'>Name:</label>
-                                    <textarea id='exercise_name__ta' className='exercise_name__ta'
+                                    <textarea id='exercise_name__ta' className={`exercise_name__ta exercise_name__ta--color-${theme}`}
                                         ref={nameRef}
                                         onFocus={() => setExerciseNameFocus(true)}
                                         onBlur={() => setExerciseNameFocus(false)}
@@ -322,7 +322,7 @@ const Exercise = ( { exercise = null } ) => {
                         </div>
                         { edit ? 
                             <>
-                                <textarea id='exercise_desc__ta' className='exercise_desc__ta' rows={4}
+                                <textarea id='exercise_desc__ta' className={`exercise_desc__ta exercise_desc__ta--color-${theme}`} rows={4}
                                     onFocus={() => setExerciseDescFocus(true)}
                                     onBlur={() => setExerciseDescFocus(false)}
                                     aria-invalid={validExerciseDesc ? "false" : "true"}

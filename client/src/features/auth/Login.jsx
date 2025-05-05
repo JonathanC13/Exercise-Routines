@@ -7,8 +7,8 @@ import { authMessageSet, credentialsSet, persistLoginSet } from './authSlice'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import FormInput from '../../components/FormInput'
 
-const createShowPasswordComp = (showPassword, setShowPassword) => {
-    return <button type="button" className="show-password__button cursor_pointer" onClick={() => {setShowPassword(!showPassword)}}>
+const createShowPasswordComp = (showPassword, setShowPassword, theme) => {
+    return <button type="button" className={`cursor_pointer show-password__button show-password__button--color-${theme}`} onClick={() => {setShowPassword(!showPassword)}}>
         {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
     </button>
 }
@@ -18,6 +18,7 @@ const Login = () => {
     const navigate = useNavigate()
     const location = useLocation()
     const from = location.state?.from.pathname ?? '/'
+    const theme = useSelector((state) => state.auth.preferredTheme)
 
     const emailRef = useRef()
     const msgRef = useRef()
@@ -124,7 +125,7 @@ const Login = () => {
   return (
     <section className="login__section">
         <p className={authMessage !== '' ? 'auth-msg__p' : 'auth-msg__p offscreen'}>{authMessage}</p>
-        <form className="login__form" onSubmit={loginFormSubmitHandler}>
+        <form className={`login__form login__form--color-${theme}`} onSubmit={loginFormSubmitHandler}>
             <div className="login__form__div">
                 {/* <div className="form-input_outer__div">
                     <div className="form-input_inner__div">
@@ -150,6 +151,7 @@ const Login = () => {
                     inputValueState = {email}
                     inputOnChangeCB = {setEmail}
                     aria = {false}
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="login__form__div">
@@ -178,12 +180,13 @@ const Login = () => {
                     inputRef = {null}
                     inputValueState = {password}
                     inputOnChangeCB = {setPassword}
-                    inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword)}
+                    inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword, theme)}
                     aria = {false}
+                    theme={theme}
                 ></FormInput>
             </div>
             <div className="login__persist__div">
-                <label className='persistChkBox__label' htmlFor="persistChkBox"> Persist login: </label>
+                <label className={`persistChkBox__label persistChkBox__label--color-${theme}`} htmlFor="persistChkBox"> Persist login: </label>
                 <input className='persistChkBox__input cursor_pointer' type="checkbox" id="persistChkBox" name="persistChkBox" value="persistVal"
                     checked={persistLogin}
                     onChange={(e) => setPersistLogin(e.currentTarget.checked)}

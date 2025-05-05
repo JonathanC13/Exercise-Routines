@@ -2,8 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
     credentials: {},
-    preferredTheme: 'light',
-    persistLogin: JSON.parse(localStorage.getItem('persistLogin') || false),
+    preferredTheme: localStorage.getItem('preferredTheme') || 'light',
+    persistLogin: localStorage.getItem('persistLogin') || false,
     authMessage: '',
 }
 
@@ -18,6 +18,8 @@ export const authSlice = createSlice({
             state.credentials.email = email ?? state.credentials.email
             state.credentials.token = token ?? state.credentials.token
             state.preferredTheme = preferredTheme ?? state.preferredTheme
+
+            localStorage.setItem('preferredTheme', preferredTheme ?? 'light')
         },
         persistLoginSet: (state, action) => {
             const { persistLogin } = action.payload
