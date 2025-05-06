@@ -272,7 +272,8 @@ body {
 .exercise_edit__button,
 .exercise_save__button,
 .set_edit__button,
-.set_save__button
+.set_save__button,
+.account-settings_edit__button
 {
   border-radius: var(--EDIT-BTN-BORDER-RAD);
   padding: var(--EDIT-BTN-PADDING);
@@ -868,7 +869,8 @@ body {
 }
 
 .login-error__p,
-.register-error__p {
+.register-error__p,
+.change-user-info-error__p {
   color: red;
   font-weight: 300;
 }

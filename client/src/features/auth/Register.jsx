@@ -6,20 +6,21 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendRegisterMutation } from './authApiSlice'
 import { credentialsSet, authMessageSet } from './authSlice'
 import FormInput from '../../components/FormInput'
+import {checkValidName, checkValidEmail, checkValidPassword} from '../../functions/accountInfoValidation'
 
-const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+// const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
-const checkValidName = (name) => {
-    return name.length > 0 && name.length <= 50
-}
+// const checkValidName = (name) => {
+//     return name.length > 0 && name.length <= 50
+// }
 
-const checkValidEmail = (email) => {
-    return EMAIL_REGEX.test(email)
-}
+// const checkValidEmail = (email) => {
+//     return EMAIL_REGEX.test(email)
+// }
 
-const checkValidPassword = (password) => {
-    return password.length >= 6
-}
+// const checkValidPassword = (password) => {
+//     return password.length >= 6
+// }
 
 const createShowPasswordComp = (showPassword, setShowPassword, theme) => {
     return <button type="button" className={`cursor_pointer show-password__button show-password__button--color-${theme}`} onClick={() => {setShowPassword(!showPassword)}}>
@@ -102,7 +103,7 @@ const Register = () => {
             return
         }
 
-        const isEmailValid = EMAIL_REGEX.test(email)
+        const isEmailValid = checkValidEmail(email)
         if (!isEmailValid) {
             msgRef.current.focus()
             setMsg('Please provide a valid email!')

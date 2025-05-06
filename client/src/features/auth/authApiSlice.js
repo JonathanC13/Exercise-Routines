@@ -48,7 +48,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
         userSendInfoUpdate: builder.mutation({
             query: (updateInfo) => ({
                 method: 'PATCH',
-                url: `/auth/updateUser/${updateInfo.id}`,
+                url: `/auth/updateUserInfo/${updateInfo.id}`,
                 body: updateInfo.body
             }),
             async onQueryStarted(arg, {dispatch, queryFulfilled}) {
@@ -63,9 +63,16 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     console.log(err)
                 }
             }
+        }),
+        userSendPasswordUpdate: builder.mutation({
+            query: (updateInfo) => ({
+                method: 'PATCH',
+                url: `/auth/updatePassword/${updateInfo.id}`,
+                body: updateInfo.body
+            })
         })
       })
 })
 
 // Export the auto-generated hook for the `getPosts` query endpoint
-export const { useUserSendLoginMutation, useLazyUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation, useUserSendInfoUpdateMutation } = authApiSlice
+export const { useUserSendLoginMutation, useLazyUserRefreshTokenQuery, useUserSendLogOutMutation, useUserSendRegisterMutation, useUserSendInfoUpdateMutation, useUserSendPasswordUpdateMutation } = authApiSlice

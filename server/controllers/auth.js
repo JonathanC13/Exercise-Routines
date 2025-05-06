@@ -129,7 +129,7 @@ const logout = async(req, res) => {
     res.status(StatusCodes.NO_CONTENT).json()
 }
 
-const updateUser = async(req, res) => {
+const updateUserInfo = async(req, res) => {
 
     const {
         params: { userId }
@@ -169,8 +169,42 @@ const updateUser = async(req, res) => {
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({'message': 'Server error!'})
         return
     }
-
-    
 }
 
-module.exports = { login, register, refreshToken, logout, updateUser }
+const updatePassword = async(req, res) => {
+    const {
+        params: { userId }
+    } = req
+
+    const {
+        currentPassword,
+        newPassword
+    } = req.body
+
+    if (!userId) {
+        throw new BadRequestError('Missing user Id!')
+    }
+
+    const userDoc = await UserModel.findById(userId)
+
+    if (!userDoc) {
+        throw new NotFoundError('User not found!')
+    }
+
+    const passwordCorrect = await response.validatePassword(password)
+    if (!passwordCorrect) {
+        throw new UnauthenticatedError('Incorrect current password!')
+    }
+
+    userDoc.replacePassword(newPassword)
+
+    try {
+        const response = await userDoc.save()
+        res.status(StatusCodes.OK).json()
+    } catch {
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({'message': 'Server error!'})
+        return
+    }
+}
+
+module.exports = { login, register, refreshToken, logout, updateUserInfo, updatePassword }

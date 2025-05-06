@@ -2,8 +2,10 @@ import React from 'react'
 import { FaMoon, FaUserGear } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendInfoUpdateMutation } from '../auth/authApiSlice'
+import { useNavigate } from 'react-router-dom'
 
 const AccountSettings = () => {
+    const navigate = useNavigate()
     const dispatch = useDispatch()
     const {id} = useSelector(state => state.auth.credentials)
     const {preferredTheme} = useSelector(state => state.auth)
@@ -24,9 +26,13 @@ const AccountSettings = () => {
       }
     }
 
+    const goToEditAccountSettings = () => {
+      navigate('/editAccountSettings')
+    }
+
   return (
     <div className='account-settings-opt__div'>
-        <button className='account-settings__btn cursor_pointer'><FaUserGear className='account-settings-cog'></FaUserGear></button>
+        <button className='account-settings__btn cursor_pointer'><FaUserGear className='account-settings-cog' onClick={goToEditAccountSettings}></FaUserGear></button>
         <button className='account-settings__btn cursor_pointer' onClick={togglePreferredTheme}><FaMoon className={moonClass}></FaMoon></button>
     </div>
   )

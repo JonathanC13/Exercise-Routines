@@ -17,6 +17,7 @@ import store from './app/store'
 import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
 import PersistentLogin from './components/PersistentLogin'
+import EditAccountSettings from './features/accountSettings/EditAccountSettings'
 
 function App() {
 
@@ -45,6 +46,8 @@ function App() {
                         {/* Route for exercises within the session */}
                       </Route>
                     </Route>
+
+                    <Route path="/editAccountSettings" element={<EditAccountSettings></EditAccountSettings>}></Route>
                   </Route>
                 </Route>
               </Route>

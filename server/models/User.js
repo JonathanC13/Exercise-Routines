@@ -74,6 +74,10 @@ UserSchema.methods.generateRefreshJWT = function() {
     return jwt.sign({userId:this._id, name:this.name}, process.env.JWT_REFRESH_SECRET, {expiresIn: process.env.JWT_REFRESH_LIFETIME})
 }
 
+UserSchema.methods.replacePassword = function(newPassword) {
+    const salt = bcrypt.genSaltSync(10);
+    this.password = bcrypt.hashSync(newPassword, salt);
+}
 
 UserSchema.pre('save', function(next) {
     if (this.isNew) {
