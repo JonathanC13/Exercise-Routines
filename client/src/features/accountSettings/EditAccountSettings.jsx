@@ -4,6 +4,13 @@ import { useSelector } from 'react-redux'
 import FormInput from '../../components/FormInput'
 import {checkValidName, checkValidEmail, checkValidPassword} from '../../functions/accountInfoValidation'
 import { useUserSendInfoUpdateMutation, useUserSendPasswordUpdateMutation } from '../auth/authApiSlice'
+import { FaEye, FaEyeSlash } from 'react-icons/fa6'
+
+const createShowPasswordComp = (showPassword, setShowPassword, theme) => {
+    return <button type="button" className={`cursor_pointer show-password__button show-password__button--color-${theme}`} onClick={() => {setShowPassword(!showPassword)}}>
+        {showPassword ? <FaEyeSlash></FaEyeSlash> : <FaEye></FaEye>}
+    </button>
+}
 
 const EditAccountSettings = () => {
     const nameRef = useRef()
@@ -23,7 +30,8 @@ const EditAccountSettings = () => {
     const [newPassword, setNewPassword] = useState('')
     const [validNewPassword, setValidNewPassword] = useState(false)
     const [newPasswordFocus, setNewPasswordFocus] = useState(false)
-    const [showPassword, setShowPassword] = useState(false)
+    const [showCurrPassword, setShowCurrPassword] = useState(false)
+    const [showNewPassword, setShowNewPassword] = useState(false)
     const [passMsg, setPassMsg] = useState('')
 
     const [updateUserInfo, {isLoading}] = useUserSendInfoUpdateMutation()
@@ -47,6 +55,8 @@ const EditAccountSettings = () => {
 
     const submitNameChange = (e) => {
         e.preventDefault()
+        nameMsgRef.current.classList.remove('change-user-info-msg__p-success')
+        nameMsgRef.current.classList.remove('change-user-info-msg__p-fail')
 
         if (!checkValidName(name)) {
             setNameMsg('Please provide a name!')
@@ -68,8 +78,11 @@ const EditAccountSettings = () => {
                     const credentials = {
                         name: payload?.user?.name
                     }
+                    nameMsgRef.current.classList.add('change-user-info-msg__p-success')
+                    setNameMsg('Success!')
                 })
                 .catch((error) => {
+                    nameMsgRef.current.classList.add('change-user-info-msg__p-fail')
                     if (!error?.data) {
                         setNameMsg('No server response!')
                     // } else if (error?.data?.status === 409) {
@@ -83,6 +96,7 @@ const EditAccountSettings = () => {
                     nameMsgRef.current.focus()
                 })
         } catch (error) {
+            nameMsgRef.current.classList.add('change-user-info-msg__p-fail')
             setNameMsg('Update failed.')
             nameMsgRef.current.focus()
         }
@@ -90,6 +104,8 @@ const EditAccountSettings = () => {
 
     const submitPasswordChange = (e) => {
         e.preventDefault()
+        passMsgRef.current.classList.remove('change-user-info-msg__p-success')
+        passMsgRef.current.classList.remove('change-user-info-msg__p-fail')
 
         if (!checkValidPassword(currentPassword) || !checkValidPassword(newPassword)) {
             setPassRef('Please provide the current and desired new password!')
@@ -108,8 +124,11 @@ const EditAccountSettings = () => {
 
             const response = updatePassword(payload).unwrap()
                 .then((payload) => {
+                    passMsgRef.current.classList.add('change-user-info-msg__p-success')
+                    setPassMsg('Success')
                 })
                 .catch((error) => {
+                    passMsgRef.current.classList.add('change-user-info-msg__p-fail')
                     if (!error?.data) {
                         setPassMsg('No server response!')
                     // } else if (error?.data?.status === 409) {
@@ -123,6 +142,7 @@ const EditAccountSettings = () => {
                     passMsgRef.current.focus()
                 })
         } catch (error) {
+            passMsgRef.current.classList.add('change-user-info-msg__p-fail')
             setPassMsg('Update failed.')
             passMsgRef.current.focus()
         }
@@ -159,10 +179,10 @@ const EditAccountSettings = () => {
                     <button type='submit' className='account-settings_edit__button cursor_pointer' name='submit_name_change__button' disabled={isLoading}>Change name</button>
                 </div>
                 <div className={nameMsg ? "edit-account-settings_container__div" : "offscreen"}>
-                    <p className="change-user-info-error__p" ref={nameMsgRef}>{nameMsg}</p>
+                    <p className="change-user-info-msg__p" ref={nameMsgRef}>{nameMsg}</p>
                 </div>
             </form>
-
+            <div className={`divider divider--color-${preferredTheme}`}></div>
             <form className="edit-account-settings_container__form" onSubmit={submitPasswordChange}>
                 <h2 className={`edit-account-settings_container__h2 edit-account-settings_container__h2--color-${preferredTheme}`}>Change password</h2>
                 <div className="edit-account-settings_container__div">
@@ -170,14 +190,14 @@ const EditAccountSettings = () => {
                         required = {true}
                         labelId = 'edit-account-settings-curr-password__label'
                         labelText = 'Current password'
-                        inputType = {showPassword ? "text" : "password"}
+                        inputType = {showCurrPassword ? "text" : "password"}
                         inputId = 'edit-account-settings-curr-password__input'
                         onFocusCB = {(e) => setCurrentPasswordFocus(true)}
                         onBlurCB = {(e) => setCurrentPasswordFocus(false)}
                         inputRef = {null}
                         inputValueState = {currentPassword}
                         inputOnChangeCB = {setCurrentPassword}
-                        inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword, preferredTheme)}
+                        inputOptionComp = {createShowPasswordComp(showCurrPassword, setShowCurrPassword, preferredTheme)}
                         aria = {true}
                         ariaValidState = {validCurrentPassword}
                         ariaDescribedby = 'passwordNote'
@@ -191,14 +211,14 @@ const EditAccountSettings = () => {
                         required = {true}
                         labelId = 'edit-account-settings-new-password__label'
                         labelText = 'New password'
-                        inputType = {showPassword ? "text" : "password"}
+                        inputType = {showNewPassword ? "text" : "password"}
                         inputId = 'edit-account-settings-new-password__input'
                         onFocusCB = {(e) => setNewPasswordFocus(true)}
                         onBlurCB = {(e) => setNewPasswordFocus(false)}
                         inputRef = {null}
                         inputValueState = {newPassword}
                         inputOnChangeCB = {setNewPassword}
-                        inputOptionComp = {createShowPasswordComp(showPassword, setShowPassword, preferredTheme)}
+                        inputOptionComp = {createShowPasswordComp(showNewPassword, setShowNewPassword, preferredTheme)}
                         aria = {true}
                         ariaValidState = {validNewPassword}
                         ariaDescribedby = 'passwordNote'
@@ -211,7 +231,7 @@ const EditAccountSettings = () => {
                     <button type='submit' className='account-settings_edit__button cursor_pointer' name='submit_password_change__button' disabled={isLoading}>Change password</button>
                 </div>
                 <div className={passMsg ? "edit-account-settings_container__div" : "offscreen"}>
-                    <p className="change-user-info-error__p" ref={passMsgRef}>{passMsg}</p>
+                    <p className="change-user-info-msg__p" ref={passMsgRef}>{passMsg}</p>
                 </div>
             </form>
         </section>

@@ -100,15 +100,17 @@ const FormInput = ({
         }
     }
 
+    const labelInitClasses = `form__label form__label--color-${theme} ` + (inputValueState !== '' ? 'form-input__focus' : '')
+
   return (
     <div id={outerDivId} className={`form-input_outer__div form-input_outer__div--color-${theme}`}>
         <div className={`form-input_inner__div form-input_inner__div--color-${theme}`}>
-            <label id={labelId} htmlFor={inputId} className={`form__label form__label--color-${theme}`}>{labelText} {required ? <span className='color--red'>*</span> : ''}</label>
+            <label id={labelId} htmlFor={inputId} className={labelInitClasses}>{labelText} {required ? <span className='color--red'>*</span> : ''}</label>
             <div className={`form-input_input__div form-input_input__div--color-${theme}`}>
                 <input 
                     {...(required ? {required} : {}) }
                     id={inputId}
-                    className={`form-input__input form-input__input--color-${theme}`}
+                    className={`cursor_pointer form-input__input form-input__input--color-${theme}`}
                     type={inputType} 
                     onFocus={(e) => {
                         inputOnFocusHandler(e)

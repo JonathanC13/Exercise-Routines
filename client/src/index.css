@@ -368,9 +368,17 @@ body {
   background-color: var(--LIGHT-INFO-DESC-COLOR);
 }
 
+.show-password__button--color-light:hover {
+  background-color: #a7a7a7;
+}
+
 .show-password__button--color-dark {
   color: var(--DARK-INFO-TEXT-COLOR);
   background-color: var(--DARK-INFO-DESC-COLOR);
+}
+
+.show-password__button--color-dark:hover {
+  background-color: #484848;
 }
 
 .missing__div {
@@ -604,6 +612,7 @@ body {
   flex-flow: column nowrap;
   gap: var(--ADD-FORM-GAP);
   width: 80vw;
+  max-width: 600px;
 }
 
 .add_form_modal__section--color-light {
@@ -823,11 +832,11 @@ body {
 }
 
 .persistChkBox__label--color-light {
-  color: var(--LIGHT-H1-TEXT-COLOR);
+  color: var(--LIGHT-INFO-TEXT-COLOR);
 }
 
 .persistChkBox__label--color-dark {
-  color: var(--DARK-H1-TEXT-COLOR);
+  color: var(--DARK-INFO-TEXT-COLOR);
 }
 
 .login-button__div {
@@ -869,8 +878,7 @@ body {
 }
 
 .login-error__p,
-.register-error__p,
-.change-user-info-error__p {
+.register-error__p {
   color: red;
   font-weight: 300;
 }
@@ -2889,6 +2897,110 @@ body {
 }
 
 /* /TIMER BOX */
+
+/* EDIT ACCOUNT SETTINGS */
+.edit-account-settings__section {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-account-settings__container {
+  width: 90vw;
+  max-width: 600px;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  padding: var(--ADD-SET-MODAL-PADDING);
+  gap: var(--ADD-FORM-GAP);
+  border-radius: var(--AUTH-BORDER-RAD);
+  padding: var(--AUTH-SECT-PADDING);
+}
+
+.edit-account-settings__container--color-light {
+  background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
+}
+
+.edit-account-settings__container--color-dark {
+  background-color: var(--DARK-MODAL-CONTAINER-COLOR);
+}
+
+.edit-account-settings_container__h1 {
+  font-size: 1.25rem;
+}
+
+.edit-account-settings_container__h1--color-light {
+  color: var(--LIGHT-INFO-TEXT-COLOR);
+}
+
+.edit-account-settings_container__h1--color-dark {
+  color: var(--DARK-INFO-TEXT-COLOR);
+}
+
+.edit-account-settings_container__h2 {
+  font-size: 1rem;
+}
+
+.edit-account-settings_container__h2--color-light {
+  color: var(--LIGHT-INFO-TEXT-COLOR);
+}
+
+.edit-account-settings_container__h2--color-dark {
+  color: var(--DARK-INFO-TEXT-COLOR);
+}
+
+.edit-account-settings_container__form {
+  width: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  gap: var(--ADD-FORM-GAP);
+}
+
+.edit-account-settings_container__div {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.account-settings_edit__button {
+  width: 100%;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+}
+
+.divider--color-light {
+  border-bottom: 1px solid var(--LIGHT-SPAN-COLOR);
+}
+
+.divider--color-dark {
+  border-bottom: 1px solid var(--DARK-SPAN-COLOR);
+}
+
+.account-settings_edit__button {
+  padding: var(--ADD-BTN-PADDING);
+  background-color: var(--ADD-BUTTON-COLOR);
+  color:var(--LIGHT-H1-TEXT-COLOR);
+  border-radius: var(--ADD-BTN-BORDER-RAD);
+}
+
+.account-settings_edit__button:hover {
+  background-color: var(--ADD-BUTTON-HOVER-COLOR);
+}
+
+.change-user-info-msg__p-success {
+  color: green;
+}
+
+.change-user-info-msg__p-fail {
+  color: firebrick;
+}
+/* /EDIT ACCOUNT SETTINGS */
 
 /* MEDIA QUERIES */
 @media (max-width: 600px) { 

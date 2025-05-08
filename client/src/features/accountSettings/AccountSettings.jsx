@@ -3,6 +3,7 @@ import { FaMoon, FaUserGear } from 'react-icons/fa6'
 import { useSelector, useDispatch } from 'react-redux'
 import { useUserSendInfoUpdateMutation } from '../auth/authApiSlice'
 import { useNavigate } from 'react-router-dom'
+import { screenNavClosed } from '../navbars/navbarSlice'
 
 const AccountSettings = () => {
     const navigate = useNavigate()
@@ -27,6 +28,7 @@ const AccountSettings = () => {
     }
 
     const goToEditAccountSettings = () => {
+      dispatch(screenNavClosed())
       navigate('/editAccountSettings')
     }
 
