@@ -38,7 +38,7 @@ const useRefreshToken = () => {
                 
             }
             dispatch(credentialsSet(credentials))
-            console.log('new token: ', data?.token)
+            // console.log('new token: ', data?.token)
         }
         if (!isFetching) {
             setIsLoadingRefresh(false)

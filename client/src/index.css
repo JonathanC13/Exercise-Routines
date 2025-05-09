@@ -33,10 +33,13 @@ img {
   --BLACK-HOVER-COLOR: #666;
   --NAV-ICON-BTN-COLOR: #EE7B30;
   --NAVBAR-BG-COLOR: #8BBEB2;
+  --NAVBAR-BG-COLOR-GRAD-1: #FFB17A;
+  --NAVBAR-BG-COLOR-GRAD-2: #8BBEB2;
   --NAVBAR-HOVER-COLOR: #7daba0;
   --SCREEN-NAV-H1-COLOR: #027BCE;
   --NAVBAR-TEXT-HOVER-COLOR: #465f59;
   --SCREEN-NAV-SHADE-10-COLOR: #7daba0;
+  --SCREEN-NAV-SHADE-20-COLOR: #719a90;
   --SCREEN-NAV-SHADE-50-COLOR: #465f59;
   --AUTH-LAYOUT-BG-COLOR: #fff;
   --AUTH-OPTIONS-ACTIVE-COLOR: #8BBEB2;
@@ -123,6 +126,7 @@ img {
   --SET-DIV-PADDING: 0.25rem;
   --ADD-BTN-PADDING: 0.125rem 0.25rem;
   --ADD-FORM-MODAL-PADDING: 1rem 1rem;
+  --MODAL-PADDING: 1rem 1rem;
   --LOGIN-REG-FORM-FORM-PADDING: 1rem 1rem;
   --LOGIN-REG-INPUT-PADDING: 0rem 1rem;
   --AUTH-BUTTON-PADDING: 0.5rem 1rem;
@@ -151,6 +155,7 @@ img {
   --EXERCISE-SEC-BORDER-RAD: 0.5rem;
   --EXERCISE-DIV-BORDER-RAD: 0.25rem;
   --ADD-SET-FORM-BORDER-RAD: 0.5rem;
+  --MODEL-BORDER-RAD: 0.5rem;
   --EDIT-BTN-BORDER-RAD: 0.25rem;
   --ADD-BTN-BORDER-RAD: 0.25rem;
 
@@ -582,12 +587,91 @@ body {
 /* /ANIMATIONS */
 
 /* HOME */
-.Home__section {
-  width: 100%;
-  min-height: 100%;
+.home__div {
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+}
+
+.home__section {
+  width: 80vw;
+  max-width: 600px;
+  /* height: 100%; */
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--MODEL-BORDER-RAD);
+  padding: var(--MODAL-PADDING);
+  gap: 0.5rem;
+  box-shadow: var(--MODAL-SHADOW);
+}
+
+.home__section--color-light {
+  background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
+}
+
+.home__section--color-dark {
+  background-color: var(--DARK-MODAL-CONTAINER-COLOR);
+}
+
+.home__h1 {
+  font-size: var(--H1-SIZE);
+}
+
+.home__h1--color-light,
+.home__p--color-light {
+  color: var(--LIGHT-INFO-TEXT-COLOR);
+}
+
+.home__h1--color-dark,
+.home__p--color-dark {
+  color: var(--DARK-INFO-TEXT-COLOR);
+}
+
+.home__div {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.home-auth-options__div {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.home-routines__nlink,
+.home-signup__nlink,
+.home-signup__login {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  color: var(--LIGHT-INFO-DESC-COLOR);
+}
+
+.home-routines__nlink {
+  background-color: var(--ROUTINE-TITLE-BG-COLOR);
+}
+
+.home-routines__nlink:hover {
+  background-color: #433e4a;
+}
+
+.home-signup__nlink,
+.home-signup__login {
+  color: var(--LIGHT-INFO-TEXT-COLOR);
+  background-color: var(--AUTH-OPTIONS-ACTIVE-COLOR);
+}
+
+:is(.home-signup__nlink, .home-signup__login):hover {
+  background-color: #7daba0;
 }
 /* /HOME */
 
@@ -2409,9 +2493,10 @@ body {
 .navbar {
   width: 100%;
   height: 72px;
-  background-color: var(--NAVBAR-BG-COLOR);
+  /* background-color: var(--NAVBAR-BG-COLOR); */
   display: flex;
   justify-content: space-between;
+  background-image: linear-gradient(to bottom right, var(--NAVBAR-BG-COLOR-GRAD-1), var(--NAVBAR-BG-COLOR));
 }
 
 .nav-logo {
@@ -2439,7 +2524,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--NAVBAR-BG-COLOR);
+  /* background-color: var(--NAVBAR-BG-COLOR); */
+  background-color: transparent;
   border: none;
   height: 100%;
   padding: 1rem 2rem;
@@ -2460,7 +2546,8 @@ body {
 .screen-nav__section {
   width: 100vw;
   flex-grow: 1;
-  background-color: var(--NAVBAR-BG-COLOR);
+  /* background-color: var(--NAVBAR-BG-COLOR); */
+  background-image: linear-gradient(to bottom right, var(--NAVBAR-BG-COLOR-GRAD-1), var(--NAVBAR-BG-COLOR));
   z-index: -1;
   opacity: 0;
   transition: opacity 0.2s ease-in-out 0s;
@@ -2518,7 +2605,7 @@ body {
 }
 
 .account-settings__btn:hover {
-  background-color: var(--NAVBAR-TEXT-HOVER-COLOR);
+  background-color: var(--SCREEN-NAV-SHADE-20-COLOR);
 }
 
 .account-settings__btn svg {
@@ -2663,6 +2750,7 @@ body {
   flex-flow: column nowrap;
   align-items: center;
   justify-content: flex-end;
+  background-image: linear-gradient(to bottom right, var(--NAVBAR-BG-COLOR-GRAD-1), var(--NAVBAR-BG-COLOR));
 }
 
 .screen-nav-link-item {
@@ -2813,7 +2901,8 @@ body {
 
 .screen-nav-close__btn {
   padding: 1rem 2rem;
-  background-color: var(--NAVBAR-BG-COLOR);
+  /* background-color: var(--NAVBAR-BG-COLOR); */
+  background-color: transparent;
   border: none;
 }
 

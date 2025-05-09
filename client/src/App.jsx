@@ -11,7 +11,7 @@ import Sessions from './features/sessions/Sessions'
 import SessionPage from './features/sessions/SessionPage'
 import AddFormModals from './features/modals/addFormModals/AddFormModals'
 import Missing from './components/Missing'
-// import Home from './components/Home'
+import Home from './components/Home'
 import RequireAuth from './components/RequireAuth'
 import store from './app/store'
 import { Provider } from 'react-redux'
@@ -30,6 +30,8 @@ function App() {
               {/* <Route index element={<Home />}></Route> */}
               <Route element={<PersistentLogin></PersistentLogin>}>
                 <Route path='/' element={<Layout/>}>
+                  <Route index element={<Home/>}></Route>
+
                   <Route element={<AuthLayout />}>
                     <Route path="login" element={<Login />} />
                     <Route path="register" element={<Register />} />
