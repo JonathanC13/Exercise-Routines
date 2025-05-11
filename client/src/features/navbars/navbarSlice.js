@@ -14,7 +14,12 @@ const initialState = {
         }
     },
     currentCategory: '',
-    categoriesHidden: false
+    categoriesHidden: false,
+    container: {
+        open: false,
+        category: '',
+        locationRect: null
+    }
 }
 
 export const navbarSlice = createSlice({
@@ -37,10 +42,21 @@ export const navbarSlice = createSlice({
             state.currentCategory = ''
             state.categoriesHidden = false
             state.screenNavOpen = false
+        },
+        containerSet: (state, action) => {
+            const { open, category, locationRect } = action.payload
+            state.container.open = open
+            state.category.category = category
+            state.locationRect = locationRect
+        },
+        containerClosed: (state, action) => {
+            state.container.open = false
+            state.category.category = ''
+            state.locationRect = null
         }
     }
 })
 
-export const { screenNavDispaySet, currentCategorySet, categoriesHiddenSet, screenNavClosed } = navbarSlice.actions
+export const { screenNavDispaySet, currentCategorySet, categoriesHiddenSet, screenNavClosed, containerSet, containerClosed } = navbarSlice.actions
 
 export default navbarSlice.reducer

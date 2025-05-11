@@ -16,7 +16,7 @@ const AccountSettings = () => {
     const moonClass = 'account-settings-moon' + (preferredTheme === 'light' ? '--light' : '--dark')
 
     const togglePreferredTheme = () => {
-      const body = {preferredTheme: preferredTheme === 'light' ? 'dark' : 'light', email: 'JOn@joN.com'}
+      const body = {preferredTheme: preferredTheme === 'light' ? 'dark' : 'light'}
       updateUserInfoHandler(body)
     }
     const updateUserInfoHandler = (body) => {
