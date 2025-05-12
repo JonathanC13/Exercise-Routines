@@ -36,7 +36,7 @@ const Exercise = ( { exercise = null } ) => {
     
 
     const [updateExercise, { isLoading }] = useUpdateExerciseMutation()
-    const [deleteExercise, { isLoadingDelete }] = useDeleteExerciseMutation()
+    const [deleteExercise, { isLoading: isLoadingDelete }] = useDeleteExerciseMutation()
 
     // Read more
     const [readMore, setReadMore] = useState(false)

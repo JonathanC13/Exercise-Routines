@@ -26,7 +26,7 @@ const Session = ( { sessionId = null, haveLink = false }) => {
     const msgRef = useRef()
 
     const [updateSession, { isLoading }] = useUpdateSessionMutation()
-    const [deleteSession, { isLoadingDelete }] = useDeleteSessionMutation()
+    const [deleteSession, { isLoading: isLoadingDelete }] = useDeleteSessionMutation()
 
     const { session } = useGetSessionsQuery( {routineId: routineId},
         {

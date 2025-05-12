@@ -6,6 +6,7 @@ import ScreenNavbarItems from './ScreenNavbarItems'
 import ScreenNavFooter from './ScreenNavFooter'
 import { useUserSendLogOutMutation } from '../auth/authApiSlice'
 import AccountSettings from '../accountSettings/AccountSettings'
+import LogoutButton from '../../components/LogoutButton'
 
 
 const ScreenNavbar = () => {
@@ -22,37 +23,15 @@ const ScreenNavbar = () => {
         dispatch(screenNavClosed())
     }
 
-    const authOptionHandler = async(action) => {
-        closeScreenNavHandler()
-        switch(action) {
-            case 'login':
-                navigate('/login')
-                break
-            case 'logout':
-                try {
-                    const response = await logOut().unwrap()
-                        .then((payload) => {
-                        })
-                        .catch((error) => {
-                        })
-        
-                } catch (err) {
-                    setMsg('Log out failed!')
-                    msgRef.current.focus()
-                } finally {
-                }
-                navigate('/')
-                break
-            default:
-                break
-        }
+    const loginHandler = () => {
+        navigate('/login')
     }
     
     const authOption = auth?.token ?
         <div className='auth-option__div'>
             <div className='account__div'></div>
             <div className='account__div'>
-                <button className='logout__button cursor_pointer' onClick={() => authOptionHandler('logout')}>Log out</button>
+                <LogoutButton/>
             </div>
             <div className='account__div'>
                 <AccountSettings></AccountSettings>
@@ -60,7 +39,7 @@ const ScreenNavbar = () => {
         </div>
         :
         <div className='auth-option__div'>
-            <button className='login__button cursor_pointer' onClick={() => authOptionHandler('login')}>Log in</button>
+            <button className='login__button cursor_pointer' onClick={() => loginHandler()}>Log in</button>
         </div>
 
 

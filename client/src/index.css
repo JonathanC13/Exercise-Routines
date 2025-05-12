@@ -155,7 +155,7 @@ img {
   --EXERCISE-SEC-BORDER-RAD: 0.5rem;
   --EXERCISE-DIV-BORDER-RAD: 0.25rem;
   --ADD-SET-FORM-BORDER-RAD: 0.5rem;
-  --MODEL-BORDER-RAD: 0.5rem;
+  --MODAL-BORDER-RAD: 0.5rem;
   --EDIT-BTN-BORDER-RAD: 0.25rem;
   --ADD-BTN-BORDER-RAD: 0.25rem;
 
@@ -604,7 +604,7 @@ body {
   flex-flow: column nowrap;
   align-items: center;
   justify-content: center;
-  border-radius: var(--MODEL-BORDER-RAD);
+  border-radius: var(--MODAL-BORDER-RAD);
   padding: var(--MODAL-PADDING);
   gap: 0.5rem;
   box-shadow: var(--MODAL-SHADOW);
@@ -2547,7 +2547,7 @@ body {
   height: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .navbar-item__li {
@@ -2562,6 +2562,29 @@ body {
 
 .navbar-item__li:hover {
   color: var(--NAVBAR-TEXT-HOVER-COLOR);
+}
+
+.manage-account-container__div {
+  position: absolute;
+}
+
+.manage-account-container__section {
+  background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
+  padding: 0.5rem;
+  border-radius: var(--MODAL-BORDER-RAD);
+}
+
+.container-footer {
+  display: flex;
+  justify-content: center;
+}
+.arrow-down {
+  /* position: absolute; */
+  width: 0; 
+  height: 0;
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid var(--LIGHT-MODAL-CONTAINER-COLOR);
 }
 /* /NAVBAR */
 
