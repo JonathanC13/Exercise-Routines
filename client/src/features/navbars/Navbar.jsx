@@ -23,6 +23,8 @@ const NavBar = () => {
       <nav className="navbar__nav nav-items">
         <NavbarItems/>
       </nav>
+      <nav className='navbar__nav-right-stopper'></nav>
+
       <div className="screen-nav-btn__div">
         <button className='cursor_pointer screen-nav__btn' onClick={openScreenNavHandler}>
           <FaBars className='hamburger'/>

@@ -19,6 +19,12 @@ const NavbarManageAccountItem = () => {
 
   useEffect(() => {
     if (itemRef.current !== null) {
+      setBoundingRect(itemRef.current.getBoundingClientRect())
+    }
+  }, [showContainer])
+
+  useEffect(() => {
+    if (itemRef.current !== null) {
       itemRef.current.addEventListener('mouseenter', enableContainer)
       itemRef.current.addEventListener('focusin', enableContainer)
       itemRef.current.addEventListener('mouseleave', disableContainer)
