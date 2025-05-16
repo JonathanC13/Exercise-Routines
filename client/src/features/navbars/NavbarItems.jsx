@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 import NavbarItem from './NavbarItem'
 import NavbarManageAccountItem from './NavbarManageAccountItem'
+import NavbarGeneralItem from './NavbarGeneralItem'
 
 const createNavItems = (navItems) => {
 
@@ -26,7 +27,9 @@ const NavbarItems = () => {
         // navItems.push(['Routines', {action: 'redirect', to: '/routines'}])
         // navItems.push(['Log out', {action: 'dispatch', query: 'logout'}])
         content = <>
-            <NavbarManageAccountItem></NavbarManageAccountItem>
+            <NavbarGeneralItem category='routines'></NavbarGeneralItem>
+            <NavbarGeneralItem category='account'></NavbarGeneralItem>
+            {/* <NavbarManageAccountItem></NavbarManageAccountItem> */}
           </>
     } else {
         // navItems.push(['Log in', {action: 'redirect', to: '/login'}])

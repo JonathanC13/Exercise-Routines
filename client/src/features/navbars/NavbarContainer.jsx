@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux'
 import { useState, useRef, useEffect } from 'react'
 
 const NavbarContainer = ( {open=false, child=<></>, boundingRect={}} ) => {
-    // console.log(boundingRect)
 
     const theme = useSelector(state => state.auth.preferredTheme)
 
@@ -20,6 +19,13 @@ const NavbarContainer = ( {open=false, child=<></>, boundingRect={}} ) => {
     const disableContainer = () => {
         setKeepOpen(false)
     }
+
+    useEffect(() => {
+        const containerRect = containerRef.current.getBoundingClientRect()
+        let left = boundingRect.left + (boundingRect.width / 2) - (containerRect.width / 2)
+        left = isNaN(left) ? 0 : left
+        setLeftPx(left)
+    }, [boundingRect])
 
     useEffect(() => {
         if (containerRef.current !== null) {

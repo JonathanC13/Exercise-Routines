@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router'
 import { FaDoorOpen } from 'react-icons/fa6'
 import ScreenNavbarLinkChildItem from './ScreenNavbarLinkChildItem'
 import { currentCategorySet, categoriesHiddenSet, screenNavDispaySet, screenNavClosed } from './navbarSlice'
+import useGetSortedRoutines from '../../hooks/useGetSortedRoutines'
 
 const createChildLinkItems = (sortedRoutines, urlTemplate, gotoDestinationHandler) => {
     const comps = sortedRoutines.map((e) => {
@@ -24,18 +25,20 @@ const ScreenNavbarLinkItems = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const auth = useSelector((state) => state.auth)
+    // const auth = useSelector((state) => state.auth)
     const { currentCategory, categories } = useSelector((state) => state.nav)
+    const {sortedRoutines} = useGetSortedRoutines()
+    // ...sortedSessions, etc
 
-    const {
-        data: routines = {ids:[], entities:{}},
-        refetch,
-        isLoading,
-        isFetching,
-        isSuccess,
-        isError,
-        error
-    } = useGetRoutinesQuery({token: auth?.credentials?.token})
+    // const {
+    //     data: routines = {ids:[], entities:{}},
+    //     refetch,
+    //     isLoading,
+    //     isFetching,
+    //     isSuccess,
+    //     isError,
+    //     error
+    // } = useGetRoutinesQuery({token: auth?.credentials?.token})
 
     let content = <></>
     if (currentCategory === '' || !categories[currentCategory]?.parent?.title) {
@@ -43,22 +46,30 @@ const ScreenNavbarLinkItems = () => {
     }
 
     const categoryInfo = categories[currentCategory]
-
-    // const sortedRoutines = useMemo(() => {
-    const sortedRoutines = []
-    for (let [key, val] of Object.entries(routines.entities)) {
-        sortedRoutines.push(val)
-    } 
-    // Sort in ascending 'order', if same then descending updatedAt order
-    sortedRoutines.sort((a, b) => 
-    {
-        const ord = a.order - b.order
-        if (ord === 0) {
-        return b.updatedAt.localeCompare(a.updatedAt)
-        }
-        return ord
+    let linkItems = new Array()
+    switch (currentCategory) {
+        case 'routines':
+            linkItems = sortedRoutines
+            break
+        default:
+            break
     }
-    )
+
+    // // const sortedRoutines = useMemo(() => {
+    // const sortedRoutines = []
+    // for (let [key, val] of Object.entries(routines.entities)) {
+    //     sortedRoutines.push(val)
+    // } 
+    // // Sort in ascending 'order', if same then descending updatedAt order
+    // sortedRoutines.sort((a, b) => 
+    // {
+    //     const ord = a.order - b.order
+    //     if (ord === 0) {
+    //     return b.updatedAt.localeCompare(a.updatedAt)
+    //     }
+    //     return ord
+    // }
+    // )
     // return sortedRoutines
         // }, [routines])
 
@@ -85,7 +96,7 @@ const ScreenNavbarLinkItems = () => {
                     <h2 className='screen-nav-link-item__h2'>{categoryInfo?.parent?.title}</h2>
                 </li>
                 <ul className='link-items-sub__ul'>
-                    {createChildLinkItems(sortedRoutines, categoryInfo?.children?.URL, gotoDestinationHandler)}
+                    {createChildLinkItems(linkItems, categoryInfo?.children?.URL, gotoDestinationHandler)}
                 </ul>
             </ul>
 
