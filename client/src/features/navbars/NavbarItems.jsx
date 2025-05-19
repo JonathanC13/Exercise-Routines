@@ -34,7 +34,7 @@ const NavbarItems = () => {
     } else {
         // navItems.push(['Log in', {action: 'redirect', to: '/login'}])
         content =
-          <li className='navbar-item__li cursor_pointer' onClick={itemOnClickHandler}>
+          <li className='navbar-item__li cursor_pointer'>
             <NavLink to='/login'>Log in</NavLink>
           </li>
     }

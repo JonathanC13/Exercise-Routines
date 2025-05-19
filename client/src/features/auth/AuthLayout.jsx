@@ -13,7 +13,7 @@ const AuthLayout = () => {
           <ul className={`auth-options__ul auth-options__ul--color-${theme}`}>
             <li className='auth-options__li'>
               <NavLink className={` auth__navlink auth__navlink--color-${theme} login__navlink`} to="/login" end>
-                Login
+                Log in
               </NavLink>
             </li>
             <li className='auth-options__li'>

@@ -1,15 +1,15 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Navigate } from 'react-router-dom'
 import useRefreshToken from '../hooks/useRefreshToken'
 import { useSelector, useDispatch } from 'react-redux'
-// import { persistLoginSet } from '../features/auth/authSlice'
+import useErrorManagement from '../hooks/useErrorManagement'
 
 const PersistentLogin = () => {
-
     const dispatch = useDispatch()
     const {credentials, persistLogin} = useSelector(state => state.auth)
     const {trigger, token, isError, error, isFetching, isLoadingRefresh} = useRefreshToken()
+    const { clearError, acknowledgeError, serverDown } = useErrorManagement()
 
     useEffect(() => {
         let isMounted = true
@@ -30,6 +30,14 @@ const PersistentLogin = () => {
         return cleanUp
     }, [])
 
+    useEffect(() => {
+        if (isError) {
+            acknowledgeError(error)
+        } else {
+            clearError()
+        }
+    }, [isError])
+
     // useEffect(() => {
     //     console.log(`isLoadingRefresh ${isLoadingRefresh}`)
     //     console.log(`token: ${token}`)
@@ -39,10 +47,13 @@ const PersistentLogin = () => {
     // console.log(isLoadingRefresh, ' ', isFetching)
   return (
     <>
-        {persistLogin && (isLoadingRefresh || isFetching) ?
-            <p>Is loading</p>
+        {isError && serverDown ?
+            <Navigate to="/error" replace />
             :
-            <Outlet></Outlet>
+            persistLogin && (isLoadingRefresh || isFetching) ?
+                <p>Is loading</p>
+                :
+                <Outlet></Outlet>
         }
     </>
   )

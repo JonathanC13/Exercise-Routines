@@ -3244,6 +3244,36 @@ body {
 }
 /* /EDIT ACCOUNT SETTINGS */
 
+/* ERROR PAGE */
+.error__div {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.error__section {
+  box-shadow: var(--MODAL-SHADOW);
+  background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
+  border-radius: var(--MODAL-BORDER-RAD);
+  padding: 1rem 2rem;
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.error__h1 {
+  font-size: 2rem;
+}
+/* /ERROR PAGE */
+
 /* MEDIA QUERIES */
 @media (max-width: 600px) { 
   /* equal to or narrower, apply */

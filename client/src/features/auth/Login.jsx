@@ -186,7 +186,7 @@ const Login = () => {
                 ></FormInput>
             </div>
             <div className="login__persist__div">
-                <label className={`persistChkBox__label persistChkBox__label--color-${theme}`} htmlFor="persistChkBox"> Persist login: </label>
+                <label className={`persistChkBox__label persistChkBox__label--color-${theme}`} htmlFor="persistChkBox"> Persist log in: </label>
                 <input className='persistChkBox__input cursor_pointer' type="checkbox" id="persistChkBox" name="persistChkBox" value="persistVal"
                     checked={persistLogin}
                     onChange={(e) => setPersistLogin(e.currentTarget.checked)}
@@ -194,7 +194,7 @@ const Login = () => {
             </div>
             <div className="login-button__div">
                 <button className="login__button cursor_pointer" type="submit" disabled={isLoading}>
-                    Login
+                    Log in
                 </button>
             </div>
             <div className={msg ? "login__form__div" : "offscreen"}>

@@ -2,6 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 // import './App.css'
+// console.log(import.meta.env.VITE_BACKEND_URL) // remove this after you've confirmed it is working
+
 import Layout from './components/Layout'
 import AuthLayout from './features/auth/AuthLayout'
 import Login from './features/auth/Login'
@@ -18,6 +20,7 @@ import { Provider } from 'react-redux'
 import { BrowserRouter, Routes, Route } from "react-router";
 import PersistentLogin from './components/PersistentLogin'
 import EditAccountSettings from './features/accountSettings/EditAccountSettings'
+import Error from './features/error/Error'
 
 function App() {
 
@@ -53,6 +56,8 @@ function App() {
                   </Route>
                 </Route>
               </Route>
+
+              <Route path='/error' element={<Error/>}></Route>
 
               {/* catach all */}
               <Route path='*' element={<Missing/>}></Route>

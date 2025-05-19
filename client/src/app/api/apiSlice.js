@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { accessTokenSet, loggedOut } from '../../features/auth/authSlice'
 
-const url = 'http://localhost:5000/api/v1/' // import.meta.env.REACT_APP_BE_URL + '/auth' || 
+const url = import.meta.env.VITE_BACKEND_URL //'http://localhost:5000/api/v1/' // import.meta.env.REACT_APP_BE_URL + '/auth' || 
 
 const baseQueryWithReauth = async (args, api, extraOptions) => {
     let result = await baseQuery(args, api, extraOptions)

@@ -17,7 +17,7 @@ const Home = () => {
       <p className={`home__p home__p--color-${theme}`}>To start creating and viewing your routines, you must either:</p>
       <div className="home-auth-options__div">
         <NavLink className='home-signup__nlink cursor_pointer' to='register'>Register</NavLink>
-        <NavLink className='home-signup__login cursor_pointer' to='login'>Login</NavLink>
+        <NavLink className='home-signup__login cursor_pointer' to='login'>Log in</NavLink>
       </div>
     </div>
     
