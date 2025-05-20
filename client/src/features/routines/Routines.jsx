@@ -5,7 +5,9 @@ import { useGetRoutinesQuery } from './routinesApiSlice'
 import Routine from './Routine'
 import classnames from 'classnames'
 import { routineAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Navigate } from 'react-router-dom'
+import { errorStatusSet, errorStatusCleared } from '../error/errorSlice'
+import errorTextConversion from '../../functions/errorTextConversion'
 
 const createRoutineComps = (sortedRoutines, isFetching) => {
   const comps = sortedRoutines.map((routine) => {
@@ -26,6 +28,7 @@ const Routines = () => {
     const dispatch = useDispatch()
     const auth = useSelector(state => state.auth)
     const theme = useSelector(state => state.auth.preferredTheme)
+    // const { status } = useSelector(state => state.errorState)
 
     const addRoutineHandler = () => {
       // open set state to open routine add form modal
@@ -77,6 +80,7 @@ const Routines = () => {
     if (isLoading) {
       content = <h2 className='routines-loading__h2'>Is loading...</h2>
     } else if (isSuccess) {
+      // dispatch(errorStatusCleared())
       // const { ids, entities } = sortedRoutines
       const routineComps = createRoutineComps(sortedRoutines, isFetching) // isFetching will cause re-render
       const containerClassname = classnames('routines__div', {
@@ -89,14 +93,25 @@ const Routines = () => {
           <button onClick={toHome}>to Home</button> */}
         </div>
       // console.log(content)
-    } else if (isError) {
-      console.log('error: ', error)
-      /*
-      dispatch(loggedOut())
-      navigate('/login')
-      */
-      content = <h2 className="routines-error__h2">{error?.data?.message ?? 'Error with server.'}</h2>
-    }
+    } 
+    // else if (isError) {
+    //   // console.log('error: ', error)
+    //   // dispatch(errorStatusSet(errorTextConversion(error)))
+    //   // return <Navigate to='/error'></Navigate>
+    //   /*
+    //   dispatch(loggedOut())
+    //   navigate('/login')
+    //   */
+    //   content = <h2 className="routines-error__h2">{error?.data?.message ?? 'Error with server.'}</h2>
+    // }
+
+    useEffect(() => {
+      if (isError) {
+        dispatch(errorStatusSet(errorTextConversion(error)))
+      } else {
+        dispatch(errorStatusCleared())
+      }
+    }, [isError])
 
     const h1Class = 'routines__h1 routines__h1--color-' + theme
 

@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
 import useRefreshToken from '../hooks/useRefreshToken'
 import { useSelector, useDispatch } from 'react-redux'
-import useErrorManagement from '../hooks/useErrorManagement'
+import { errorStatusSet, errorStatusCleared } from '../features/error/errorSlice'
+import errorTextConversion from '../functions/errorTextConversion'
 
 const PersistentLogin = () => {
     const dispatch = useDispatch()
     const {credentials, persistLogin} = useSelector(state => state.auth)
     const {trigger, token, isError, error, isFetching, isLoadingRefresh} = useRefreshToken()
-    const { clearError, acknowledgeError, serverDown } = useErrorManagement()
+    const { status } = useSelector(state => state.errorState)
 
     useEffect(() => {
         let isMounted = true
@@ -32,12 +33,12 @@ const PersistentLogin = () => {
 
     useEffect(() => {
         if (isError) {
-            acknowledgeError(error)
+            dispatch(errorStatusSet(errorTextConversion(error)))
         } else {
-            clearError()
+            dispatch(errorStatusCleared())
         }
     }, [isError])
-
+    // console.log(status)
     // useEffect(() => {
     //     console.log(`isLoadingRefresh ${isLoadingRefresh}`)
     //     console.log(`token: ${token}`)
@@ -47,7 +48,7 @@ const PersistentLogin = () => {
     // console.log(isLoadingRefresh, ' ', isFetching)
   return (
     <>
-        {isError && serverDown ?
+        {status === 'Server error' ?
             <Navigate to="/error" replace />
             :
             persistLogin && (isLoadingRefresh || isFetching) ?

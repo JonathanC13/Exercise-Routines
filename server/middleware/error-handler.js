@@ -17,7 +17,8 @@ const errorHandler = (err, req, res, next) => {
     if (err.code && err.code === 11000) {
         // Remember that 'unique' in the schema does not fail a validation, it will return an error after commiting to the DB.
         customError.status = StatusCodes.CONFLICT
-        customError.message = `Duplicate value ${Object.keys(err.keyValue)} already exists! Please use a different one.`
+        const text = Object.keys(err.keyValue)[0] === 'emailLowercase' ? 'Email' : Object.keys(err.keyValue)
+        customError.message = `Duplicate value ${text} already exists! Please use a different one.`
     }
     
     return res.status(customError.status).json({'message': customError.message})

@@ -7,6 +7,8 @@ import { useUserSendRegisterMutation } from './authApiSlice'
 import { credentialsSet, authMessageSet } from './authSlice'
 import FormInput from '../../components/FormInput'
 import {checkValidName, checkValidEmail, checkValidPassword} from '../../functions/accountInfoValidation'
+import { errorStatusSet, errorStatusCleared } from '../error/errorSlice'
+import errorTextConversion from '../../functions/errorTextConversion'
 
 // const EMAIL_REGEX = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
 
@@ -129,6 +131,7 @@ const Register = () => {
         try {
             const response = await register({name: name, email: email, password: password}).unwrap()
                 .then((payload) => {
+                    dispatch(errorStatusCleared())
                     // save JWT token returned
                     const credentials = {
                         name: payload?.user?.name,
@@ -145,7 +148,9 @@ const Register = () => {
                 })
                 .catch((error) => {
                     if (!error?.data) {
-                        setMsg('No server response!')
+                        // setMsg('No server response!')
+                        dispatch(errorStatusSet(errorTextConversion(error)))
+                        // navigate('/error')
                     // } else if (error?.data?.status === 409) {
                     //     setMsg('Email already registred, please enter a different one.')
                     } else if (error?.data?.message) {

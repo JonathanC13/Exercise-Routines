@@ -91,7 +91,10 @@ const RoutineAddForm = ( {theme = 'light'}) => {
         
         try {
             const response = await addRoutine({ body }).unwrap()
-                .then((payload) => {closeAddFormHandler()})
+                .then((payload) => {
+                    clearError()
+                    closeAddFormHandler()
+                })
                 .catch((error) => {
                     msgRef.current.focus()
                     if (!error?.data) {

@@ -8,16 +8,16 @@ const useErrorManagement = () => {
     const [serverDown, setServerDown] = useState(false)
     
     const clearError = useCallback(() => {
-        setServerDown(false)
+        // setServerDown(false)
         dispatch(errorStatusCleared())
         return
     }, [setServerDown])
 
     const acknowledgeError = useCallback((error) => {
-        if (error?.status === 'FETCH_ERROR') {
-            setServerDown(true)
+        if (error?.status === 'FETCH_ERROR' || error?.status('NO_RESP')) {
+            // setServerDown(true)
         } else {
-            setServerDown(false)
+            // setServerDown(false)
         }
         dispatch(errorStatusSet({newStatus: error?.status ?? 'error', newMessage: error?.error ?? 'Something has gone wrong!'}))
         return

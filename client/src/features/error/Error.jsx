@@ -1,8 +1,11 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { errorStatusCleared } from './errorSlice'
 
 const Error = () => {
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const { status, message } = useSelector((state) => state.errorState)
     
     let errorTitle = ''
@@ -19,12 +22,17 @@ const Error = () => {
             break
     }
 
+    const goHome = () => {
+        dispatch(errorStatusCleared())
+        navigate('/')
+    }
+
   return (
     <div className='error__div'>
         <section className='error__section'>
             <h1 className='error__h1'>{errorTitle}</h1>
             <p>{errorMessage}</p>
-            <Link to="/">Reload home.</Link>
+            <button onClick={goHome} className='cursor_pointer'>Reload home</button>
         </section>
     </div>
   )

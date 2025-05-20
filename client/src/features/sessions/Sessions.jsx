@@ -1,4 +1,5 @@
 import React from 'react'
+import { useEffect } from 'react'
 import { useGetRoutinesQuery } from '../routines/routinesApiSlice'
 import { useGetSessionsQuery } from './sessionsApiSlice'
 import { useParams, useNavigate, Link, useLocation } from 'react-router'
@@ -6,6 +7,8 @@ import Session from './Session'
 import { useSelector, useDispatch } from 'react-redux'
 import { sessionAddFormOpenChanged } from '../modals/addFormModals/addFormModalsSlice'
 import { FaBackwardStep } from 'react-icons/fa6'
+import { errorStatusSet, errorStatusCleared } from '../error/errorSlice'
+import errorTextConversion from '../../functions/errorTextConversion'
 
 const createSessionComps = (routineId, sessionIds) => {
     const comps = sessionIds.map((sessionId) => {
@@ -82,9 +85,18 @@ const Sessions = () => {
                 {createSessionComps(routineId, ids)}
             </div>
         </>
-    } else if (isError) {
-        content = <p className="errmsg">hello {error?.data?.message}</p>
-    }
+    } 
+    // else if (isError) {
+    //     content = <p className="errmsg">hello {error?.data?.message}</p>
+    // }
+
+    useEffect(() => {
+        if (isError) {
+        dispatch(errorStatusSet(errorTextConversion(error)))
+        } else {
+        dispatch(errorStatusCleared())
+        }
+    }, [isError])
 
   return (
     <section className='sessions__section'>

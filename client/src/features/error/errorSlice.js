@@ -10,9 +10,9 @@ export const errorSlice = createSlice({
     initialState: initialState,
     reducers: {
         errorStatusSet: (state, action) => {
-            const { newStatus, newMessage } = action.payload
-            state.status = newStatus
-            state.message = newMessage
+            const { status, message } = action.payload
+            state.status = status
+            state.message = message
         },
         errorStatusCleared: (state, action) => {
             state.status = ''

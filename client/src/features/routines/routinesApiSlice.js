@@ -66,7 +66,7 @@ export const routinesApiSlice = apiSlice.injectEndpoints({
                 } else {
                     return [{ type: 'Routine', id: 'LIST' }]
                 }
-            }
+            },
         }),
         addRoutine: builder.mutation({
             query: (args) => ({

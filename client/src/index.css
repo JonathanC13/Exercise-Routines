@@ -1101,6 +1101,10 @@ body {
 /* /ROUTINES */
 
 /* ROUTINE ADD FORM */
+.add_routine__p {
+  color: red;  
+}
+
 .add_routine__form {
   width: 100%;
   display: flex;
@@ -1575,6 +1579,10 @@ body {
 /* /SESSIONS */
 
 /* SESSION ADD FORM */
+.add_session__p {
+  color: red;
+}
+
 .add_session__form {
   display: flex;
   flex-flow: column nowrap;
