@@ -78,7 +78,9 @@ const Routines = () => {
     let content = null
 
     if (isLoading) {
-      content = <h2 className='routines-loading__h2'>Is loading...</h2>
+      content = <section className='routines-loading__section'>
+              <h1 className='routines-loading__h1'>Is loading...</h1>
+            </section>
     } else if (isSuccess) {
       // dispatch(errorStatusCleared())
       // const { ids, entities } = sortedRoutines
@@ -87,11 +89,21 @@ const Routines = () => {
         disabled: isFetching
       })
 
-      content = <div className={containerClassname}>
-          { routineComps }
-          {/* <button onClick={refetch}>manual refetch</button>
-          <button onClick={toHome}>to Home</button> */}
-        </div>
+      const h1Class = 'routines__h1 routines__h1--color-' + theme
+      
+      content = 
+        <>
+          <div className='routines_title__div'>
+            <h1 className={h1Class}>Routines</h1>
+            <div className="routines_title_underline"></div>
+          </div>
+          <button className='cursor_pointer routines_add__button' onClick={addRoutineHandler}>Add Routine</button>
+          <div className={containerClassname}>
+            { routineComps }
+            {/* <button onClick={refetch}>manual refetch</button>
+            <button onClick={toHome}>to Home</button> */}
+          </div>
+        </>
       // console.log(content)
     } 
     // else if (isError) {
@@ -113,15 +125,8 @@ const Routines = () => {
       }
     }, [isError])
 
-    const h1Class = 'routines__h1 routines__h1--color-' + theme
-
   return (
     <section className='routines__section'>
-      <div className='routines_title__div'>
-        <h1 className={h1Class}>Routines</h1>
-        <div className="routines_title_underline"></div>
-      </div>
-      <button className='cursor_pointer routines_add__button' onClick={addRoutineHandler}>Add Routine</button>
       { content }
     </section>
   )

@@ -4,7 +4,9 @@ import { useParams } from 'react-router'
 import { useUpdateExerciseMutation, useDeleteExerciseMutation } from './exerciseApiSlice'
 import Sets from './sets/Sets.jsx'
 import { FaTrashCan, FaCircleInfo, FaCheck } from 'react-icons/fa6'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { errorStatusSet, errorStatusCleared } from '../error/errorSlice.js'
+import errorTextConversion from '../../functions/errorTextConversion.js'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -15,6 +17,7 @@ const checkValidDescription = (description) => {
 }
 
 const Exercise = ( { exercise = null } ) => {
+    const dispatch = useDispatch()
     const { routineId } = useParams()
 
     const theme = useSelector(state => state.auth.preferredTheme)
@@ -106,12 +109,14 @@ const Exercise = ( { exercise = null } ) => {
                 .then((payload) => {
                     // console.log(payload)
                     // setExerciseMessage('Success!');
+                    dispatch(errorStatusCleared())
                 })
                 .catch((error) => {
                     // console.log('11, ', error)
                     msgRef.current.focus()
                     if (!error?.data) {
                         setExerciseMessage('No Server Response!');
+                        dispatch(errorStatusSet(errorTextConversion(error)))
                     } else if (error?.data) {       
                         const message = error?.data?.message ?? 'Error!'
                         setExerciseMessage(message)
@@ -132,11 +137,13 @@ const Exercise = ( { exercise = null } ) => {
             const response = await deleteExercise({ routineId, sessionId: exercise.sessionId, exerciseId: exercise.id }).unwrap()
                 .then((payload) => {
                     // setExerciseMessage('Success!');
+                    dispatch(errorStatusCleared())
                 })
                 .catch((error) => {
                     msgRef.current.focus()
                     if (!error?.data) {
                         setExerciseMessage('No Server Response!');
+                        dispatch(errorStatusSet(errorTextConversion(error)))
                     } else if (error?.data) {
                         const message = error?.data?.message ?? 'Error!'
                         setExerciseMessage(message)

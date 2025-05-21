@@ -34,7 +34,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     dispatch(loggedOut())
                     dispatch(authApiSlice.util.resetApiState()) // clear the cache of this request
                 } catch (err) {
-                    console.log(err)
+                    // console.log(err)
                 }
             }
         }),
@@ -60,7 +60,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                     dispatch(credentialsSet(data.user))
                     dispatch(authApiSlice.util.resetApiState()) // clear the cache of this request
                 } catch (err) {
-                    console.log(err)
+                    // console.log(err)
                 }
             }
         }),

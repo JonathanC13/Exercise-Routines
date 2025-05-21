@@ -3,9 +3,11 @@ import React from 'react'
 import { memo, useState, useEffect, useRef } from 'react'
 import { useGetRoutinesQuery, useUpdateRoutineMutation, useDeleteRoutineMutation } from './routinesApiSlice'
 import { useLocation, useNavigate, Link } from 'react-router'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import classnames from 'classnames'
 import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
+import { errorStatusSet, errorStatusCleared } from '../error/errorSlice'
+import errorTextConversion from '../../functions/errorTextConversion'
 
 const months = {
   0: 'Jan',
@@ -39,6 +41,7 @@ const checkValidDescription = (description) => {
 }
 
 const Routine = ( { routineId = null, isFetching = true } ) => {
+    const dispatch = useDispatch()
 
     const location = useLocation()
     // console.log(`${routineId} has rendered!`)
@@ -188,11 +191,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
               }
               // console.log(payload)
               const response = await updateRoutine({ routineId: routineId, body, token: auth?.credentials?.token }).unwrap()
-                .then((payload) => {})
+                .then((payload) => {
+                  dispatch(errorStatusCleared())
+                })
                 .catch((error) => {
                   msgRef.current.focus()
                   if (!error?.data) {
                     setRoutineMessage('No server response!')
+                    dispatch(errorStatusSet(errorTextConversion(error)))
                   } else if (error?.data?.message) {
                     const message = error?.data?.message ?? 'Error!'
                     setRoutineMessage(message)
@@ -214,11 +220,14 @@ const Routine = ( { routineId = null, isFetching = true } ) => {
 
           try {
             const response = await deleteRoutine({routineId: routineId, token: auth?.credentials?.token }).unwrap()
-              .then((payload) => {})
+              .then((payload) => {
+                dispatch(errorStatusCleared())
+              })
               .catch((error) => {
                 msgRef.current.focus()
                 if (error?.data) {
                   setRoutineMessage('No server response!')
+                  dispatch(errorStatusSet(errorTextConversion(error)))
                 } else if (error?.data?.message) {
                     const message = error?.data?.message ?? 'Error!'
                     setRoutineMessage(message)

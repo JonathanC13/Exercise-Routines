@@ -63,7 +63,9 @@ const Sessions = () => {
     let content = ''
 
     if (isLoading) {
-        content = <p>loading...</p>//<PulseLoader color={"#FFF"} />
+        content = <section className='sessions-loading__section'>
+              <h1 className='sessions-loading__h1'>Is loading...</h1>
+            </section>
     } else if (isSuccess && routine) {
         const { ids, entities } = sessions
 
@@ -92,9 +94,9 @@ const Sessions = () => {
 
     useEffect(() => {
         if (isError) {
-        dispatch(errorStatusSet(errorTextConversion(error)))
+            dispatch(errorStatusSet(errorTextConversion(error)))
         } else {
-        dispatch(errorStatusCleared())
+            dispatch(errorStatusCleared())
         }
     }, [isError])
 

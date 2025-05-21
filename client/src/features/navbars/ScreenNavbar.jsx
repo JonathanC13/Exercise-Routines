@@ -25,6 +25,7 @@ const ScreenNavbar = () => {
 
     const loginHandler = () => {
         navigate('/login')
+        closeScreenNavHandler()
     }
     
     const authOption = auth?.token ?

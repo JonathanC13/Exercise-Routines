@@ -5,7 +5,9 @@ import { useParams, useNavigate } from 'react-router'
 import Exercises from '../exercises/Exercises'
 import { FaTrashCan, FaDoorOpen, FaCircleInfo } from 'react-icons/fa6'
 import { Link } from 'react-router'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { errorStatusSet, errorStatusCleared } from '../error/errorSlice'
+import errorTextConversion from '../../functions/errorTextConversion'
 
 const checkValidName = (name) => {
     return name.length > 0 && name.length <= 50
@@ -16,6 +18,7 @@ const checkValidDescription = (description) => {
 }
 
 const Session = ( { sessionId = null, haveLink = false }) => {
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const theme = useSelector(state => state.auth.preferredTheme)
@@ -123,11 +126,14 @@ const Session = ( { sessionId = null, haveLink = false }) => {
         try {
             
             const response = await updateSession({routineId: routineId, sessionId: sessionId, body: body}).unwrap()
-                .then((payload) => {})
+                .then((payload) => {
+                    dispatch(errorStatusCleared())
+                })
                 .catch((error) => {
                     msgRef.current.focus()
                     if (!error?.data) {
                         setMsg('No server response!')
+                        dispatch(errorStatusSet(errorTextConversion(error)))
                     } else if (error?.data?.message) {
                         const message = error?.data?.message ?? 'Error!'
                         setMsg(message)
@@ -147,11 +153,14 @@ const Session = ( { sessionId = null, haveLink = false }) => {
     const sessionDeleteFunc = async(body) => {
         try {
             const response = await deleteSession({routineId: routineId, sessionId: sessionId}).unwrap()
-                .then((payload) => {})
+                .then((payload) => {
+                    dispatch(errorStatusCleared())
+                })
                 .catch((error) => {
                     msgRef.current.focus()
                     if (error?.data) {
                         setMsg('No server response!')
+                        dispatch(errorStatusSet(errorTextConversion(error)))
                     } else if (error?.data?.message) {
                         const message = error?.data?.message ?? 'Error!'
                         setMsg(message)
