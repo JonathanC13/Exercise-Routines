@@ -37,7 +37,7 @@ const baseQuery = retry(fetchBaseQuery({
       return headers
     }
 }), {
-  maxRetries: 1,
+  maxRetries: 2,
 })
 
 // Define our single API slice object

@@ -40,7 +40,7 @@ app.use(cookieParser())
 app.use(helmet())
 app.use(cors(
     {
-        origin: 'http://localhost:5173', // Adjust this to your frontend's URL
+        origin: process.env.ACCESS_CONTROL_ALLOW_ORIGIN, // Adjust this to your frontend's URL
         credentials: true, // This allows cookies to be included in requests
     }
 ))
