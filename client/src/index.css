@@ -253,6 +253,7 @@ body {
 }
 
 .info_text_padding {
+  font-size: initial;
   padding: var(--INFO-PADDING);
 }
 
@@ -587,6 +588,27 @@ body {
   }
 }
 /* /ANIMATIONS */
+
+/* PERSISTENT LOGIN */
+.persistent-login-loading__section {
+  padding: 1em 2rem;
+  background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
+  border-radius: var(--MODAL-BORDER-RAD);
+  box-shadow: var(--MODAL-SHADOW);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.persistent-login-loading__h1 {
+  font-size: initial;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* /PERSISTENT LOGIN */
 
 /* HOME */
 .home__div {
@@ -1498,6 +1520,7 @@ body {
 }
 
 .sessions-loading__h1 {
+  font-size: initial;
   width: 100%;
   height: 100%;
   display: flex;

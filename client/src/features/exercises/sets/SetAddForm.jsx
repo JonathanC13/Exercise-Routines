@@ -86,7 +86,8 @@ const SetAddForm = ({theme = 'light'}) => {
                         .catch((error) => {
                             msgRef.current.focus()
                             if (!error?.data) {
-                                setMsg('No Server Response!');
+                                // setMsg('No Server Response!');   // since render will spin down the server after 50 seconds of inactivity, just close the form. The routines component will re-fetch and will detect server down.
+                                closeAddFormHandler()
                             } else if (error?.data) {
                                 const message = error?.data?.message ?? 'Error!'
                                 setMsg(message)
