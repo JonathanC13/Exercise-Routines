@@ -111,7 +111,7 @@ e.g. /api/v1/auth + {route} + {params}
     </tr>
     <tr>
         <td>PATCH</td>
-        <td>updatePassword</td>
+        <td>/updatePassword</td>
         <td>/:userId</td>
         <td>{"currentPassword": <mark>currentPassword</mark>, "newPassword": <mark>newPassword</mark>}</td>
         <td>200</td>
@@ -206,7 +206,7 @@ e.g. /api/v1/routines + {route} + {params}
     </tr>
     <tr>
         <td>PATCH</td>
-        <td></td>
+        <td>N/A</td>
         <td>/:routineId</td>
         <td>{name: <mark>name</mark>, order: order, description: description}</td>
         <td>200</td>
@@ -311,7 +311,7 @@ e.g. /api/v1/routines/:routineId/sessions + {route} + {params}
         <td>GET</td>
         <td>N/A</td>
         <td>/:sessionId</td>
-        <td></td>
+        <td>N/A</td>
         <td>200</td>
         <td>
             {
@@ -409,19 +409,24 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
     </tr>
     <tr>
         <td>POST</td>
-        <td>createExercise</td>
         <td>N/A</td>
-        <td></td>
+        <td>N/A</td>
+        <td>{"name": name, "order": order, "description": description, "sets", "muscleType": muscleType, "completed": completed}</td>
         <td>201</td>
         <td>
             {
-                "response": 
-                    {
-                        "order": 1,
-                        "name": "exercise 1",
-                        "description": "DESCRIPTION", 
-                        "sets": []
-                    }
+                "response": {
+                    "order": 1,
+                    "name": "exercise 1",
+                    "description": "DESCRIPTION",
+                    "sets": [[set objects](##Set Object)],
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "muscleType": muscleType,
+                    "completed": completed
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-03T21:03:22.305Z"
+                }
             }
         </td>
         <td>Creates a new exercise in the specified sessionId document and returns the new exercise.</td>
@@ -434,13 +439,18 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
         <td>200</td>
         <td>
             {
-                "response": 
-                    {
-                        "order": 1,
-                        "name": "exercise 1",
-                        "description": "DESCRIPTION", 
-                        "sets": []
-                    }
+                "response": {
+                    "order": 1,
+                    "name": "exercise 1",
+                    "description": "DESCRIPTION",
+                    "sets": [[set objects](##Set Object)],
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "muscleType": muscleType,
+                    "completed": completed
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-03T21:03:22.305Z"
+                }
             }
         </td>
         <td>Returns the exercise document specified by the exerciseId.</td>
@@ -449,17 +459,22 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
         <td>PATCH</td>
         <td>N/A</td>
         <td>/:exerciseId</td>
-        <td> {"name": name, "order": order, "description": description, "sets", "muscleType": muscleType, "completed": completed}</td>
+        <td>{"name": name, "order": order, "description": description, "sets", "muscleType": muscleType, "completed": completed}</td>
         <td>200</td>
         <td>
             {
-                "response":
-                    {
-                        "order": 1,
-                        "name": "",
-                        "description": "DESCRIPTION", 
-                        "sets": []
-                    }
+                "response": {
+                    "order": 1,
+                    "name": "exercise 1",
+                    "description": "DESCRIPTION",
+                    "sets": [[set objects](##Set Object)],
+                    "_id": "67a12f1aa86add8b2d097105",
+                    "comments": [],
+                    "muscleType": muscleType,
+                    "completed": completed
+                    "createdAt": "2025-02-03T21:03:22.305Z",
+                    "updatedAt": "2025-02-03T21:03:22.305Z"
+                }
             }
         </td>
         <td>Updates the exercise specified by the exerciseId and returns the updated exercise object.</td>
@@ -474,3 +489,12 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
         <td>Deletes the exercise specified by the exerciseId.</td>
     </tr>
 </table>
+
+## Set Object
+{
+    "order": order,
+    "weight": weight,
+    "repsOrDuration": repsOrDuration,
+    "restTimeSeconds": restTimeSeconds,
+    "completed": completed
+}
