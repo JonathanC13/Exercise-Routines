@@ -9,9 +9,9 @@ Video: todo
 I took my sweet time learning and applying bits and pieces of the MERN stack to create a glorified to-do list. 
 
 The application enabled a user to:
-1. create i number of routines, where each can include j number of sessions. 
-2. Each session can include k number of exercises.
-3. Then finally, each exercise can include l number of sets.
+1. Create *i* number of routines, where each can include *j* number of sessions. 
+2. Each session created can include *k* number of exercises.
+3. Then finally, each exercise created can include *l* number of sets.
 
 Objectively, a worse evolution of a to-do list since it has enforced rigidity to conform to the Routines-Sessions-Exercises-Sets relationships. At the time, it was the only idea I could conjure because of how hollow my skull is and how inactive my body is.
 
