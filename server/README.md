@@ -419,9 +419,7 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
                     "order": 1,
                     "name": "exercise 1",
                     "description": "DESCRIPTION",
-                    "sets": [
-                        <md>[set objects](##Set Object)</md>
-                    ],
+                    "sets": [*set objects],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "muscleType": muscleType,
@@ -445,9 +443,7 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
                     "order": 1,
                     "name": "exercise 1",
                     "description": "DESCRIPTION",
-                    "sets": [
-                        <md>[set objects](##Set Object)</md>
-                    ],
+                    "sets": [*set objects],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "muscleType": muscleType,
@@ -471,9 +467,7 @@ e.g. /api/v1/routines/:routineId/sessions/:sessionId + {route} + {params}
                     "order": 1,
                     "name": "exercise 1",
                     "description": "DESCRIPTION",
-                    "sets": [
-                        <md>[set objects](##Set Object)</md>
-                    ],
+                    "sets": [*set objects],
                     "_id": "67a12f1aa86add8b2d097105",
                     "comments": [],
                     "muscleType": muscleType,
