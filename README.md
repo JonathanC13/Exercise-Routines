@@ -6,14 +6,12 @@ MongoDB, ExpressJS, React, NodeJS
 Video: todo
 
 ## Description
-I took my sweet time learning and applying bits and pieces of the MERN stack to create a glorified to-do list. The application enabled a user to create;
+I took my sweet time learning and applying bits and pieces of the MERN stack to create a glorified to-do list. The application enabled a user to create:
 
-> i number of routines, where each can include j number of sessions.
->
-> Each session can include k number of exercises.
->
-> Then finally, each exercise can include l number of sets.
+1. i number of routines, where each can include j number of sessions.
+2. Each session can include k number of exercises.
+3. Then finally, each exercise can include l number of sets.
 
 Objectively, a worse evolution of a to-do list since it has enforced rigidity to conform to the Routines-Sessions-Exercises-Sets relationships. At the time, it was the only idea I could conjure because of how hollow my skull is and how inactive my body is.
 
-All in all, the project was enjoyable to work on because I could engage with the entire system, the front end activated my eyes and the back end tickled my neural synapses, contrary to the fact this project's duration was egregiously long. I must have short circuits in my brain.Learning, applying, and creating something is a great time until my mental demon slinks out of its trench to whisper, "wHat's ThE poINT?"
+All in all, the project was enjoyable to work on because I could engage with the entire system, the front end activated my eyes and the back end tickled my neural synapses, contrary to the fact this project's duration was egregiously long. I must have short circuits in my brain. Learning, applying, and creating something is a great time until my mental demon slinks out of its trench to whisper, "wHat's ThE poINT?"
