@@ -9,7 +9,7 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
 # Asset sources
-    1. Backgrround photo by [Samuel Girven](https://unsplash.com/@samuelgirven?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/people-in-a-room-with-a-black-table-and-chairs-fqMu99l8sqo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
+1. Background photo by [Samuel Girven](https://unsplash.com/@samuelgirven?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash) on [Unsplash](https://unsplash.com/photos/people-in-a-room-with-a-black-table-and-chairs-fqMu99l8sqo?utm_content=creditCopyText&utm_medium=referral&utm_source=unsplash)
       
 
 # Additional modules
