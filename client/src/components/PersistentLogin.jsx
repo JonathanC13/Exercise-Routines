@@ -52,9 +52,11 @@ const PersistentLogin = () => {
             <Navigate to="/error" replace />
             :
             persistLogin && (isLoadingRefresh || isFetching) ?
-                <section className='persistent-login-loading__section'>
-                    <h1 className='persistent-login-loading__h1'>Is loading...</h1>
-                </section>
+                <div className='persistent-login-loading__div'>
+                    <section className='persistent-login-loading__section'>
+                        <h1 className='persistent-login-loading__h1'>Is loading...</h1>
+                    </section>
+                </div>
                 :
                 <Outlet></Outlet>
         }

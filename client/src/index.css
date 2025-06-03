@@ -201,6 +201,8 @@ body {
 }
 
 .App {
+  min-width: 100vw;
+  min-height: 100vh;
   width: 100%;
   height: 100%;
   display: flex;
@@ -213,6 +215,8 @@ body {
   flex-flow: column nowrap;
   position: relative;
   overflow-y: hidden;
+  align-items: center;
+  justify-content: center;
   /* padding: var(--GENERAL-PADDING); */
 }
 
@@ -590,6 +594,16 @@ body {
 /* /ANIMATIONS */
 
 /* PERSISTENT LOGIN */
+.persistent-login-loading__div {
+  /* min-width: 100vw;
+  min-height: 100vh; */
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .persistent-login-loading__section {
   padding: 1em 2rem;
   background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
@@ -677,6 +691,7 @@ body {
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   text-decoration: none;
+  border: 1px solid black;
   color: var(--LIGHT-INFO-DESC-COLOR);
 }
 
@@ -982,6 +997,8 @@ body {
 }
 
 .auth-msg__p {
+  background-color: var(--LIGHT-MODAL-CONTAINER-COLOR);
+  padding: 0.5rem 1rem;
   color: green;
   font-weight: 300;
 }
@@ -2635,6 +2652,19 @@ body {
 
 .navbar-item__li:hover {
   color: var(--NAVBAR-TEXT-HOVER-COLOR);
+}
+
+.navbar-login {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  text-decoration: none;
+  border: 1px solid black;
+  color: var(--LIGHT-INFO-TEXT-COLOR);
+  background-color: var(--AUTH-OPTIONS-ACTIVE-COLOR);
+}
+
+.navbar-login:hover {
+  background-color: #7daba0;
 }
 
 .navbar-container__div {
