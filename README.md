@@ -3,7 +3,9 @@ First full stack project with the MERN stack.
 
 MongoDB, ExpressJS, React, NodeJS
 
-Deployed at: https://exercise-routines-frontend.onrender.com
+Backend is here if you want to spin it up before accessing the front end URL: https://exercise-routines-backend.onrender.com
+
+Front end deployed at: https://exercise-routines-frontend.onrender.com
 
 Video: https://www.youtube.com/watch?v=OweG_AHq2QM
 
